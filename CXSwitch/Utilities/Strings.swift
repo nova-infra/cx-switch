@@ -18,7 +18,6 @@ enum Strings {
     static var settings: String { L("设置", en: "Settings") }
     static var status: String { L("状态", en: "Status") }
     static var quit: String { L("退出 CX Switch", en: "Quit CX Switch") }
-    static var saveToKeychain: String { L("加密保存凭证", en: "Save Credentials to Keychain") }
     static var maskEmails: String { L("邮箱脱敏", en: "Mask Emails") }
     static var openDataFolder: String { L("打开数据文件夹", en: "Open Data Folder") }
     static var noActiveAccount: String { L("未检测到活跃账户，请切换或添加", en: "No active account, switch or add one") }
@@ -34,4 +33,27 @@ enum Strings {
     static var loginWaiting: String { L("等待登录完成", en: "Waiting for login") }
     static var loginCompleted: String { L("已完成", en: "Completed") }
     static var loginCancelled: String { L("已取消", en: "Cancelled") }
+
+    static func planTypeDisplayName(for planType: PlanType) -> String {
+        switch planType {
+        case .free:
+            return "Free"
+        case .go:
+            return "Go"
+        case .plus:
+            return "Plus"
+        case .pro:
+            return "Pro"
+        case .team:
+            return "Team"
+        case .business:
+            return "Business"
+        case .enterprise:
+            return "Enterprise"
+        case .edu:
+            return "Edu"
+        case .unknown:
+            return "Unknown Plan"
+        }
+    }
 }

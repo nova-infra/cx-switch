@@ -1,26 +1,76 @@
 import SwiftUI
 
 struct UsageBar: View {
+    enum Style {
+        case regular
+        case compact
+    }
+
     let window: UsageWindow
+    var style: Style = .regular
 
     var body: some View {
+        switch style {
+        case .regular:
+            regularBody
+        case .compact:
+            compactBody
+        }
+    }
+
+    private var regularBody: some View {
         VStack(alignment: .leading, spacing: 3) {
             HStack {
-                Text(window.label)
-                    .font(.caption2)
-                    .foregroundStyle(.secondary)
                 Spacer()
                 Text(percentText)
-                    .font(.caption2)
+                    .font(.caption2.weight(.semibold))
                     .monospacedDigit()
                     .foregroundStyle(.secondary)
             }
             ProgressView(value: normalizedPercent)
                 .tint(progressColor)
-            if let resetText {
-                Text(resetText)
+            HStack(spacing: 6) {
+                Text(displayLabel)
                     .font(.caption2)
                     .foregroundStyle(.tertiary)
+                Spacer()
+                if let resetText {
+                    Text(resetText)
+                        .font(.caption2)
+                        .foregroundStyle(.tertiary)
+                        .lineLimit(1)
+                        .truncationMode(.tail)
+                }
+            }
+        }
+    }
+
+    private var compactBody: some View {
+        VStack(alignment: .leading, spacing: 3) {
+            HStack(spacing: 8) {
+                ProgressView(value: normalizedPercent)
+                    .tint(progressColor)
+                    .controlSize(.small)
+
+                Text(percentText)
+                    .font(.caption.weight(.medium))
+                    .monospacedDigit()
+                    .foregroundStyle(.secondary)
+                    .frame(width: 36, alignment: .trailing)
+            }
+
+            HStack(spacing: 6) {
+                Text(displayLabel)
+                    .font(.caption2)
+                    .foregroundStyle(.tertiary)
+                Spacer()
+                if let resetText {
+                    Text(resetText)
+                        .font(.caption2)
+                        .foregroundStyle(.tertiary)
+                        .lineLimit(1)
+                        .truncationMode(.tail)
+                }
             }
         }
     }
@@ -70,5 +120,20 @@ struct UsageBar: View {
             formatter.allowedUnits = [.minute]
         }
         return formatter.string(from: TimeInterval(seconds))
+    }
+
+    private var compactLabel: String {
+        switch window.label.lowercased() {
+        case "5 hours":
+            return "5h"
+        case "weekly":
+            return "week"
+        default:
+            return window.label
+        }
+    }
+
+    private var displayLabel: String {
+        compactLabel
     }
 }

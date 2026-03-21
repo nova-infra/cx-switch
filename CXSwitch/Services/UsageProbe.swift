@@ -1,8 +1,17 @@
 import Foundation
 
-enum UsageProbeError: Error {
+enum UsageProbeError: Error, LocalizedError {
     case invalidResponse
     case missingHeaders
+
+    var errorDescription: String? {
+        switch self {
+        case .invalidResponse:
+            return "暂时无法获取用量信息"
+        case .missingHeaders:
+            return "暂时无法读取用量详情"
+        }
+    }
 }
 
 final class UsageProbe {

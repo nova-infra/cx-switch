@@ -4,31 +4,65 @@ struct SavedAccountRow: View {
     let account: Account
     let preferences: Preferences
     let onSelect: () -> Void
+    let onRefresh: () -> Void
+    let refreshing: Bool
 
     var body: some View {
-        Button(action: onSelect) {
-            VStack(alignment: .leading, spacing: 4) {
-                HStack {
-                    Text(displayEmail(for: account))
-                        .font(.subheadline)
-                    Spacer(minLength: 8)
-                    if let planType = account.planType {
-                        Text(planType.rawValue.uppercased())
+        HStack(alignment: .center, spacing: 10) {
+            Button(action: onSelect) {
+                VStack(alignment: .leading, spacing: 7) {
+                    HStack(alignment: .firstTextBaseline, spacing: 8) {
+                        Text(displayEmail(for: account))
+                            .font(.body.weight(.medium))
+                            .lineLimit(1)
+                            .truncationMode(.middle)
+
+                        if let accountType = account.accountType {
+                            infoText(accountType.displayName)
+                        }
+
+                        if let planType = account.planType {
+                            infoText(Strings.planTypeDisplayName(for: planType))
+                        }
+
+                        Spacer(minLength: 8)
+                    }
+
+                    if let usageSnapshot = account.usageSnapshot {
+                        usageBars(primary: usageSnapshot.primary, secondary: usageSnapshot.secondary)
+                    }
+
+                    if let error = account.usageError, !error.isEmpty {
+                        Text(error)
                             .font(.caption2)
-                            .padding(.horizontal, 6)
-                            .padding(.vertical, 2)
-                            .background(Color.secondary.opacity(0.15))
-                            .clipShape(Capsule())
+                            .foregroundStyle(.red)
+                            .lineLimit(2)
                     }
                 }
-
-                if let primary = account.usageSnapshot?.primary {
-                    UsageBar(window: primary)
-                }
+                .contentShape(Rectangle())
             }
-            .contentShape(Rectangle())
+            .buttonStyle(.plain)
+            .accessibilityLabel(displayEmail(for: account))
+
+            Button(action: onRefresh) {
+                Group {
+                    if refreshing {
+                        ProgressView()
+                            .controlSize(.small)
+                    } else {
+                        Image(systemName: "arrow.clockwise")
+                            .font(.caption.weight(.semibold))
+                    }
+                }
+                .frame(width: 24, height: 24)
+                .background(Color.primary.opacity(0.06), in: Circle())
+            }
+            .buttonStyle(.plain)
+            .disabled(refreshing)
+            .accessibilityLabel(Strings.refresh)
         }
-        .buttonStyle(.plain)
+        .frame(maxWidth: .infinity, alignment: .leading)
+        .padding(.vertical, 6)
     }
 
     private func displayEmail(for account: Account) -> String {
@@ -36,5 +70,30 @@ struct SavedAccountRow: View {
             return account.maskedEmail
         }
         return account.email
+    }
+
+    private func infoText(_ text: String) -> some View {
+        Text(text)
+            .font(.caption2.weight(.medium))
+            .foregroundStyle(.secondary)
+            .lineLimit(1)
+            .truncationMode(.tail)
+    }
+
+    @ViewBuilder
+    private func usageBars(primary: UsageWindow?, secondary: UsageWindow?) -> some View {
+        let windows = [primary, secondary].compactMap { $0 }
+
+        if windows.count == 2 {
+            HStack(alignment: .top, spacing: 8) {
+                ForEach(Array(windows.enumerated()), id: \.offset) { _, window in
+                    UsageBar(window: window, style: .compact)
+                        .frame(maxWidth: .infinity, alignment: .leading)
+                }
+            }
+        } else if let window = windows.first {
+            UsageBar(window: window, style: .compact)
+                .frame(maxWidth: .infinity, alignment: .leading)
+        }
     }
 }

@@ -123,6 +123,13 @@ final class CodexAppServer: @unchecked Sendable {
         try start()
     }
 
+    func restartAndInitialize() async throws {
+        shutdown()
+        try await Task.sleep(nanoseconds: 500_000_000)
+        try start()
+        try await initialize()
+    }
+
     func setNotificationHandler(_ handler: ((ServerNotification) -> Void)?) {
         processQueue.sync {
             notificationHandler = handler
