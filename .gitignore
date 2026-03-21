@@ -1,6 +1,7 @@
-node_modules
-dist
-build
-electrobun.config.ts
-icon.iconset
 .DS_Store
+.build/
+DerivedData/
+*.xcuserstate
+xcuserdata/
+*.swp
+icon.iconset
