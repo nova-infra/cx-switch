@@ -5,7 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <meta
       name="description"
-      content="CX Switch official site. A bilingual menu bar companion for switching OpenAI accounts, distilled from GPT-5.4 frontend guidance."
+      content="CX Switch official site. A bilingual menu bar app for switching OpenAI accounts, distilled from real repository content."
     />
     <meta name="theme-color" content="#08131f" />
     <title>CX Switch | Official Site</title>
@@ -26,10 +26,10 @@
         </a>
 
         <nav class="nav" aria-label="Primary">
-          <a href="#story" data-i18n="navStory">Story</a>
-          <a href="#features" data-i18n="navFeatures">Features</a>
+          <a href="#method" data-i18n="navMethod">Method</a>
+          <a href="#product" data-i18n="navProduct">Product</a>
           <a href="#install" data-i18n="navInstall">Install</a>
-          <a href="#publish" data-i18n="navPublish">Deploy</a>
+          <a href="#download" data-i18n="navDownload">Download</a>
         </nav>
 
         <div class="topbar__actions">
@@ -51,26 +51,20 @@
             <p class="eyebrow" data-i18n="heroEyebrow">Official website</p>
             <h1 data-i18n="heroTitle">CX Switch</h1>
             <p class="hero__lead" data-i18n="heroLead">
-              A menu bar companion for switching OpenAI accounts with clarity,
-              calm hierarchy, and bilingual polish.
+              A menu bar app for switching OpenAI accounts, tracking usage, and
+              keeping the current workspace close at hand.
             </p>
             <div class="hero__actions">
-              <a class="button button--primary" href="#install" data-i18n="ctaPrimary">
-                See how to install
+              <a class="button button--primary" href="#method" data-i18n="ctaPrimary">
+                Read the method
               </a>
-              <a
-                class="button button--secondary"
-                href="https://developers.openai.com/blog/designing-delightful-frontends-with-gpt-5-4"
-                target="_blank"
-                rel="noreferrer"
-                data-i18n="ctaSecondary"
-              >
-                Read the GPT-5.4 article
+              <a class="button button--secondary" href="#product" data-i18n="ctaSecondary">
+                See product facts
               </a>
             </div>
             <p class="hero__note" data-i18n="heroNote">
-              This site follows the same guidance it summarizes: one story, one
-              visual anchor, and just enough motion to feel alive.
+              The page is written from the repository itself: real files first,
+              claims second, polish third.
             </p>
           </div>
 
@@ -81,10 +75,10 @@
             <article class="panel mockup">
               <div class="mockup__header">
                 <div>
-                  <p class="mockup__eyebrow">Menu bar panel</p>
+                  <p class="mockup__eyebrow" data-i18n="mockEyebrow">Menu bar panel</p>
                   <h2>CX Switch</h2>
                 </div>
-                <span class="badge">Live</span>
+                <span class="badge" data-i18n="mockBadge">Live</span>
               </div>
 
               <div class="account-card">
@@ -102,7 +96,7 @@
                     <span data-i18n="mockPrimary">5 hour window</span>
                     <strong>72%</strong>
                   </div>
-                  <span>47 min left</span>
+                  <span data-i18n="mockPrimaryTime">47 min left</span>
                 </div>
                 <div class="meter" aria-hidden="true">
                   <span style="width: 72%"></span>
@@ -115,7 +109,7 @@
                     <span data-i18n="mockSecondary">Weekly window</span>
                     <strong>28%</strong>
                   </div>
-                  <span>2 days left</span>
+                  <span data-i18n="mockSecondaryTime">2 days left</span>
                 </div>
                 <div class="meter meter--secondary" aria-hidden="true">
                   <span style="width: 28%"></span>
@@ -131,98 +125,94 @@
           </div>
         </section>
 
-        <section class="section" id="story">
+        <section class="section" id="method">
           <div class="section__header">
-            <p class="eyebrow" data-i18n="storyKicker">What GPT-5.4 teaches us</p>
-            <h2 data-i18n="storyTitle">Design starts with a story, not with chrome.</h2>
-            <p data-i18n="storyLead">
-              The OpenAI article argues that stronger frontends come from better
-              constraints, clearer content, and visual verification. We turned
-              that advice into the structure of this page.
+            <p class="eyebrow" data-i18n="methodKicker">Method</p>
+            <h2 data-i18n="methodTitle">Use the repo as the source of truth.</h2>
+            <p data-i18n="methodLead">
+              The site is built the same way the skill works: read the codebase,
+              extract the facts, shape a short narrative, and verify every claim.
             </p>
           </div>
 
           <div class="principles">
             <article class="panel principle">
               <p class="principle__index">01</p>
-              <h3 data-i18n="principle1Title">Define constraints up front</h3>
+              <h3 data-i18n="principle1Title">Read the source</h3>
               <p data-i18n="principle1Body">
-                Choose the layout, the palette, the hierarchy, and the tone
-                before adding details. Good output is easier when the model sees
-                the rules first.
+                Start with app entry points, view files, services, and config so
+                the site reflects what the product actually does.
               </p>
             </article>
 
             <article class="panel principle">
               <p class="principle__index">02</p>
-              <h3 data-i18n="principle2Title">Use a narrative page flow</h3>
+              <h3 data-i18n="principle2Title">Extract product facts</h3>
               <p data-i18n="principle2Body">
-                Hero, support, detail, and final action. That rhythm keeps the
-                page focused and prevents generic dashboard sprawl.
+                Keep only claims that are supported by the repository: current
+                account, saved accounts, usage bars, token import, and language support.
               </p>
             </article>
 
             <article class="panel principle">
               <p class="principle__index">03</p>
-              <h3 data-i18n="principle3Title">Ground the page in real content</h3>
+              <h3 data-i18n="principle3Title">Shape a short narrative</h3>
               <p data-i18n="principle3Body">
-                Real product copy, real usage states, and real install steps make
-                the site feel believable instead of decorative.
+                Lead with the promise, then show proof, then explain install and
+                download. One job per section.
               </p>
             </article>
 
             <article class="panel principle">
               <p class="principle__index">04</p>
-              <h3 data-i18n="principle4Title">Verify on desktop and mobile</h3>
+              <h3 data-i18n="principle4Title">Verify against the repo</h3>
               <p data-i18n="principle4Body">
-                The article emphasizes inspection and iteration. This page uses a
-                responsive hero, readable spacing, and motion that respects reduced
-                motion settings.
+                Before shipping, check that every line of copy matches the code
+                and that the page still works on desktop and mobile.
               </p>
             </article>
           </div>
         </section>
 
-        <section class="section" id="features">
+        <section class="section" id="product">
           <div class="section__header">
-            <p class="eyebrow" data-i18n="featuresKicker">Current features</p>
-            <h2 data-i18n="featuresTitle">Everything the current app already does.</h2>
-            <p data-i18n="featuresLead">
-              These are drawn from the SwiftUI rewrite in this repository, so the
-              site reflects the app as it exists now.
+            <p class="eyebrow" data-i18n="productKicker">Product</p>
+            <h2 data-i18n="productTitle">A compact tool for OpenAI account switching.</h2>
+            <p data-i18n="productLead">
+              The current app is a macOS menu bar utility, and these are the
+              features that are visible in the codebase today.
             </p>
           </div>
 
           <div class="feature-grid">
             <article class="panel feature">
-              <h3 data-i18n="feature1Title">Menu bar first</h3>
+              <h3 data-i18n="feature1Title">Menu bar only</h3>
               <p data-i18n="feature1Body">
-                CX Switch runs as a macOS menu bar app with no Dock icon, keeping
-                account switching close to where you need it.
+                CX Switch launches as a macOS menu bar app with no Dock icon.
               </p>
             </article>
 
             <article class="panel feature">
-              <h3 data-i18n="feature2Title">Usage at a glance</h3>
+              <h3 data-i18n="feature2Title">Current and saved accounts</h3>
               <p data-i18n="feature2Body">
-                The app shows your current account, plan badge, 5-hour usage, weekly
-                usage, and reset countdowns in one compact panel.
+                The panel shows the current account and a list of saved accounts
+                for quick switching.
               </p>
             </article>
 
             <article class="panel feature">
-              <h3 data-i18n="feature3Title">Fast account actions</h3>
+              <h3 data-i18n="feature3Title">Usage and reset timers</h3>
               <p data-i18n="feature3Body">
-                Add, save, switch, refresh, and import refresh tokens without
-                leaving the menu bar.
+                The current account card includes usage bars and reset countdowns
+                when the data is available.
               </p>
             </article>
 
             <article class="panel feature">
-              <h3 data-i18n="feature4Title">Bilingual ready</h3>
+              <h3 data-i18n="feature4Title">Import and language support</h3>
               <p data-i18n="feature4Body">
-                UI strings are centralized and can be shown in Chinese or English,
-                which makes the product easier to localize and maintain.
+                Users can import a refresh token, open settings or status, and
+                switch the UI between Chinese and English.
               </p>
             </article>
           </div>
@@ -231,10 +221,10 @@
         <section class="section" id="install">
           <div class="section__header">
             <p class="eyebrow" data-i18n="installKicker">Install</p>
-            <h2 data-i18n="installTitle">Run it locally in a few steps.</h2>
+            <h2 data-i18n="installTitle">Run the app locally.</h2>
             <p data-i18n="installLead">
-              The repository is a Swift package and Xcode project, so local setup
-              stays simple.
+              The project is an Xcode app built from a Swift package, so setup is
+              straightforward on macOS 14+.
             </p>
           </div>
 
@@ -259,41 +249,51 @@
 
             <article class="panel step">
               <p class="step__index">3</p>
-              <h3 data-i18n="installStep3Title">Start managing accounts</h3>
+              <h3 data-i18n="installStep3Title">Use the panel</h3>
               <p data-i18n="installStep3Body">
-                Add an account, import a refresh token, or switch to a saved
-                account from the menu bar panel.
+                Add accounts, switch between them, refresh usage, or import a
+                refresh token from the menu bar panel.
               </p>
             </article>
           </div>
         </section>
 
-        <section class="section" id="publish">
+        <section class="section" id="download">
           <div class="section__header">
-            <p class="eyebrow" data-i18n="publishKicker">GitHub Pages</p>
-            <h2 data-i18n="publishTitle">Ready for automatic deployment.</h2>
-            <p data-i18n="publishLead">
-              This site lives in <code>docs/</code> and ships with a GitHub Actions
-              workflow that publishes it to GitHub Pages on every push.
+            <p class="eyebrow" data-i18n="downloadKicker">Download</p>
+            <h2 data-i18n="downloadTitle">Get the app.</h2>
+            <p data-i18n="downloadLead">
+              A simple landing area for the current build, the latest releases,
+              and the source repository.
             </p>
           </div>
 
           <div class="publish-panel panel">
             <div>
-              <p class="publish-panel__label" data-i18n="publishLabel">Deployment path</p>
-              <strong>docs/ → gh-pages</strong>
+              <p class="publish-panel__label" data-i18n="downloadLabel">Latest build</p>
+              <strong data-i18n="downloadBuild">GitHub Releases</strong>
             </div>
             <div>
-              <p class="publish-panel__label" data-i18n="publishLabel2">What you get</p>
-              <strong data-i18n="publishResult">A bilingual marketing site that is easy to maintain.</strong>
+              <p class="publish-panel__label" data-i18n="downloadLabel2">Source</p>
+              <strong data-i18n="downloadSource">github.com/nova-infra/cx-switch</strong>
             </div>
+          </div>
+
+          <div class="hero__actions hero__actions--compact">
+            <a class="button button--primary" href="https://github.com/nova-infra/cx-switch/releases" target="_blank" rel="noreferrer" data-i18n="downloadCtaPrimary">
+              Open releases
+            </a>
+            <a class="button button--secondary" href="https://github.com/nova-infra/cx-switch" target="_blank" rel="noreferrer" data-i18n="downloadCtaSecondary">
+              View source
+            </a>
           </div>
         </section>
       </main>
 
       <footer class="footer">
         <p data-i18n="footerCopy">
-          Built from the GPT-5.4 frontend guidance article and adapted for CX Switch.
+          Built from source truth, shaped with the repo-site-builder method, and
+          presented as a bilingual official site.
         </p>
         <p class="footer__year">2026</p>
       </footer>

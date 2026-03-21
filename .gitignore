@@ -1,7 +1,12 @@
 .DS_Store
 .build/
+build/
+dist/
+node_modules/
 DerivedData/
 *.xcuserstate
 xcuserdata/
 *.swp
 icon.iconset
+CXSwitch.icns
+*.xcresult
