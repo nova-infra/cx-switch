@@ -21,7 +21,7 @@ CX Switch 是 macOS 菜单栏应用，用于管理和切换多个 OpenAI/ChatGPT
 **Non-Goals:**
 
 - 自动更新 / Sparkle 集成
-- 多语言/国际化
+- 完整国际化框架（首版中文，预留英文切换结构）
 - 单元测试（首版）
 - 内嵌 WebView 登录（使用系统浏览器）
 - 沙盒化 / Mac App Store 发布
@@ -50,13 +50,31 @@ CX Switch 是 macOS 菜单栏应用，用于管理和切换多个 OpenAI/ChatGPT
 ### 4. Security framework 直接访问 Keychain
 
 - 使用 `SecItemAdd` / `SecItemCopyMatching` / `SecItemDelete` 替换 shell 调用 `security` 命令。
-- Service: `com.bigo.cx-switch.account`，Account: 账户 ID，Value: Base64(AuthBlob JSON)。
+- Service: `com.novainfra.cx-switch.account`，Account: 账户 ID，Value: Base64(AuthBlob JSON)。
 - 格式与原版完全兼容。
 
-### 5. 保持原有文件路径和格式
+### 5. 首版中文 UI，预留英文切换
 
-- 注册表: `~/Library/Application Support/com.bigo.cx-switch/registry.json`
-- 偏好: `~/Library/Application Support/com.bigo.cx-switch/preferences.json`
+- 所有用户可见的 UI 文案首版使用中文。
+- 文案统一收敛到 `Strings.swift` 文件中，以 `enum Strings` 的 static let 形式管理，不散落在视图代码中。
+- 每个字符串同时保留中文和英文版本，通过 `Preferences.language` 切换（首版默认中文，后续可扩展为系统语言自动检测）。
+- 示例结构：
+  ```swift
+  enum Strings {
+      static var currentAccount: String { L("当前账户", en: "Current Account") }
+      static var switchTo: String { L("切换到", en: "Switch To") }
+      static var addAccount: String { L("添加账户…", en: "Add Account…") }
+      static var refresh: String { L("刷新", en: "Refresh") }
+      static var quit: String { L("退出 CX Switch", en: "Quit CX Switch") }
+      // ...
+  }
+  ```
+- 备选方案：使用 Apple 标准 Localizable.strings / String Catalog；对首版来说过重，且不利于 Codex 生成。
+
+### 6. 保持原有文件路径和格式
+
+- 注册表: `~/Library/Application Support/com.novainfra.cx-switch/registry.json`
+- 偏好: `~/Library/Application Support/com.novainfra.cx-switch/preferences.json`
 - 当前认证: `~/.codex/auth.json`
 - 写入策略：原子写入（写临时文件 → rename）
 
@@ -86,7 +104,8 @@ CXSwitch/
 │   └── UsageProbe.swift            # HTTP 用量探测
 ├── Utilities/
 │   ├── JWTDecoder.swift            # JWT payload 解码
-│   └── EmailMasker.swift           # 邮箱脱敏
+│   ├── EmailMasker.swift           # 邮箱脱敏
+│   └── Strings.swift               # UI 文案集中管理（中文 + 英文）
 └── Resources/
     └── Assets.xcassets             # 图标资源
 ```
@@ -214,15 +233,16 @@ OpenAI OAuth token 交换：
 
 ```
 ┌─────────────────────────────────────┐
-│  ✦ user@email.com                    │
-│  Pro Plan                            │
+│  ✦ 当前账户                          │
+│  user@email.com                      │
+│  Pro 套餐                            │
 │                                      │
-│  5 Hours  ████████░░  80%    1h30m   │  ← 原生 ProgressView
-│  Weekly   ██░░░░░░░░  20%    3d      │  ← 原生 ProgressView
+│  5 小时  ████████░░  80%    1h30m    │  ← 原生 ProgressView
+│  每周    ██░░░░░░░░  20%    3d       │  ← 原生 ProgressView
 │                                      │
-│  [Save Current Account]              │
+│  [保存当前账户]                       │
 ├──────────────────────────────────────┤
-│  Switch To                           │
+│  切换到                              │
 │  ┌────────────────────────────────┐  │
 │  │ other@mail.com  (plus)        │  │
 │  │ ████░░░░░░ 40%               │  │
@@ -232,11 +252,12 @@ OpenAI OAuth token 交换：
 │  │ ██████░░░░ 60%               │  │
 │  └────────────────────────────────┘  │
 ├──────────────────────────────────────┤
-│  ＋ Add Account…                     │
-│  ↻  Refresh                          │
+│  ＋ 添加账户…                        │
+│  ↻  刷新                             │
+│  📋 导入 Token…                      │
 ├──────────────────────────────────────┤
-│  Settings…        OpenAI Status      │
-│         Quit CX Switch               │
+│  设置…            OpenAI 状态        │
+│         退出 CX Switch               │
 └──────────────────────────────────────┘
 ```
 
@@ -275,7 +296,7 @@ OpenAI OAuth token 交换：
 ## 应用配置
 
 ```
-Bundle ID: com.bigo.cx-switch
+Bundle ID: com.novainfra.cx-switch
 App Name: CX Switch
 LSUIElement: true          (无 Dock 图标)
 Minimum Deployment: macOS 14.0
