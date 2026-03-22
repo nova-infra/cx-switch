@@ -1,5 +1,9 @@
 import Foundation
 
+protocol AuthTokenExchanging: Sendable {
+    func exchangeRefreshToken(_ refreshToken: String) async throws -> AuthTokens
+}
+
 enum AuthServiceError: Error, LocalizedError {
     case invalidResponse(statusCode: Int, body: String)
     case missingToken
@@ -14,7 +18,7 @@ enum AuthServiceError: Error, LocalizedError {
     }
 }
 
-final class AuthService {
+final class AuthService: AuthTokenExchanging {
     private let session: URLSession
     private let clientId: String
 

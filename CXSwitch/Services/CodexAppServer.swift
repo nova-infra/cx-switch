@@ -1,5 +1,22 @@
 import Foundation
 
+protocol CodexAppServering: Sendable {
+    func start() throws
+    func shutdown()
+    func restart() throws
+    func restartAndInitialize() async throws
+    func setNotificationHandler(_ handler: ((ServerNotification) -> Void)?)
+    func initialize(clientName: String, version: String) async throws
+    func sendRequest<T: Decodable>(method: String, params: Encodable?) async throws -> T
+    func sendNotification(method: String, params: Encodable?) throws
+}
+
+extension CodexAppServering {
+    func initialize() async throws {
+        try await initialize(clientName: "cx-switch", version: "0.1.0")
+    }
+}
+
 enum CodexAppServerError: Error {
     case notRunning
     case launchFailed
@@ -7,7 +24,7 @@ enum CodexAppServerError: Error {
     case malformedResponse
 }
 
-final class CodexAppServer: @unchecked Sendable {
+final class CodexAppServer: CodexAppServering, @unchecked Sendable {
     struct ClientInfo: Encodable {
         let name: String
         let version: String

@@ -19,6 +19,7 @@ source_files = [
   "CXSwitch/Models/Preferences.swift",
   "CXSwitch/Models/UsageSnapshot.swift",
   "CXSwitch/Services/AccountStore.swift",
+  "CXSwitch/Services/AccountDatabase.swift",
   "CXSwitch/Services/AuthService.swift",
   "CXSwitch/Services/CodexAppServer.swift",
   "CXSwitch/Services/KeychainService.swift",

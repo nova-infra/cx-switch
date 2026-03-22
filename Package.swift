@@ -16,7 +16,10 @@ let package = Package(
         .executableTarget(
             name: "CXSwitch",
             path: "CXSwitch",
-            exclude: ["Resources"]
+            exclude: ["Resources"],
+            linkerSettings: [
+                .linkedLibrary("sqlite3")
+            ]
         )
     ]
 )

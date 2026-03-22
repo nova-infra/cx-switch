@@ -7,189 +7,192 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		03A5584D37D17CE6DDBB44B0 /* SavedAccountRow.swift in Sources */ = {isa = PBXBuildFile; fileRef = DEB58767A67FBB041AFBB6BE /* SavedAccountRow.swift */; };
-		0C31F69C758A45081BC01F5B /* AccountStore.swift in Sources */ = {isa = PBXBuildFile; fileRef = D1CE1BFC639981D82556414E /* AccountStore.swift */; };
-		20FB201183B5FD920B63B89A /* SettingsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0CD392DA631F2FE8EA1CC711 /* SettingsView.swift */; };
-		294F92DF731D4DB45750FD6B /* CurrentAccountSection.swift in Sources */ = {isa = PBXBuildFile; fileRef = F757AD52C163C4C64C211B6F /* CurrentAccountSection.swift */; };
-		336FC07C956D9171B93CEB68 /* Strings.swift in Sources */ = {isa = PBXBuildFile; fileRef = DAAE74E21A4A0DD9267D17FA /* Strings.swift */; };
-		37A898436F875E2F60003EF2 /* KeychainService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 32B0C9DD6F38CB39F466EF68 /* KeychainService.swift */; };
-		4A964CBF68DCE140DD87F648 /* AppIntents.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 29F6508F5B407BB903334B7D /* AppIntents.framework */; };
-		4B8FD553C51784C890A54CDA /* CodexAppServer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 876FF63AFCC3866C32525895 /* CodexAppServer.swift */; };
-		5618409B79EAA3CE5CE109DB /* LoginFlowSheet.swift in Sources */ = {isa = PBXBuildFile; fileRef = 766FA1AC74D79C66D2880786 /* LoginFlowSheet.swift */; };
-		5D15748024810D0080E90919 /* AppIcon.icns in Resources */ = {isa = PBXBuildFile; fileRef = 9EBA3E8DAB9F40A18891C83E /* AppIcon.icns */; };
-		62D99A775ECAC2130945D42B /* Preferences.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4ADCD7C4566F769814CDE0E5 /* Preferences.swift */; };
-		7ACA221CB55B89B6AB4ABE60 /* JWTDecoder.swift in Sources */ = {isa = PBXBuildFile; fileRef = CE15DAF379175732B67F94D5 /* JWTDecoder.swift */; };
-		8276B652883431167D44779F /* MenuBarView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 10390C86025CBBB0E6102EC4 /* MenuBarView.swift */; };
-		9BD5975142EDE19343CEC0FC /* UsageProbe.swift in Sources */ = {isa = PBXBuildFile; fileRef = 411AC567ED37A32F906734D8 /* UsageProbe.swift */; };
-		A01850E82E6B3A56357C00AC /* CXSwitchApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5591D0C798A3CB22BE319F55 /* CXSwitchApp.swift */; };
-		A15E6D09CE123A1536EB5764 /* FooterActions.swift in Sources */ = {isa = PBXBuildFile; fileRef = DBB4ED18F8CA7C98792A019C /* FooterActions.swift */; };
-		A850EDA33BED941E6671D85F /* UsageBar.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3DAA8078DD8D990A411676A5 /* UsageBar.swift */; };
-		AFBB66005A8D7E10D637289F /* EmailMasker.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3F5FB4ED037AB2EC06B0CF71 /* EmailMasker.swift */; };
-		B24803D651418ECABFB063CE /* AppState.swift in Sources */ = {isa = PBXBuildFile; fileRef = F59C81A6508AEAFA7E9C4551 /* AppState.swift */; };
-		CE47E11104179B39ED465D36 /* AuthBlob.swift in Sources */ = {isa = PBXBuildFile; fileRef = D5D9AA741A0C3FCC729759D9 /* AuthBlob.swift */; };
-		E502F4968D2EDFD7B41636E9 /* Account.swift in Sources */ = {isa = PBXBuildFile; fileRef = 63267516E4E9B86D756E9B51 /* Account.swift */; };
-		EDCB07CC2755C34DBF23DF23 /* AuthService.swift in Sources */ = {isa = PBXBuildFile; fileRef = BAC296DBD94E574A73143E23 /* AuthService.swift */; };
-		F27BAD18D8D0C6FFBB2AE55D /* UsageSnapshot.swift in Sources */ = {isa = PBXBuildFile; fileRef = 124FF18B0AD07A485C5DE81A /* UsageSnapshot.swift */; };
-		F8AA46C28AA60C1A538B6E2C /* Cocoa.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 04FC631446BF6B0EADBE1A76 /* Cocoa.framework */; };
-		FDB18E64755C16395BB98CA6 /* LoginFlowState.swift in Sources */ = {isa = PBXBuildFile; fileRef = E55C66E640E7522B4F3E5317 /* LoginFlowState.swift */; };
+		008FBAE326033BA78BB75D49 /* EmailMasker.swift in Sources */ = {isa = PBXBuildFile; fileRef = B20D2989FA0684E7669907F9 /* EmailMasker.swift */; };
+		0F1D60652870AAFA92D0AF41 /* Account.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8B1B1DEF3B0EF826F5485DF0 /* Account.swift */; };
+		15616B3F02335252066CB61D /* FooterActions.swift in Sources */ = {isa = PBXBuildFile; fileRef = ABB264039380C2CB788EC649 /* FooterActions.swift */; };
+		15B62C37D37107C3D85069B7 /* AppState.swift in Sources */ = {isa = PBXBuildFile; fileRef = F48B4E6F8A45158E3921BDFD /* AppState.swift */; };
+		18F0A9DF3E95812B9D42A58A /* LoginFlowState.swift in Sources */ = {isa = PBXBuildFile; fileRef = C97A37478A18674A8B873CEB /* LoginFlowState.swift */; };
+		1D1300711997D502DF2BB954 /* AppIntents.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = C9976861A54BB9FD4C33BE58 /* AppIntents.framework */; };
+		2B0FD10FCD55A456B4A2D689 /* AccountDatabase.swift in Sources */ = {isa = PBXBuildFile; fileRef = CFA7B082B04BA114D5F541BB /* AccountDatabase.swift */; };
+		4EDD5A831898D9E0DEA21439 /* AccountStore.swift in Sources */ = {isa = PBXBuildFile; fileRef = 81817233C139A1F8F8031278 /* AccountStore.swift */; };
+		50CE51660EBA868E064C8478 /* UsageSnapshot.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9AAFC986B4F97694F05D44B9 /* UsageSnapshot.swift */; };
+		550B4529A788FA986D4AFC08 /* AuthService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 66DCB2A153D397583C8EE39A /* AuthService.swift */; };
+		596A006616AAACB2EEA5E0A1 /* AuthBlob.swift in Sources */ = {isa = PBXBuildFile; fileRef = 10DD0BC245C24649F9F29042 /* AuthBlob.swift */; };
+		6A8A0587483355D8AC72FEB6 /* Preferences.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1CD3A15F489B379452C22A67 /* Preferences.swift */; };
+		7711B7C426813752B80AEF92 /* CurrentAccountSection.swift in Sources */ = {isa = PBXBuildFile; fileRef = 976B789B06F54B1593EED694 /* CurrentAccountSection.swift */; };
+		931315EDCCBFF242EAC43DA6 /* CodexAppServer.swift in Sources */ = {isa = PBXBuildFile; fileRef = F575C2B6DB4ADDEEC2987D11 /* CodexAppServer.swift */; };
+		9CFF7733FAF4B04A290B0569 /* Strings.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2721887893D2AA1FF8B7067F /* Strings.swift */; };
+		AACEAC03FA2166EEDB4BCE9E /* KeychainService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 23693AC8CC017CA04B4447B7 /* KeychainService.swift */; };
+		AD6D3CE4A03A4D192C56D895 /* SavedAccountRow.swift in Sources */ = {isa = PBXBuildFile; fileRef = 961E528B44780C2B9B572A1A /* SavedAccountRow.swift */; };
+		B1FE5EDA896E45DD72A1B9F1 /* MenuBarView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 37D5099C5A905C82285402F9 /* MenuBarView.swift */; };
+		BDD809CCF3EF2B1F5F18B38B /* LoginFlowSheet.swift in Sources */ = {isa = PBXBuildFile; fileRef = CF80BCB2BE9DFE1BB23C308B /* LoginFlowSheet.swift */; };
+		C59C89DF30987A3E51F8E037 /* UsageBar.swift in Sources */ = {isa = PBXBuildFile; fileRef = 76217DB2102FB9E6276EB626 /* UsageBar.swift */; };
+		CB1F5168E5F3FDF7DADD7FF0 /* CXSwitchApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 26A6015A8362AD29708CCA9F /* CXSwitchApp.swift */; };
+		CB4BCB2A86AF55167FA1A650 /* SettingsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C943F9C0A95640EADC000AF4 /* SettingsView.swift */; };
+		CFF26EFD3FB0B9C379F537B1 /* Cocoa.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = DE2969143495578C55E33B0C /* Cocoa.framework */; };
+		DBFB5A8D975C11462805170C /* UsageProbe.swift in Sources */ = {isa = PBXBuildFile; fileRef = C8EE5DE95DBCEB087A02CBDC /* UsageProbe.swift */; };
+		EC1429C495F8C33C39FCD3DA /* JWTDecoder.swift in Sources */ = {isa = PBXBuildFile; fileRef = C75C7C8146DCEAB6EC76C82A /* JWTDecoder.swift */; };
+		FE3ED3A39F12EB7B5EEB3C44 /* AppIcon.icns in Resources */ = {isa = PBXBuildFile; fileRef = 13AC744DFB4F3DD90EA46C2E /* AppIcon.icns */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
-		04FC631446BF6B0EADBE1A76 /* Cocoa.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Cocoa.framework; path = Platforms/MacOSX.platform/Developer/SDKs/MacOSX15.0.sdk/System/Library/Frameworks/Cocoa.framework; sourceTree = DEVELOPER_DIR; };
-		0CD392DA631F2FE8EA1CC711 /* SettingsView.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = SettingsView.swift; path = CXSwitch/Views/SettingsView.swift; sourceTree = "<group>"; };
-		10390C86025CBBB0E6102EC4 /* MenuBarView.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = MenuBarView.swift; path = CXSwitch/Views/MenuBarView.swift; sourceTree = "<group>"; };
-		124FF18B0AD07A485C5DE81A /* UsageSnapshot.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = UsageSnapshot.swift; path = CXSwitch/Models/UsageSnapshot.swift; sourceTree = "<group>"; };
-		29F6508F5B407BB903334B7D /* AppIntents.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AppIntents.framework; path = System/Library/Frameworks/AppIntents.framework; sourceTree = "<group>"; };
-		32B0C9DD6F38CB39F466EF68 /* KeychainService.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = KeychainService.swift; path = CXSwitch/Services/KeychainService.swift; sourceTree = "<group>"; };
-		3DAA8078DD8D990A411676A5 /* UsageBar.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = UsageBar.swift; path = CXSwitch/Views/UsageBar.swift; sourceTree = "<group>"; };
-		3DC93D675CFC77A0F71E1FEA /* CXSwitch.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = CXSwitch.app; sourceTree = BUILT_PRODUCTS_DIR; };
-		3F5FB4ED037AB2EC06B0CF71 /* EmailMasker.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = EmailMasker.swift; path = CXSwitch/Utilities/EmailMasker.swift; sourceTree = "<group>"; };
-		411AC567ED37A32F906734D8 /* UsageProbe.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = UsageProbe.swift; path = CXSwitch/Services/UsageProbe.swift; sourceTree = "<group>"; };
-		4ADCD7C4566F769814CDE0E5 /* Preferences.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = Preferences.swift; path = CXSwitch/Models/Preferences.swift; sourceTree = "<group>"; };
-		5591D0C798A3CB22BE319F55 /* CXSwitchApp.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = CXSwitchApp.swift; path = CXSwitch/CXSwitchApp.swift; sourceTree = "<group>"; };
-		63267516E4E9B86D756E9B51 /* Account.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = Account.swift; path = CXSwitch/Models/Account.swift; sourceTree = "<group>"; };
-		766FA1AC74D79C66D2880786 /* LoginFlowSheet.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = LoginFlowSheet.swift; path = CXSwitch/Views/LoginFlowSheet.swift; sourceTree = "<group>"; };
-		876FF63AFCC3866C32525895 /* CodexAppServer.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = CodexAppServer.swift; path = CXSwitch/Services/CodexAppServer.swift; sourceTree = "<group>"; };
-		9EBA3E8DAB9F40A18891C83E /* AppIcon.icns */ = {isa = PBXFileReference; includeInIndex = 1; name = AppIcon.icns; path = CXSwitch/Resources/AppIcon.icns; sourceTree = "<group>"; };
-		BAC296DBD94E574A73143E23 /* AuthService.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = AuthService.swift; path = CXSwitch/Services/AuthService.swift; sourceTree = "<group>"; };
-		CE15DAF379175732B67F94D5 /* JWTDecoder.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = JWTDecoder.swift; path = CXSwitch/Utilities/JWTDecoder.swift; sourceTree = "<group>"; };
-		D1CE1BFC639981D82556414E /* AccountStore.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = AccountStore.swift; path = CXSwitch/Services/AccountStore.swift; sourceTree = "<group>"; };
-		D5D9AA741A0C3FCC729759D9 /* AuthBlob.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = AuthBlob.swift; path = CXSwitch/Models/AuthBlob.swift; sourceTree = "<group>"; };
-		DAAE74E21A4A0DD9267D17FA /* Strings.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = Strings.swift; path = CXSwitch/Utilities/Strings.swift; sourceTree = "<group>"; };
-		DBB4ED18F8CA7C98792A019C /* FooterActions.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = FooterActions.swift; path = CXSwitch/Views/FooterActions.swift; sourceTree = "<group>"; };
-		DEB58767A67FBB041AFBB6BE /* SavedAccountRow.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = SavedAccountRow.swift; path = CXSwitch/Views/SavedAccountRow.swift; sourceTree = "<group>"; };
-		E55C66E640E7522B4F3E5317 /* LoginFlowState.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = LoginFlowState.swift; path = CXSwitch/Models/LoginFlowState.swift; sourceTree = "<group>"; };
-		F59C81A6508AEAFA7E9C4551 /* AppState.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = AppState.swift; path = CXSwitch/Models/AppState.swift; sourceTree = "<group>"; };
-		F757AD52C163C4C64C211B6F /* CurrentAccountSection.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = CurrentAccountSection.swift; path = CXSwitch/Views/CurrentAccountSection.swift; sourceTree = "<group>"; };
+		10DD0BC245C24649F9F29042 /* AuthBlob.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = AuthBlob.swift; path = CXSwitch/Models/AuthBlob.swift; sourceTree = "<group>"; };
+		13AC744DFB4F3DD90EA46C2E /* AppIcon.icns */ = {isa = PBXFileReference; includeInIndex = 1; name = AppIcon.icns; path = CXSwitch/Resources/AppIcon.icns; sourceTree = "<group>"; };
+		1CD3A15F489B379452C22A67 /* Preferences.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = Preferences.swift; path = CXSwitch/Models/Preferences.swift; sourceTree = "<group>"; };
+		23693AC8CC017CA04B4447B7 /* KeychainService.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = KeychainService.swift; path = CXSwitch/Services/KeychainService.swift; sourceTree = "<group>"; };
+		23E84EC2FDCD1D045E83E103 /* CXSwitch.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = CXSwitch.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		26A6015A8362AD29708CCA9F /* CXSwitchApp.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = CXSwitchApp.swift; path = CXSwitch/CXSwitchApp.swift; sourceTree = "<group>"; };
+		2721887893D2AA1FF8B7067F /* Strings.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = Strings.swift; path = CXSwitch/Utilities/Strings.swift; sourceTree = "<group>"; };
+		37D5099C5A905C82285402F9 /* MenuBarView.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = MenuBarView.swift; path = CXSwitch/Views/MenuBarView.swift; sourceTree = "<group>"; };
+		66DCB2A153D397583C8EE39A /* AuthService.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = AuthService.swift; path = CXSwitch/Services/AuthService.swift; sourceTree = "<group>"; };
+		76217DB2102FB9E6276EB626 /* UsageBar.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = UsageBar.swift; path = CXSwitch/Views/UsageBar.swift; sourceTree = "<group>"; };
+		81817233C139A1F8F8031278 /* AccountStore.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = AccountStore.swift; path = CXSwitch/Services/AccountStore.swift; sourceTree = "<group>"; };
+		8B1B1DEF3B0EF826F5485DF0 /* Account.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = Account.swift; path = CXSwitch/Models/Account.swift; sourceTree = "<group>"; };
+		961E528B44780C2B9B572A1A /* SavedAccountRow.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = SavedAccountRow.swift; path = CXSwitch/Views/SavedAccountRow.swift; sourceTree = "<group>"; };
+		976B789B06F54B1593EED694 /* CurrentAccountSection.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = CurrentAccountSection.swift; path = CXSwitch/Views/CurrentAccountSection.swift; sourceTree = "<group>"; };
+		9AAFC986B4F97694F05D44B9 /* UsageSnapshot.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = UsageSnapshot.swift; path = CXSwitch/Models/UsageSnapshot.swift; sourceTree = "<group>"; };
+		ABB264039380C2CB788EC649 /* FooterActions.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = FooterActions.swift; path = CXSwitch/Views/FooterActions.swift; sourceTree = "<group>"; };
+		B20D2989FA0684E7669907F9 /* EmailMasker.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = EmailMasker.swift; path = CXSwitch/Utilities/EmailMasker.swift; sourceTree = "<group>"; };
+		C75C7C8146DCEAB6EC76C82A /* JWTDecoder.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = JWTDecoder.swift; path = CXSwitch/Utilities/JWTDecoder.swift; sourceTree = "<group>"; };
+		C8EE5DE95DBCEB087A02CBDC /* UsageProbe.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = UsageProbe.swift; path = CXSwitch/Services/UsageProbe.swift; sourceTree = "<group>"; };
+		C943F9C0A95640EADC000AF4 /* SettingsView.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = SettingsView.swift; path = CXSwitch/Views/SettingsView.swift; sourceTree = "<group>"; };
+		C97A37478A18674A8B873CEB /* LoginFlowState.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = LoginFlowState.swift; path = CXSwitch/Models/LoginFlowState.swift; sourceTree = "<group>"; };
+		C9976861A54BB9FD4C33BE58 /* AppIntents.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AppIntents.framework; path = System/Library/Frameworks/AppIntents.framework; sourceTree = "<group>"; };
+		CF80BCB2BE9DFE1BB23C308B /* LoginFlowSheet.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = LoginFlowSheet.swift; path = CXSwitch/Views/LoginFlowSheet.swift; sourceTree = "<group>"; };
+		CFA7B082B04BA114D5F541BB /* AccountDatabase.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = AccountDatabase.swift; path = CXSwitch/Services/AccountDatabase.swift; sourceTree = "<group>"; };
+		DE2969143495578C55E33B0C /* Cocoa.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Cocoa.framework; path = Platforms/MacOSX.platform/Developer/SDKs/MacOSX15.0.sdk/System/Library/Frameworks/Cocoa.framework; sourceTree = DEVELOPER_DIR; };
+		F48B4E6F8A45158E3921BDFD /* AppState.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = AppState.swift; path = CXSwitch/Models/AppState.swift; sourceTree = "<group>"; };
+		F575C2B6DB4ADDEEC2987D11 /* CodexAppServer.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = CodexAppServer.swift; path = CXSwitch/Services/CodexAppServer.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
-		1536510AF5B93AE6E18CF229 /* Frameworks */ = {
+		893372ED16D96998C8711C46 /* Frameworks */ = {
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				F8AA46C28AA60C1A538B6E2C /* Cocoa.framework in Frameworks */,
-				4A964CBF68DCE140DD87F648 /* AppIntents.framework in Frameworks */,
+				CFF26EFD3FB0B9C379F537B1 /* Cocoa.framework in Frameworks */,
+				1D1300711997D502DF2BB954 /* AppIntents.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
-		12C18862041EC5E7558D3097 /* Views */ = {
+		1A74571214B4678295592620 /* Services */ = {
 			isa = PBXGroup;
 			children = (
-				F757AD52C163C4C64C211B6F /* CurrentAccountSection.swift */,
-				DBB4ED18F8CA7C98792A019C /* FooterActions.swift */,
-				766FA1AC74D79C66D2880786 /* LoginFlowSheet.swift */,
-				10390C86025CBBB0E6102EC4 /* MenuBarView.swift */,
-				DEB58767A67FBB041AFBB6BE /* SavedAccountRow.swift */,
-				0CD392DA631F2FE8EA1CC711 /* SettingsView.swift */,
-				3DAA8078DD8D990A411676A5 /* UsageBar.swift */,
-			);
-			name = Views;
-			sourceTree = "<group>";
-		};
-		1A9CD35CAF9080CF6E1B66D8 /* Models */ = {
-			isa = PBXGroup;
-			children = (
-				63267516E4E9B86D756E9B51 /* Account.swift */,
-				D5D9AA741A0C3FCC729759D9 /* AuthBlob.swift */,
-				F59C81A6508AEAFA7E9C4551 /* AppState.swift */,
-				E55C66E640E7522B4F3E5317 /* LoginFlowState.swift */,
-				4ADCD7C4566F769814CDE0E5 /* Preferences.swift */,
-				124FF18B0AD07A485C5DE81A /* UsageSnapshot.swift */,
-			);
-			name = Models;
-			sourceTree = "<group>";
-		};
-		265E3CE463A24B14767EFCCF /* OS X */ = {
-			isa = PBXGroup;
-			children = (
-				04FC631446BF6B0EADBE1A76 /* Cocoa.framework */,
-			);
-			name = "OS X";
-			sourceTree = "<group>";
-		};
-		46F04390B82B7EFB83F745F6 /* Services */ = {
-			isa = PBXGroup;
-			children = (
-				D1CE1BFC639981D82556414E /* AccountStore.swift */,
-				BAC296DBD94E574A73143E23 /* AuthService.swift */,
-				876FF63AFCC3866C32525895 /* CodexAppServer.swift */,
-				32B0C9DD6F38CB39F466EF68 /* KeychainService.swift */,
-				411AC567ED37A32F906734D8 /* UsageProbe.swift */,
+				81817233C139A1F8F8031278 /* AccountStore.swift */,
+				CFA7B082B04BA114D5F541BB /* AccountDatabase.swift */,
+				66DCB2A153D397583C8EE39A /* AuthService.swift */,
+				F575C2B6DB4ADDEEC2987D11 /* CodexAppServer.swift */,
+				23693AC8CC017CA04B4447B7 /* KeychainService.swift */,
+				C8EE5DE95DBCEB087A02CBDC /* UsageProbe.swift */,
 			);
 			name = Services;
 			sourceTree = "<group>";
 		};
-		46F3DCBEB315A23E911BB351 /* Utilities */ = {
+		369D799E67DC3231FF32B714 /* Models */ = {
 			isa = PBXGroup;
 			children = (
-				3F5FB4ED037AB2EC06B0CF71 /* EmailMasker.swift */,
-				CE15DAF379175732B67F94D5 /* JWTDecoder.swift */,
-				DAAE74E21A4A0DD9267D17FA /* Strings.swift */,
+				8B1B1DEF3B0EF826F5485DF0 /* Account.swift */,
+				10DD0BC245C24649F9F29042 /* AuthBlob.swift */,
+				F48B4E6F8A45158E3921BDFD /* AppState.swift */,
+				C97A37478A18674A8B873CEB /* LoginFlowState.swift */,
+				1CD3A15F489B379452C22A67 /* Preferences.swift */,
+				9AAFC986B4F97694F05D44B9 /* UsageSnapshot.swift */,
 			);
-			name = Utilities;
+			name = Models;
 			sourceTree = "<group>";
 		};
-		5E068D014FC7D656F050DB1F /* CXSwitch */ = {
+		375A082EB261AAA57A0B20B6 /* OS X */ = {
 			isa = PBXGroup;
 			children = (
-				1A9CD35CAF9080CF6E1B66D8 /* Models */,
-				46F04390B82B7EFB83F745F6 /* Services */,
-				46F3DCBEB315A23E911BB351 /* Utilities */,
-				12C18862041EC5E7558D3097 /* Views */,
-				F7E1EDE28F37397116789419 /* Resources */,
-				5591D0C798A3CB22BE319F55 /* CXSwitchApp.swift */,
+				DE2969143495578C55E33B0C /* Cocoa.framework */,
 			);
-			name = CXSwitch;
+			name = "OS X";
 			sourceTree = "<group>";
 		};
-		82403D653AED544BB1B8EF6A /* Products */ = {
+		509AA995A205E8E47C0F7754 /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
-				3DC93D675CFC77A0F71E1FEA /* CXSwitch.app */,
-			);
-			name = Products;
-			sourceTree = "<group>";
-		};
-		D1C02C21F3CB09395A1E43F8 /* Frameworks */ = {
-			isa = PBXGroup;
-			children = (
-				265E3CE463A24B14767EFCCF /* OS X */,
-				29F6508F5B407BB903334B7D /* AppIntents.framework */,
+				375A082EB261AAA57A0B20B6 /* OS X */,
+				C9976861A54BB9FD4C33BE58 /* AppIntents.framework */,
 			);
 			name = Frameworks;
 			sourceTree = "<group>";
 		};
-		EC197A252C8A117141151A31 = {
+		5D502AC07356C1C769EEA805 /* Views */ = {
 			isa = PBXGroup;
 			children = (
-				82403D653AED544BB1B8EF6A /* Products */,
-				D1C02C21F3CB09395A1E43F8 /* Frameworks */,
-				5E068D014FC7D656F050DB1F /* CXSwitch */,
+				976B789B06F54B1593EED694 /* CurrentAccountSection.swift */,
+				ABB264039380C2CB788EC649 /* FooterActions.swift */,
+				CF80BCB2BE9DFE1BB23C308B /* LoginFlowSheet.swift */,
+				37D5099C5A905C82285402F9 /* MenuBarView.swift */,
+				961E528B44780C2B9B572A1A /* SavedAccountRow.swift */,
+				C943F9C0A95640EADC000AF4 /* SettingsView.swift */,
+				76217DB2102FB9E6276EB626 /* UsageBar.swift */,
+			);
+			name = Views;
+			sourceTree = "<group>";
+		};
+		79E6A3065809C46993428979 /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				23E84EC2FDCD1D045E83E103 /* CXSwitch.app */,
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
+		817903518EFB5838197D1216 /* CXSwitch */ = {
+			isa = PBXGroup;
+			children = (
+				369D799E67DC3231FF32B714 /* Models */,
+				1A74571214B4678295592620 /* Services */,
+				F6CC540A3D28980ECD7842E3 /* Utilities */,
+				5D502AC07356C1C769EEA805 /* Views */,
+				EE9385F148FE2446467B2799 /* Resources */,
+				26A6015A8362AD29708CCA9F /* CXSwitchApp.swift */,
+			);
+			name = CXSwitch;
+			sourceTree = "<group>";
+		};
+		E20E3FFD40BD5ADCB0551E3C = {
+			isa = PBXGroup;
+			children = (
+				79E6A3065809C46993428979 /* Products */,
+				509AA995A205E8E47C0F7754 /* Frameworks */,
+				817903518EFB5838197D1216 /* CXSwitch */,
 			);
 			sourceTree = "<group>";
 		};
-		F7E1EDE28F37397116789419 /* Resources */ = {
+		EE9385F148FE2446467B2799 /* Resources */ = {
 			isa = PBXGroup;
 			children = (
-				9EBA3E8DAB9F40A18891C83E /* AppIcon.icns */,
+				13AC744DFB4F3DD90EA46C2E /* AppIcon.icns */,
 			);
 			name = Resources;
+			sourceTree = "<group>";
+		};
+		F6CC540A3D28980ECD7842E3 /* Utilities */ = {
+			isa = PBXGroup;
+			children = (
+				B20D2989FA0684E7669907F9 /* EmailMasker.swift */,
+				C75C7C8146DCEAB6EC76C82A /* JWTDecoder.swift */,
+				2721887893D2AA1FF8B7067F /* Strings.swift */,
+			);
+			name = Utilities;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
-		BDCD0DDE7BEBD1B04A883141 /* CXSwitch */ = {
+		CDCFB777FFD56480D1271CD9 /* CXSwitch */ = {
 			isa = PBXNativeTarget;
-			buildConfigurationList = A438DF11D9468E12E8E0A923 /* Build configuration list for PBXNativeTarget "CXSwitch" */;
+			buildConfigurationList = A085C61F244771C4D784EBEF /* Build configuration list for PBXNativeTarget "CXSwitch" */;
 			buildPhases = (
-				BA1826235BA95ACA23EFD493 /* Sources */,
-				1536510AF5B93AE6E18CF229 /* Frameworks */,
-				9BEEB43BCCAD1DA3647AFFB5 /* Resources */,
+				6F8029E7F596638D28BB27F3 /* Sources */,
+				893372ED16D96998C8711C46 /* Frameworks */,
+				67D3372626D76FC91580B0D1 /* Resources */,
 			);
 			buildRules = (
 			);
@@ -197,19 +200,19 @@
 			);
 			name = CXSwitch;
 			productName = CXSwitch;
-			productReference = 3DC93D675CFC77A0F71E1FEA /* CXSwitch.app */;
+			productReference = 23E84EC2FDCD1D045E83E103 /* CXSwitch.app */;
 			productType = "com.apple.product-type.application";
 		};
 /* End PBXNativeTarget section */
 
 /* Begin PBXProject section */
-		BF9E39B80D454B530F57D471 /* Project object */ = {
+		C6968DB2F6583710C91E19E0 /* Project object */ = {
 			isa = PBXProject;
 			attributes = {
 				LastSwiftUpdateCheck = 1600;
 				LastUpgradeCheck = 1600;
 			};
-			buildConfigurationList = 3DF3FB40EA32CD4ACA8EAE54 /* Build configuration list for PBXProject "CXSwitch" */;
+			buildConfigurationList = D927AE6E5647E223C36EC41A /* Build configuration list for PBXProject "CXSwitch" */;
 			compatibilityVersion = "Xcode 3.2";
 			developmentRegion = en;
 			hasScannedForEncodings = 0;
@@ -217,63 +220,118 @@
 				en,
 				Base,
 			);
-			mainGroup = EC197A252C8A117141151A31;
+			mainGroup = E20E3FFD40BD5ADCB0551E3C;
 			minimizedProjectReferenceProxies = 0;
 			preferredProjectObjectVersion = 77;
-			productRefGroup = 82403D653AED544BB1B8EF6A /* Products */;
+			productRefGroup = 79E6A3065809C46993428979 /* Products */;
 			projectDirPath = "";
 			projectRoot = "";
 			targets = (
-				BDCD0DDE7BEBD1B04A883141 /* CXSwitch */,
+				CDCFB777FFD56480D1271CD9 /* CXSwitch */,
 			);
 		};
 /* End PBXProject section */
 
 /* Begin PBXResourcesBuildPhase section */
-		9BEEB43BCCAD1DA3647AFFB5 /* Resources */ = {
+		67D3372626D76FC91580B0D1 /* Resources */ = {
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				5D15748024810D0080E90919 /* AppIcon.icns in Resources */,
+				FE3ED3A39F12EB7B5EEB3C44 /* AppIcon.icns in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXResourcesBuildPhase section */
 
 /* Begin PBXSourcesBuildPhase section */
-		BA1826235BA95ACA23EFD493 /* Sources */ = {
+		6F8029E7F596638D28BB27F3 /* Sources */ = {
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				A01850E82E6B3A56357C00AC /* CXSwitchApp.swift in Sources */,
-				E502F4968D2EDFD7B41636E9 /* Account.swift in Sources */,
-				CE47E11104179B39ED465D36 /* AuthBlob.swift in Sources */,
-				B24803D651418ECABFB063CE /* AppState.swift in Sources */,
-				FDB18E64755C16395BB98CA6 /* LoginFlowState.swift in Sources */,
-				62D99A775ECAC2130945D42B /* Preferences.swift in Sources */,
-				F27BAD18D8D0C6FFBB2AE55D /* UsageSnapshot.swift in Sources */,
-				0C31F69C758A45081BC01F5B /* AccountStore.swift in Sources */,
-				EDCB07CC2755C34DBF23DF23 /* AuthService.swift in Sources */,
-				4B8FD553C51784C890A54CDA /* CodexAppServer.swift in Sources */,
-				37A898436F875E2F60003EF2 /* KeychainService.swift in Sources */,
-				9BD5975142EDE19343CEC0FC /* UsageProbe.swift in Sources */,
-				AFBB66005A8D7E10D637289F /* EmailMasker.swift in Sources */,
-				7ACA221CB55B89B6AB4ABE60 /* JWTDecoder.swift in Sources */,
-				336FC07C956D9171B93CEB68 /* Strings.swift in Sources */,
-				294F92DF731D4DB45750FD6B /* CurrentAccountSection.swift in Sources */,
-				A15E6D09CE123A1536EB5764 /* FooterActions.swift in Sources */,
-				5618409B79EAA3CE5CE109DB /* LoginFlowSheet.swift in Sources */,
-				8276B652883431167D44779F /* MenuBarView.swift in Sources */,
-				03A5584D37D17CE6DDBB44B0 /* SavedAccountRow.swift in Sources */,
-				20FB201183B5FD920B63B89A /* SettingsView.swift in Sources */,
-				A850EDA33BED941E6671D85F /* UsageBar.swift in Sources */,
+				CB1F5168E5F3FDF7DADD7FF0 /* CXSwitchApp.swift in Sources */,
+				0F1D60652870AAFA92D0AF41 /* Account.swift in Sources */,
+				596A006616AAACB2EEA5E0A1 /* AuthBlob.swift in Sources */,
+				15B62C37D37107C3D85069B7 /* AppState.swift in Sources */,
+				18F0A9DF3E95812B9D42A58A /* LoginFlowState.swift in Sources */,
+				6A8A0587483355D8AC72FEB6 /* Preferences.swift in Sources */,
+				50CE51660EBA868E064C8478 /* UsageSnapshot.swift in Sources */,
+				4EDD5A831898D9E0DEA21439 /* AccountStore.swift in Sources */,
+				2B0FD10FCD55A456B4A2D689 /* AccountDatabase.swift in Sources */,
+				550B4529A788FA986D4AFC08 /* AuthService.swift in Sources */,
+				931315EDCCBFF242EAC43DA6 /* CodexAppServer.swift in Sources */,
+				AACEAC03FA2166EEDB4BCE9E /* KeychainService.swift in Sources */,
+				DBFB5A8D975C11462805170C /* UsageProbe.swift in Sources */,
+				008FBAE326033BA78BB75D49 /* EmailMasker.swift in Sources */,
+				EC1429C495F8C33C39FCD3DA /* JWTDecoder.swift in Sources */,
+				9CFF7733FAF4B04A290B0569 /* Strings.swift in Sources */,
+				7711B7C426813752B80AEF92 /* CurrentAccountSection.swift in Sources */,
+				15616B3F02335252066CB61D /* FooterActions.swift in Sources */,
+				BDD809CCF3EF2B1F5F18B38B /* LoginFlowSheet.swift in Sources */,
+				B1FE5EDA896E45DD72A1B9F1 /* MenuBarView.swift in Sources */,
+				AD6D3CE4A03A4D192C56D895 /* SavedAccountRow.swift in Sources */,
+				CB4BCB2A86AF55167FA1A650 /* SettingsView.swift in Sources */,
+				C59C89DF30987A3E51F8E037 /* UsageBar.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXSourcesBuildPhase section */
 
 /* Begin XCBuildConfiguration section */
-		810FD423D04A420CE1A72E22 /* Release */ = {
+		69AEEB55BCC50750D05580FE /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++14";
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_ENABLE_OBJC_WEAK = YES;
+				CLANG_WARN_BLOCK_CAPTURE_AUTORELEASING = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_COMMA = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DEPRECATED_OBJC_IMPLEMENTATIONS = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
+				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
+				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_QUOTED_INCLUDE_IN_FRAMEWORK_HEADER = YES;
+				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
+				CLANG_WARN_STRICT_PROTOTYPES = YES;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
+				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				COPY_PHASE_STRIP = NO;
+				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				ENABLE_NS_ASSERTIONS = NO;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu11;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				MTL_ENABLE_DEBUG_INFO = NO;
+				MTL_FAST_MATH = YES;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_COMPILATION_MODE = wholemodule;
+				SWIFT_OPTIMIZATION_LEVEL = "-O";
+				SWIFT_VERSION = 5.0;
+			};
+			name = Release;
+		};
+		ABB8668B303DBC31B781852C /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
@@ -295,9 +353,9 @@
 				SDKROOT = macosx;
 				SWIFT_VERSION = 6.0;
 			};
-			name = Release;
+			name = Debug;
 		};
-		9EF98D1EE1A05B07EE9AFD9B /* Debug */ = {
+		C737E94896053D611B13A623 /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
@@ -358,7 +416,7 @@
 			};
 			name = Debug;
 		};
-		C21FA0B4DB5094F9718B4E9F /* Debug */ = {
+		F7B39EFAD135185682555BC7 /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
@@ -380,84 +438,30 @@
 				SDKROOT = macosx;
 				SWIFT_VERSION = 6.0;
 			};
-			name = Debug;
-		};
-		F8174EC9A8DD2863A0569B62 /* Release */ = {
-			isa = XCBuildConfiguration;
-			buildSettings = {
-				ALWAYS_SEARCH_USER_PATHS = NO;
-				CLANG_ANALYZER_NONNULL = YES;
-				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
-				CLANG_CXX_LANGUAGE_STANDARD = "gnu++14";
-				CLANG_CXX_LIBRARY = "libc++";
-				CLANG_ENABLE_MODULES = YES;
-				CLANG_ENABLE_OBJC_ARC = YES;
-				CLANG_ENABLE_OBJC_WEAK = YES;
-				CLANG_WARN_BLOCK_CAPTURE_AUTORELEASING = YES;
-				CLANG_WARN_BOOL_CONVERSION = YES;
-				CLANG_WARN_COMMA = YES;
-				CLANG_WARN_CONSTANT_CONVERSION = YES;
-				CLANG_WARN_DEPRECATED_OBJC_IMPLEMENTATIONS = YES;
-				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
-				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
-				CLANG_WARN_EMPTY_BODY = YES;
-				CLANG_WARN_ENUM_CONVERSION = YES;
-				CLANG_WARN_INFINITE_RECURSION = YES;
-				CLANG_WARN_INT_CONVERSION = YES;
-				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
-				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
-				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
-				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
-				CLANG_WARN_QUOTED_INCLUDE_IN_FRAMEWORK_HEADER = YES;
-				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
-				CLANG_WARN_STRICT_PROTOTYPES = YES;
-				CLANG_WARN_SUSPICIOUS_MOVE = YES;
-				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
-				CLANG_WARN_UNREACHABLE_CODE = YES;
-				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
-				COPY_PHASE_STRIP = NO;
-				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
-				ENABLE_NS_ASSERTIONS = NO;
-				ENABLE_STRICT_OBJC_MSGSEND = YES;
-				GCC_C_LANGUAGE_STANDARD = gnu11;
-				GCC_NO_COMMON_BLOCKS = YES;
-				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
-				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
-				GCC_WARN_UNDECLARED_SELECTOR = YES;
-				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
-				GCC_WARN_UNUSED_FUNCTION = YES;
-				GCC_WARN_UNUSED_VARIABLE = YES;
-				MTL_ENABLE_DEBUG_INFO = NO;
-				MTL_FAST_MATH = YES;
-				PRODUCT_NAME = "$(TARGET_NAME)";
-				SWIFT_COMPILATION_MODE = wholemodule;
-				SWIFT_OPTIMIZATION_LEVEL = "-O";
-				SWIFT_VERSION = 5.0;
-			};
 			name = Release;
 		};
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
-		3DF3FB40EA32CD4ACA8EAE54 /* Build configuration list for PBXProject "CXSwitch" */ = {
+		A085C61F244771C4D784EBEF /* Build configuration list for PBXNativeTarget "CXSwitch" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
-				9EF98D1EE1A05B07EE9AFD9B /* Debug */,
-				F8174EC9A8DD2863A0569B62 /* Release */,
+				F7B39EFAD135185682555BC7 /* Release */,
+				ABB8668B303DBC31B781852C /* Debug */,
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
 		};
-		A438DF11D9468E12E8E0A923 /* Build configuration list for PBXNativeTarget "CXSwitch" */ = {
+		D927AE6E5647E223C36EC41A /* Build configuration list for PBXProject "CXSwitch" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
-				810FD423D04A420CE1A72E22 /* Release */,
-				C21FA0B4DB5094F9718B4E9F /* Debug */,
+				C737E94896053D611B13A623 /* Debug */,
+				69AEEB55BCC50750D05580FE /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
 	};
-	rootObject = BF9E39B80D454B530F57D471 /* Project object */;
+	rootObject = C6968DB2F6583710C91E19E0 /* Project object */;
 }

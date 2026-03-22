@@ -1,6 +1,7 @@
 import Foundation
 import Security
 
+/// Deprecated: kept only for one-time migration of legacy registry/keychain data into SQLite.
 protocol KeychainStoring {
     func saveAuthBlob(_ blob: AuthBlob, accountId: String) throws
     func loadAuthBlob(accountId: String) throws -> AuthBlob?

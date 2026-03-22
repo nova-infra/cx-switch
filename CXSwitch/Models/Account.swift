@@ -10,8 +10,6 @@ struct Account: Identifiable, Codable {
     var addedAt: Date
     var lastUsedAt: Date?
     var usageSnapshot: UsageSnapshot?
-    var authKeychainKey: String?  // Legacy keychain account ID retained for migration only
-    var storedAuth: String?       // Base64 encoded AuthBlob stored in registry
     var usageError: String?
     var isCurrent: Bool = false
 }
