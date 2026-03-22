@@ -73,7 +73,6 @@ final class AccountDatabase {
     deinit {
         if let db {
             sqlite3_close_v2(db)
-            self.db = nil
         }
     }
 
@@ -91,7 +90,7 @@ final class AccountDatabase {
             return
         }
 
-        try writeTransaction {
+        try queue.sync { try writeTransaction {
             for legacy in legacyAccounts {
                 let account = legacy.toAccount()
                 try self.saveAccountLocked(account)
@@ -115,7 +114,7 @@ final class AccountDatabase {
             if let current = legacyAccounts.first(where: { $0.isCurrent == true }) {
                 try self.setCurrentAccountLocked(id: current.id)
             }
-        }
+        } }
 
         if fileManager.fileExists(atPath: migratedMarkerURL.path) {
             try? fileManager.removeItem(at: migratedMarkerURL)
@@ -140,6 +139,7 @@ final class AccountDatabase {
         try queue.sync {
             try writeTransaction {
                 try self.saveAccountLocked(account)
+                try self.syncUsageSnapshotLocked(accountId: account.id, snapshot: account.usageSnapshot)
             }
         }
     }
@@ -187,7 +187,7 @@ final class AccountDatabase {
     func deleteCredential(accountId: String) throws {
         try queue.sync {
             try writeTransaction {
-                try self.deleteRowLocked(table: "credentials", accountId: accountId)
+                try self.deleteCredentialLocked(accountId: accountId)
             }
         }
     }
@@ -214,9 +214,7 @@ final class AccountDatabase {
             try writeTransaction {
                 for account in accounts {
                     try self.saveAccountLocked(account)
-                    if let usageSnapshot = account.usageSnapshot {
-                        try self.saveUsageSnapshotLocked(accountId: account.id, snapshot: usageSnapshot)
-                    }
+                    try self.syncUsageSnapshotLocked(accountId: account.id, snapshot: account.usageSnapshot)
                 }
                 if let current = accounts.first(where: { $0.isCurrent }) {
                     try self.setCurrentAccountLocked(id: current.id)
@@ -448,6 +446,14 @@ final class AccountDatabase {
         }
     }
 
+    private func syncUsageSnapshotLocked(accountId: String, snapshot: UsageSnapshot?) throws {
+        if let snapshot {
+            try saveUsageSnapshotLocked(accountId: accountId, snapshot: snapshot)
+        } else {
+            try deleteUsageSnapshotLocked(accountId: accountId)
+        }
+    }
+
     private func loadCredentialLocked(accountId: String) throws -> AuthBlob? {
         guard let data = try rawCredentialBlob(accountId: accountId) else {
             return nil
@@ -484,13 +490,21 @@ final class AccountDatabase {
         return sqlite3ColumnTextData(stmt, column: 0)
     }
 
-    private func deleteRowLocked(table: String, accountId: String) throws {
-        let stmt = try prepare("DELETE FROM \(table) WHERE account_id = ?;")
+    private func deleteCredentialLocked(accountId: String) throws {
+        let stmt = try prepare("DELETE FROM credentials WHERE account_id = ?;")
         defer { sqlite3_finalize(stmt) }
-
         try bind(accountId, at: 1, to: stmt)
         guard sqlite3_step(stmt) == SQLITE_DONE else {
-            throw errorFromDB("delete \(table)")
+            throw errorFromDB("delete credentials")
+        }
+    }
+
+    private func deleteUsageSnapshotLocked(accountId: String) throws {
+        let stmt = try prepare("DELETE FROM usage_snapshots WHERE account_id = ?;")
+        defer { sqlite3_finalize(stmt) }
+        try bind(accountId, at: 1, to: stmt)
+        guard sqlite3_step(stmt) == SQLITE_DONE else {
+            throw errorFromDB("delete usage_snapshots")
         }
     }
 
@@ -643,7 +657,8 @@ final class AccountDatabase {
         guard let cString = sqlite3_column_text(stmt, column) else {
             return nil
         }
-        return Data(bytes: cString, count: Int(strlen(cString)))
+        let byteCount = Int(sqlite3_column_bytes(stmt, column))
+        return Data(bytes: cString, count: byteCount)
     }
 
     private func sqlite3ColumnDouble(_ stmt: OpaquePointer, column: Int32) -> Double {

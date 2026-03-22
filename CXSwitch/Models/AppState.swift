@@ -38,15 +38,30 @@ final class AppState {
     }
 
     init(
-        accountStore: AccountStore = try! AccountStore(),
+        accountStore: AccountStore? = nil,
         accountDB: AccountDatabase? = nil,
         legacyKeychainService: any KeychainStoring = KeychainService(),
         appServer: any CodexAppServering = CodexAppServer(),
         usageProbe: UsageProbe = UsageProbe(),
         authService: any AuthTokenExchanging = AuthService()
     ) {
-        self.accountStore = accountStore
-        self.accountDB = accountDB ?? (try! AccountDatabase(appSupportURL: accountStore.appSupportDirectoryURL))
+        let store: AccountStore
+        do {
+            store = try accountStore ?? AccountStore()
+        } catch {
+            NSLog("[CXSwitch] FATAL: cannot initialize AccountStore: \(error)")
+            store = try! AccountStore(appSupportURL: FileManager.default.temporaryDirectory.appendingPathComponent("cx-switch-fallback"))
+        }
+        self.accountStore = store
+
+        let db: AccountDatabase
+        do {
+            db = try accountDB ?? AccountDatabase(appSupportURL: store.appSupportDirectoryURL)
+        } catch {
+            NSLog("[CXSwitch] FATAL: cannot initialize AccountDatabase: \(error)")
+            db = try! AccountDatabase(appSupportURL: FileManager.default.temporaryDirectory.appendingPathComponent("cx-switch-fallback"))
+        }
+        self.accountDB = db
         self.legacyKeychainService = legacyKeychainService
         self.appServer = appServer
         self.usageProbe = usageProbe
@@ -68,7 +83,7 @@ final class AppState {
         }
 
         try? self.accountDB.migrateIfNeeded(
-            registryPath: accountStore.registryFileURL.path,
+            registryPath: store.registryFileURL.path,
             keychainService: legacyKeychainService
         )
 
@@ -1202,7 +1217,7 @@ final class AppState {
 
         var currentDisplay = merged
         currentDisplay.isCurrent = true
-        currentAccount = applyMasking(to: currentDisplay)
+        currentAccount = applyMasking(to: displayAccountWithoutUsage(currentDisplay))
         dashboardLoaded = true
         rescheduleAutoRefreshTasks()
     }
@@ -1382,15 +1397,24 @@ final class AppState {
     }
 
     private func activateAccount(_ account: Account) async {
-        let active = mergeAccountRecord(account, preserving: savedAccounts.first(where: { $0.id == account.id }) ?? (currentAccount?.id == account.id ? currentAccount : nil))
+        let existing = savedAccounts.first(where: { $0.id == account.id })
+            ?? (currentAccount?.id == account.id ? currentAccount : nil)
+        let active = mergeAccountRecord(account, preserving: existing)
         currentAccount = applyMasking(to: active)
         markCurrentAccount(active)
         dashboardLoaded = true
         await persistAccount(active)
     }
 
+    private func displayAccountWithoutUsage(_ account: Account) -> Account {
+        var display = account
+        display.usageSnapshot = nil
+        display.usageError = nil
+        return display
+    }
+
     private func mergeAccountRecord(_ incoming: Account, preserving existing: Account?) -> Account {
-        guard let existing else { return incoming }
+        guard let existing, existing.id == incoming.id else { return incoming }
 
         var merged = incoming
 

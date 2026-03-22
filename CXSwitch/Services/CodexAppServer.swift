@@ -17,11 +17,22 @@ extension CodexAppServering {
     }
 }
 
-enum CodexAppServerError: Error {
+enum CodexAppServerError: Error, LocalizedError {
     case notRunning
     case launchFailed
     case responseError(code: Int?, message: String)
     case malformedResponse
+    case requestTimeout
+
+    var errorDescription: String? {
+        switch self {
+        case .notRunning: return "Codex app-server is not running."
+        case .launchFailed: return "Failed to start codex app-server."
+        case .responseError(_, let message): return message
+        case .malformedResponse: return "Malformed response from codex app-server."
+        case .requestTimeout: return "Request to codex app-server timed out."
+        }
+    }
 }
 
 final class CodexAppServer: CodexAppServering, @unchecked Sendable {
@@ -74,65 +85,68 @@ final class CodexAppServer: CodexAppServering, @unchecked Sendable {
         let params: AnyDecodable?
     }
 
-    private let processQueue = DispatchQueue(label: "cxswitch.codex-app-server.process")
+    /// All mutable state accessed only through this queue
+    private let queue = DispatchQueue(label: "cxswitch.codex-app-server")
     private var process: Process?
     private var stdinHandle: FileHandle?
     private var stdoutHandle: FileHandle?
-    private var stderrHandle: FileHandle?
     private var listenTask: Task<Void, Never>?
     private var nextId: Int = 1
+    private var isInitialized = false
     private var notificationHandler: ((ServerNotification) -> Void)?
 
-    private var isInitialized = false
     private let pending = PendingRequestStore()
-    private let encoder = JSONEncoder()
-    private let decoder = JSONDecoder()
+    private static let requestTimeoutNs: UInt64 = 20_000_000_000 // 20 seconds
 
     init() {}
 
     func start() throws {
-        if process?.isRunning == true {
-            return
-        }
-        isInitialized = false
+        try queue.sync {
+            if process?.isRunning == true { return }
+            isInitialized = false
 
-        let pipeIn = Pipe()
-        let pipeOut = Pipe()
-        let pipeErr = Pipe()
+            let pipeIn = Pipe()
+            let pipeOut = Pipe()
+            let pipeErr = Pipe()
 
-        let proc = Process()
-        proc.executableURL = URL(fileURLWithPath: "/usr/bin/env")
-        proc.arguments = ["codex", "app-server", "--listen", "stdio://"]
-        proc.standardInput = pipeIn
-        proc.standardOutput = pipeOut
-        proc.standardError = pipeErr
+            let proc = Process()
+            proc.executableURL = URL(fileURLWithPath: "/usr/bin/env")
+            proc.arguments = ["codex", "app-server", "--listen", "stdio://"]
+            proc.standardInput = pipeIn
+            proc.standardOutput = pipeOut
+            proc.standardError = pipeErr
 
-        do {
-            try proc.run()
-            NSLog("[CodexAppServer] process started, pid=\(proc.processIdentifier)")
-        } catch {
-            NSLog("[CodexAppServer] launch failed: \(error)")
-            throw CodexAppServerError.launchFailed
-        }
+            do {
+                try proc.run()
+                NSLog("[CodexAppServer] process started, pid=\(proc.processIdentifier)")
+            } catch {
+                NSLog("[CodexAppServer] launch failed: \(error)")
+                throw CodexAppServerError.launchFailed
+            }
 
-        process = proc
-        stdinHandle = pipeIn.fileHandleForWriting
-        stdoutHandle = pipeOut.fileHandleForReading
-        stderrHandle = pipeErr.fileHandleForReading
+            process = proc
+            stdinHandle = pipeIn.fileHandleForWriting
+            stdoutHandle = pipeOut.fileHandleForReading
 
-        listenTask = Task { [weak self] in
-            await self?.listen()
+            let handle = pipeOut.fileHandleForReading
+            listenTask = Task { [weak self] in
+                await self?.listen(handle: handle)
+            }
         }
     }
 
     func shutdown() {
-        processQueue.sync {
+        queue.sync {
             process?.terminate()
             process = nil
+            stdinHandle = nil
+            stdoutHandle = nil
+            isInitialized = false
+            listenTask?.cancel()
+            listenTask = nil
         }
-        isInitialized = false
-        listenTask?.cancel()
-        listenTask = nil
+        // Fail all pending requests so continuations are always resumed
+        pending.failAll(error: CodexAppServerError.notRunning)
     }
 
     func restart() throws {
@@ -148,104 +162,110 @@ final class CodexAppServer: CodexAppServering, @unchecked Sendable {
     }
 
     func setNotificationHandler(_ handler: ((ServerNotification) -> Void)?) {
-        processQueue.sync {
+        queue.sync {
             notificationHandler = handler
         }
     }
 
     func initialize(clientName: String = "cx-switch", version: String = "0.1.0") async throws {
-        if isInitialized { return }
+        let alreadyDone = queue.sync { isInitialized }
+        if alreadyDone { return }
         let params = InitializeParams(clientInfo: ClientInfo(name: clientName, version: version), protocolVersion: 2)
         _ = try await sendRequest(method: "initialize", params: params) as EmptyResult
-        isInitialized = true
+        queue.sync { isInitialized = true }
     }
 
     func sendRequest<T: Decodable>(method: String, params: Encodable? = nil) async throws -> T {
-        guard process?.isRunning == true else {
-            throw CodexAppServerError.notRunning
-        }
-        let id = nextRequestId()
-        let request = JSONRPCRequest(id: id, method: method, params: params.map { EncodableValue($0) })
-        let data = try encoder.encode(request)
-        try writeLine(data)
+        let isRunning = queue.sync { process?.isRunning == true }
+        guard isRunning else { throw CodexAppServerError.notRunning }
 
-        let resultData = try await pending.wait(for: id)
+        let id = queue.sync { () -> Int in
+            let current = nextId
+            nextId += 1
+            return current
+        }
+
+        let request = JSONRPCRequest(id: id, method: method, params: params.map { EncodableValue($0) })
+        // Create encoder per call — JSONEncoder is not thread-safe
+        let encoder = JSONEncoder()
+        let data = try encoder.encode(request)
+        try queue.sync {
+            guard let handle = stdinHandle else { throw CodexAppServerError.notRunning }
+            var line = data
+            line.append(0x0A)
+            try handle.write(contentsOf: line)
+        }
+
+        // Wait with timeout
+        let resultData = try await withThrowingTaskGroup(of: Data.self) { group in
+            group.addTask {
+                try await self.pending.wait(for: id)
+            }
+            group.addTask {
+                try await Task.sleep(nanoseconds: Self.requestTimeoutNs)
+                throw CodexAppServerError.requestTimeout
+            }
+            guard let result = try await group.next() else {
+                throw CodexAppServerError.requestTimeout
+            }
+            group.cancelAll()
+            return result
+        }
+
+        let decoder = JSONDecoder()
         return try decoder.decode(T.self, from: resultData)
     }
 
     func sendNotification(method: String, params: Encodable? = nil) throws {
-        guard process?.isRunning == true else {
-            throw CodexAppServerError.notRunning
-        }
-        let envelope = JSONRPCNotification(method: method, params: params.map { EncodableValue($0) })
-        let data = try encoder.encode(envelope)
-        try writeLine(data)
-    }
-
-    private func nextRequestId() -> Int {
-        processQueue.sync {
-            let id = nextId
-            nextId += 1
-            return id
+        try queue.sync {
+            guard process?.isRunning == true else { throw CodexAppServerError.notRunning }
+            let envelope = JSONRPCNotification(method: method, params: params.map { EncodableValue($0) })
+            let encoder = JSONEncoder()
+            let data = try encoder.encode(envelope)
+            guard let handle = stdinHandle else { throw CodexAppServerError.notRunning }
+            var line = data
+            line.append(0x0A)
+            try handle.write(contentsOf: line)
         }
     }
 
-    private func writeLine(_ data: Data) throws {
-        guard let handle = stdinHandle else {
-            throw CodexAppServerError.notRunning
-        }
-        var line = data
-        line.append(0x0A)
-        try handle.write(contentsOf: line)
-    }
-
-    private func listen() async {
-        guard let handle = stdoutHandle else {
-            return
-        }
+    private func listen(handle: FileHandle) async {
+        let decoder = JSONDecoder()
         do {
             for try await line in handle.bytes.lines {
-                guard let data = line.data(using: String.Encoding.utf8) else {
-                    continue
-                }
-                handleResponse(data)
+                guard let data = line.data(using: .utf8) else { continue }
+                handleResponse(data, decoder: decoder)
             }
         } catch {
-            return
+            // Stream ended (process terminated)
         }
+        // Process exited — fail any remaining pending requests
+        pending.failAll(error: CodexAppServerError.notRunning)
     }
 
-    private func handleResponse(_ data: Data) {
+    private func handleResponse(_ data: Data, decoder: JSONDecoder) {
         guard let envelope = try? decoder.decode(JSONRPCEnvelope.self, from: data) else {
             NSLog("[CodexAppServer] failed to decode: \(String(data: data, encoding: .utf8) ?? "<binary>")")
             return
         }
 
+        // Notification (no id)
         if let method = envelope.method, envelope.id == nil {
-            processQueue.sync {
+            queue.sync {
                 notificationHandler?(ServerNotification(method: method, paramsData: envelope.params?.rawData))
             }
             return
         }
 
-        if let id = envelope.id, id != 0 {
+        // Response with id
+        if let id = envelope.id, id > 0 {
             if let error = envelope.error {
-                let message = error.message ?? "Unknown error"
-                pending.fail(id: id, error: CodexAppServerError.responseError(code: error.code, message: message))
-                return
+                pending.fail(id: id, error: CodexAppServerError.responseError(code: error.code, message: error.message ?? "Unknown error"))
+            } else if let result = envelope.result, let resultData = result.rawData {
+                pending.fulfill(id: id, data: resultData)
+            } else {
+                pending.fail(id: id, error: CodexAppServerError.malformedResponse)
             }
-            if let result = envelope.result {
-                if let resultData = result.rawData {
-                    pending.fulfill(id: id, data: resultData)
-                } else {
-                    pending.fail(id: id, error: CodexAppServerError.malformedResponse)
-                }
-                return
-            }
-        }
-
-        if let id = envelope.id, id == 0 {
-            return
         }
     }
 }
@@ -255,7 +275,8 @@ struct ServerNotification {
     let paramsData: Data?
 }
 
-private final class PendingRequestStore {
+/// Thread-safe store for pending request continuations.
+private final class PendingRequestStore: @unchecked Sendable {
     private var continuations: [Int: CheckedContinuation<Data, Error>] = [:]
     private let lock = NSLock()
 
@@ -280,11 +301,22 @@ private final class PendingRequestStore {
         lock.unlock()
         continuation?.resume(throwing: error)
     }
+
+    /// Fail all pending continuations (e.g. on shutdown or process exit).
+    func failAll(error: Error) {
+        lock.lock()
+        let all = continuations
+        continuations.removeAll()
+        lock.unlock()
+        for (_, continuation) in all {
+            continuation.resume(throwing: error)
+        }
+    }
 }
 
 private struct EmptyResult: Decodable {}
 
-private struct EncodableValue: Encodable {
+private struct EncodableValue: Encodable, @unchecked Sendable {
     private let encodeBlock: (Encoder) throws -> Void
 
     init(_ value: Encodable) {
@@ -301,10 +333,7 @@ private struct AnyDecodable: Decodable {
 
     init(from decoder: Decoder) throws {
         let container = try decoder.singleValueContainer()
-        if let data = try? container.decode(Data.self) {
-            rawData = data
-            return
-        }
+        // Try structured types first (dict/array), then primitives
         if let dict = try? container.decode([String: AnyDecodable].self) {
             rawData = try? JSONSerialization.data(withJSONObject: dict.mapValues { $0.anyValue }, options: [.fragmentsAllowed])
             return
@@ -313,16 +342,16 @@ private struct AnyDecodable: Decodable {
             rawData = try? JSONSerialization.data(withJSONObject: array.map { $0.anyValue }, options: [.fragmentsAllowed])
             return
         }
-        if let string = try? container.decode(String.self) {
-            rawData = try? JSONSerialization.data(withJSONObject: string, options: [.fragmentsAllowed])
+        if let bool = try? container.decode(Bool.self) {
+            rawData = try? JSONSerialization.data(withJSONObject: bool, options: [.fragmentsAllowed])
             return
         }
         if let number = try? container.decode(Double.self) {
             rawData = try? JSONSerialization.data(withJSONObject: number, options: [.fragmentsAllowed])
             return
         }
-        if let bool = try? container.decode(Bool.self) {
-            rawData = try? JSONSerialization.data(withJSONObject: bool, options: [.fragmentsAllowed])
+        if let string = try? container.decode(String.self) {
+            rawData = try? JSONSerialization.data(withJSONObject: string, options: [.fragmentsAllowed])
             return
         }
         rawData = nil

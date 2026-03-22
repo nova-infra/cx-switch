@@ -43,13 +43,15 @@ final class AuthService: AuthTokenExchanging {
         request.setValue("https://chatgpt.com/", forHTTPHeaderField: "Referer")
         request.setValue("CX Switch/1.0", forHTTPHeaderField: "User-Agent")
 
-        let params = [
-            "grant_type=refresh_token",
-            "client_id=\(clientId)",
-            "refresh_token=\(refreshToken)",
-            "scope=openid profile email",
-        ].joined(separator: "&")
-        request.httpBody = params.data(using: .utf8)
+        var components = URLComponents()
+        components.queryItems = [
+            URLQueryItem(name: "grant_type", value: "refresh_token"),
+            URLQueryItem(name: "client_id", value: clientId),
+            URLQueryItem(name: "refresh_token", value: refreshToken),
+            URLQueryItem(name: "scope", value: "openid profile email"),
+        ]
+        // percentEncodedQuery handles URL encoding of special chars
+        request.httpBody = components.percentEncodedQuery?.data(using: .utf8)
 
         let (data, response) = try await session.data(for: request)
         guard let http = response as? HTTPURLResponse else {
