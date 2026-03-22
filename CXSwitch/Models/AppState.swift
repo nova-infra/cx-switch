@@ -797,10 +797,11 @@ final class AppState {
 
         if let authEmail, let responseEmail, authEmail != responseEmail {
             NSLog(
-                "[CXSwitch] account/read returned stale email %@, preferring auth identity %@",
+                "[CXSwitch] account/read returned stale email %@, expected %@ — server not ready",
                 responseEmail,
                 authEmail
             )
+            return nil
         }
 
         let accountType = resolvedAccountType(response.accountType, authBlob: authBlob)
@@ -869,7 +870,11 @@ final class AppState {
                 return (nil, Strings.missingToken)
             }
 
+            NSLog("[CXSwitch] refreshUsage: probing %@ with chatgptAccountId=%@, tokenSuffix=...%@",
+                  account.email, accountId, String(accessToken.suffix(8)))
             let snapshot = try await usageProbe.probeUsage(accessToken: accessToken, chatgptAccountId: accountId)
+            NSLog("[CXSwitch] refreshUsage: %@ → primary=%.0f%% secondary=%.0f%%",
+                  account.email, snapshot.primary?.usedPercent ?? -1, snapshot.secondary?.usedPercent ?? -1)
             return (snapshot, nil)
         } catch {
             if error is UsageProbeError, let cachedSnapshot = account.usageSnapshot {
@@ -913,6 +918,10 @@ final class AppState {
         let existing = savedAccounts.first(where: { $0.id == account.id })
             ?? (currentAccount?.id == account.id ? currentAccount : nil)
         let merged = mergeAccountRecord(account, preserving: existing)
+        NSLog("[CXSwitch] persistSnapshot: %@ (id=%@) updateCurrent=%d primary=%.0f%% current=%@",
+              merged.email, String(merged.id.prefix(8)), updateCurrentAccount ? 1 : 0,
+              merged.usageSnapshot?.primary?.usedPercent ?? -1,
+              currentAccount?.email ?? "nil")
 
         let maskedAccount = applyMasking(to: merged)
         if let index = savedAccounts.firstIndex(where: { $0.id == merged.id }) {

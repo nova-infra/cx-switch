@@ -34,22 +34,44 @@ final class UsageProbe {
         request.setValue("Bearer \(accessToken)", forHTTPHeaderField: "Authorization")
         request.setValue(chatgptAccountId, forHTTPHeaderField: "chatgpt-account-id")
         request.setValue("application/json", forHTTPHeaderField: "Content-Type")
+        request.setValue("text/event-stream", forHTTPHeaderField: "Accept")
+        request.setValue("codex_cli_rs", forHTTPHeaderField: "Originator")
+        request.setValue("codex_cli_rs/0.1.0", forHTTPHeaderField: "User-Agent")
 
         let payload: [String: Any] = [
             "model": "gpt-5.1-codex",
-            "max_output_tokens": 1,
+            "instructions": "ping",
+            "input": [
+                ["role": "user", "content": [["type": "input_text", "text": "hi"]]]
+            ],
             "store": false,
             "stream": true
         ]
         request.httpBody = try JSONSerialization.data(withJSONObject: payload, options: [])
 
-        let (_, response) = try await session.data(for: request)
+        let (responseData, response) = try await session.data(for: request)
         guard let http = response as? HTTPURLResponse else {
             throw UsageProbeError.invalidResponse
         }
 
+        // Diagnostic: write probe result to file for debugging
+        let diag = """
+        [\(Date())] chatgptAccountId=\(chatgptAccountId) HTTP=\(http.statusCode)
+        headers: \(http.allHeaderFields.filter { ($0.key as? String)?.contains("codex") == true })
+        body: \(String(data: responseData.prefix(500), encoding: .utf8) ?? "nil")
+        ---
+        """
+        let logURL = FileManager.default.temporaryDirectory.appendingPathComponent("cx-switch-probe.log")
+        if let handle = try? FileHandle(forWritingTo: logURL) {
+            handle.seekToEndOfFile()
+            handle.write(Data(diag.utf8))
+            handle.closeFile()
+        } else {
+            try? Data(diag.utf8).write(to: logURL)
+        }
+
         guard let primary = parseWindow(from: http, prefix: "primary") else {
-            NSLog("[CXSwitch] UsageProbe: missingHeaders — HTTP %d, headers: %@", http.statusCode, http.allHeaderFields)
+            NSLog("[CXSwitch] UsageProbe: missingHeaders — HTTP %d", http.statusCode)
             throw UsageProbeError.missingHeaders
         }
 
