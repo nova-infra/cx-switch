@@ -578,16 +578,27 @@ final class AppState {
 
     private func nextAutoRefreshDate(for account: Account) -> Date? {
         guard let snapshot = account.usageSnapshot else { return nil }
+        let now = Date()
 
         let windows = snapshot.windows ?? [snapshot.primary, snapshot.secondary].compactMap { $0 }
         let candidates = windows.compactMap { window -> Date? in
             if let resetsAt = window.resetsAt {
-                return resetsAt
+                if resetsAt > now {
+                    return resetsAt
+                }
+
+                guard let remainingSeconds = window.remainingSeconds, remainingSeconds > 0 else {
+                    return nil
+                }
+
+                return now.addingTimeInterval(TimeInterval(remainingSeconds))
             }
-            guard let remainingSeconds = window.remainingSeconds, remainingSeconds >= 0 else {
+
+            guard let remainingSeconds = window.remainingSeconds, remainingSeconds > 0 else {
                 return nil
             }
-            let anchor = snapshot.updatedAt ?? account.lastUsedAt ?? Date()
+
+            let anchor = max(snapshot.updatedAt ?? now, account.lastUsedAt ?? now, now)
             return anchor.addingTimeInterval(TimeInterval(remainingSeconds))
         }
 
@@ -731,14 +742,14 @@ final class AppState {
                 return (cachedSnapshot, nil)
             }
 
-            return (nil, userFacingUsageError(for: error))
+            return (nil, normalizedUsageError(userFacingUsageError(for: error)))
         }
     }
 
     private func applyUsageResult(to account: Account, result: (UsageSnapshot?, String?)) -> Account {
         var updated = account
         updated.usageSnapshot = result.0
-        updated.usageError = result.1
+        updated.usageError = normalizedUsageError(result.1)
         return updated
     }
 
@@ -803,14 +814,18 @@ final class AppState {
         var changed = false
         let normalized = accounts.map { account in
             let enriched = enrichAccountMetadata(account)
-            if enriched.accountType != account.accountType
-                || enriched.planType != account.planType
-                || enriched.chatgptAccountId != account.chatgptAccountId
-                || enriched.authKeychainKey != account.authKeychainKey
-                || enriched.storedAuth != account.storedAuth {
+            var sanitized = enriched
+            sanitized.usageError = normalizedUsageError(sanitized.usageError)
+
+            if sanitized.accountType != account.accountType
+                || sanitized.planType != account.planType
+                || sanitized.chatgptAccountId != account.chatgptAccountId
+                || sanitized.authKeychainKey != account.authKeychainKey
+                || sanitized.storedAuth != account.storedAuth
+                || sanitized.usageError != account.usageError {
                 changed = true
             }
-            return enriched
+            return sanitized
         }
         return (normalized, changed)
     }
@@ -840,12 +855,14 @@ final class AppState {
             if updated.chatgptAccountId == nil {
                 updated.chatgptAccountId = chatgptAccountID(from: currentAuthBlob)
             }
+            updated.usageError = normalizedUsageError(updated.usageError)
 
             if updated.storedAuth != account.storedAuth
                 || updated.accountType != account.accountType
                 || updated.planType != account.planType
                 || updated.chatgptAccountId != account.chatgptAccountId
-                || updated.authKeychainKey != account.authKeychainKey {
+                || updated.authKeychainKey != account.authKeychainKey
+                || updated.usageError != account.usageError {
                 changed = true
             }
             return updated
@@ -1118,11 +1135,32 @@ final class AppState {
     }
 
     private func userFacingUsageError(for error: Error) -> String? {
+        if error is CancellationError {
+            return nil
+        }
+
         if error is UsageProbeError {
             NSLog("[CXSwitch] usage probe failed: %@", String(describing: error))
             return nil
         }
         return error.localizedDescription
+    }
+
+    private func normalizedUsageError(_ value: String?) -> String? {
+        guard let value else { return nil }
+        let trimmed = value.trimmingCharacters(in: .whitespacesAndNewlines)
+        guard !trimmed.isEmpty else { return nil }
+
+        let lowered = trimmed.lowercased()
+        if lowered == "cancelled" || lowered == "canceled" {
+            return nil
+        }
+
+        if trimmed == Strings.loginCancelled {
+            return nil
+        }
+
+        return trimmed
     }
 
     private func knownAccounts(for account: Account) -> [Account] {
@@ -1205,6 +1243,8 @@ final class AppState {
         if merged.usageError == nil {
             merged.usageError = existing.usageError
         }
+
+        merged.usageError = normalizedUsageError(merged.usageError)
 
         if existing.addedAt < merged.addedAt {
             merged.addedAt = existing.addedAt
