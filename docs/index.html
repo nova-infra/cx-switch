@@ -1,304 +1,718 @@
 <!doctype html>
-<html lang="zh-Hans" data-lang="zh">
+<html lang="en" data-lang="en">
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <meta
       name="description"
-      content="CX Switch official site. A bilingual menu bar app for switching OpenAI accounts, distilled from real repository content."
+      content="CX Switch — switch ChatGPT / Codex accounts from your Mac menu bar. Local SQLite store, live usage, one-click switching."
     />
-    <meta name="theme-color" content="#08131f" />
-    <title>CX Switch | Official Site</title>
+    <meta name="theme-color" content="#020617" />
+    <meta name="color-scheme" content="dark" />
+
+    <meta property="og:type" content="website" />
+    <meta property="og:title" content="CX Switch — ChatGPT account switcher for macOS" />
+    <meta
+      property="og:description"
+      content="Switch ChatGPT / Codex accounts in one click. Menu bar app with local credentials, live usage, and Codex integration."
+    />
+    <meta property="og:url" content="https://nova-infra.github.io/cx-switch/" />
+    <meta property="og:image" content="https://nova-infra.github.io/cx-switch/assets/og-image.png" />
+    <meta property="og:image:width" content="1200" />
+    <meta property="og:image:height" content="630" />
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:title" content="CX Switch — ChatGPT account switcher for macOS" />
+    <meta
+      name="twitter:description"
+      content="Switch ChatGPT / Codex accounts in one click. Menu bar app with local credentials, live usage, and Codex integration."
+    />
+    <meta name="twitter:image" content="https://nova-infra.github.io/cx-switch/assets/og-image.png" />
+
+    <title>CX Switch — ChatGPT account switcher for macOS</title>
+
+    <link rel="icon" type="image/png" sizes="512x512" href="./assets/icon.png" />
+    <link rel="apple-touch-icon" href="./assets/icon.png" />
+
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link
-      href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;700&family=Noto+Sans+SC:wght@400;500;700;900&display=swap"
+      href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap"
       rel="stylesheet"
     />
-    <link rel="stylesheet" href="./assets/site.css" />
+
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+      tailwind.config = {
+        darkMode: "class",
+        theme: {
+          extend: {
+            colors: {
+              accent: "#007AFF",
+            },
+            fontFamily: {
+              sans: [
+                "Inter",
+                "ui-sans-serif",
+                "system-ui",
+                "Segoe UI",
+                "PingFang SC",
+                "Hiragino Sans GB",
+                "Microsoft YaHei",
+                "Noto Sans SC",
+                "sans-serif",
+              ],
+            },
+            boxShadow: {
+              glow: "0 24px 80px rgba(0, 0, 0, 0.45)",
+            },
+          },
+        },
+      };
+    </script>
+    <link rel="stylesheet" href="./style.css" />
   </head>
-  <body>
-    <div class="page-shell">
-      <header class="topbar">
-        <a class="brand" href="#top" aria-label="CX Switch home">
-          <span class="brand__mark">CX</span>
-          <span class="brand__name">CX Switch</span>
-        </a>
-
-        <nav class="nav" aria-label="Primary">
-          <a href="#method" data-i18n="navMethod">Method</a>
-          <a href="#product" data-i18n="navProduct">Product</a>
-          <a href="#install" data-i18n="navInstall">Install</a>
-          <a href="#download" data-i18n="navDownload">Download</a>
-        </nav>
-
-        <div class="topbar__actions">
-          <button
-            class="lang-toggle"
-            id="langToggle"
-            type="button"
-            aria-pressed="false"
-            aria-label="Switch language"
-          >
-            <span class="lang-toggle__label" data-i18n="langLabel">中文 / EN</span>
-          </button>
-        </div>
-      </header>
-
-      <main>
-        <section class="hero" id="top">
-          <div class="hero__copy">
-            <p class="eyebrow" data-i18n="heroEyebrow">Official website</p>
-            <h1 data-i18n="heroTitle">CX Switch</h1>
-            <p class="hero__lead" data-i18n="heroLead">
-              A menu bar app for switching OpenAI accounts, tracking usage, and
-              keeping the current workspace close at hand.
-            </p>
-            <div class="hero__actions">
-              <a class="button button--primary" href="#method" data-i18n="ctaPrimary">
-                Read the method
-              </a>
-              <a class="button button--secondary" href="#product" data-i18n="ctaSecondary">
-                See product facts
-              </a>
-            </div>
-            <p class="hero__note" data-i18n="heroNote">
-              The page is written from the repository itself: real files first,
-              claims second, polish third.
-            </p>
-          </div>
-
-          <div class="hero__visual" aria-label="Product preview">
-            <div class="visual-orb visual-orb--one"></div>
-            <div class="visual-orb visual-orb--two"></div>
-
-            <article class="panel mockup">
-              <div class="mockup__header">
-                <div>
-                  <p class="mockup__eyebrow" data-i18n="mockEyebrow">Menu bar panel</p>
-                  <h2>CX Switch</h2>
-                </div>
-                <span class="badge" data-i18n="mockBadge">Live</span>
-              </div>
-
-              <div class="account-card">
-                <div class="avatar">CX</div>
-                <div class="account-card__copy">
-                  <span class="account-card__label" data-i18n="mockCurrent">Current account</span>
-                  <strong>alex@openai.com</strong>
-                  <span class="account-card__sub" data-i18n="mockPlan">Plus plan</span>
-                </div>
-              </div>
-
-              <div class="usage-block">
-                <div class="usage-block__row">
-                  <div>
-                    <span data-i18n="mockPrimary">5 hour window</span>
-                    <strong>72%</strong>
-                  </div>
-                  <span data-i18n="mockPrimaryTime">47 min left</span>
-                </div>
-                <div class="meter" aria-hidden="true">
-                  <span style="width: 72%"></span>
-                </div>
-              </div>
-
-              <div class="usage-block">
-                <div class="usage-block__row">
-                  <div>
-                    <span data-i18n="mockSecondary">Weekly window</span>
-                    <strong>28%</strong>
-                  </div>
-                  <span data-i18n="mockSecondaryTime">2 days left</span>
-                </div>
-                <div class="meter meter--secondary" aria-hidden="true">
-                  <span style="width: 28%"></span>
-                </div>
-              </div>
-
-              <div class="mockup__actions">
-                <span class="action-chip" data-i18n="mockAdd">Add account</span>
-                <span class="action-chip" data-i18n="mockRefresh">Refresh</span>
-                <span class="action-chip" data-i18n="mockImport">Import token</span>
-              </div>
-            </article>
-          </div>
-        </section>
-
-        <section class="section" id="method">
-          <div class="section__header">
-            <p class="eyebrow" data-i18n="methodKicker">Method</p>
-            <h2 data-i18n="methodTitle">Use the repo as the source of truth.</h2>
-            <p data-i18n="methodLead">
-              The site is built the same way the skill works: read the codebase,
-              extract the facts, shape a short narrative, and verify every claim.
-            </p>
-          </div>
-
-          <div class="principles">
-            <article class="panel principle">
-              <p class="principle__index">01</p>
-              <h3 data-i18n="principle1Title">Read the source</h3>
-              <p data-i18n="principle1Body">
-                Start with app entry points, view files, services, and config so
-                the site reflects what the product actually does.
-              </p>
-            </article>
-
-            <article class="panel principle">
-              <p class="principle__index">02</p>
-              <h3 data-i18n="principle2Title">Extract product facts</h3>
-              <p data-i18n="principle2Body">
-                Keep only claims that are supported by the repository: current
-                account, saved accounts, usage bars, token import, and language support.
-              </p>
-            </article>
-
-            <article class="panel principle">
-              <p class="principle__index">03</p>
-              <h3 data-i18n="principle3Title">Shape a short narrative</h3>
-              <p data-i18n="principle3Body">
-                Lead with the promise, then show proof, then explain install and
-                download. One job per section.
-              </p>
-            </article>
-
-            <article class="panel principle">
-              <p class="principle__index">04</p>
-              <h3 data-i18n="principle4Title">Verify against the repo</h3>
-              <p data-i18n="principle4Body">
-                Before shipping, check that every line of copy matches the code
-                and that the page still works on desktop and mobile.
-              </p>
-            </article>
-          </div>
-        </section>
-
-        <section class="section" id="product">
-          <div class="section__header">
-            <p class="eyebrow" data-i18n="productKicker">Product</p>
-            <h2 data-i18n="productTitle">A compact tool for OpenAI account switching.</h2>
-            <p data-i18n="productLead">
-              The current app is a macOS menu bar utility, and these are the
-              features that are visible in the codebase today.
-            </p>
-          </div>
-
-          <div class="feature-grid">
-            <article class="panel feature">
-              <h3 data-i18n="feature1Title">Menu bar only</h3>
-              <p data-i18n="feature1Body">
-                CX Switch launches as a macOS menu bar app with no Dock icon.
-              </p>
-            </article>
-
-            <article class="panel feature">
-              <h3 data-i18n="feature2Title">Current and saved accounts</h3>
-              <p data-i18n="feature2Body">
-                The panel shows the current account and a list of saved accounts
-                for quick switching.
-              </p>
-            </article>
-
-            <article class="panel feature">
-              <h3 data-i18n="feature3Title">Usage and reset timers</h3>
-              <p data-i18n="feature3Body">
-                The current account card includes usage bars and reset countdowns
-                when the data is available.
-              </p>
-            </article>
-
-            <article class="panel feature">
-              <h3 data-i18n="feature4Title">Import and language support</h3>
-              <p data-i18n="feature4Body">
-                Users can import a refresh token, open settings or status, and
-                switch the UI between Chinese and English.
-              </p>
-            </article>
-          </div>
-        </section>
-
-        <section class="section" id="install">
-          <div class="section__header">
-            <p class="eyebrow" data-i18n="installKicker">Install</p>
-            <h2 data-i18n="installTitle">Run the app locally.</h2>
-            <p data-i18n="installLead">
-              The project is an Xcode app built from a Swift package, so setup is
-              straightforward on macOS 14+.
-            </p>
-          </div>
-
-          <div class="install-grid">
-            <article class="panel step">
-              <p class="step__index">1</p>
-              <h3 data-i18n="installStep1Title">Open the project</h3>
-              <p data-i18n="installStep1Body">
-                Use Xcode 15+ on macOS 14 or later, then open
-                <code>CXSwitch.xcodeproj</code>.
-              </p>
-            </article>
-
-            <article class="panel step">
-              <p class="step__index">2</p>
-              <h3 data-i18n="installStep2Title">Run the app</h3>
-              <p data-i18n="installStep2Body">
-                Launch <code>CXSwitch</code> and let it appear in the menu bar.
-                The app loads your dashboard and account data automatically.
-              </p>
-            </article>
-
-            <article class="panel step">
-              <p class="step__index">3</p>
-              <h3 data-i18n="installStep3Title">Use the panel</h3>
-              <p data-i18n="installStep3Body">
-                Add accounts, switch between them, refresh usage, or import a
-                refresh token from the menu bar panel.
-              </p>
-            </article>
-          </div>
-        </section>
-
-        <section class="section" id="download">
-          <div class="section__header">
-            <p class="eyebrow" data-i18n="downloadKicker">Download</p>
-            <h2 data-i18n="downloadTitle">Get the app.</h2>
-            <p data-i18n="downloadLead">
-              A simple landing area for the current build, the latest releases,
-              and the source repository.
-            </p>
-          </div>
-
-          <div class="publish-panel panel">
-            <div>
-              <p class="publish-panel__label" data-i18n="downloadLabel">Latest build</p>
-              <strong data-i18n="downloadBuild">GitHub Releases</strong>
-            </div>
-            <div>
-              <p class="publish-panel__label" data-i18n="downloadLabel2">Source</p>
-              <strong data-i18n="downloadSource">github.com/nova-infra/cx-switch</strong>
-            </div>
-          </div>
-
-          <div class="hero__actions hero__actions--compact">
-            <a class="button button--primary" href="https://github.com/nova-infra/cx-switch/releases" target="_blank" rel="noreferrer" data-i18n="downloadCtaPrimary">
-              Open releases
-            </a>
-            <a class="button button--secondary" href="https://github.com/nova-infra/cx-switch" target="_blank" rel="noreferrer" data-i18n="downloadCtaSecondary">
-              View source
-            </a>
-          </div>
-        </section>
-      </main>
-
-      <footer class="footer">
-        <p data-i18n="footerCopy">
-          Built from source truth, shaped with the repo-site-builder method, and
-          presented as a bilingual official site.
-        </p>
-        <p class="footer__year">2026</p>
-      </footer>
+  <body class="dark bg-slate-950 text-slate-100 antialiased">
+    <div class="pointer-events-none fixed inset-0 -z-10 overflow-hidden">
+      <div
+        class="absolute -left-32 top-0 h-[420px] w-[420px] rounded-full bg-accent/10 blur-3xl"
+      ></div>
+      <div
+        class="absolute -right-24 top-40 h-[380px] w-[380px] rounded-full bg-indigo-500/10 blur-3xl"
+      ></div>
+      <div
+        class="absolute bottom-0 left-1/3 h-[320px] w-[320px] rounded-full bg-cyan-500/5 blur-3xl"
+      ></div>
     </div>
 
-    <script src="./assets/site.js"></script>
+    <header
+      class="sticky top-0 z-50 border-b border-white/10 bg-slate-950/70 backdrop-blur-xl"
+    >
+      <div
+        class="mx-auto flex max-w-6xl flex-wrap items-center justify-between gap-3 px-4 py-3 md:gap-4"
+      >
+        <a class="flex items-center gap-3" href="#top">
+          <img
+            src="./assets/icon.png"
+            width="36"
+            height="36"
+            alt=""
+            class="h-9 w-9 rounded-xl shadow-lg shadow-black/40"
+          />
+          <span class="text-sm font-semibold tracking-tight text-white">CX Switch</span>
+        </a>
+
+        <nav
+          class="order-3 flex w-full basis-full flex-wrap items-center justify-center gap-x-4 gap-y-2 text-xs text-slate-300 sm:text-sm md:order-none md:w-auto md:basis-auto md:flex-1 md:justify-center md:gap-6"
+          aria-label="Primary"
+        >
+          <a class="hover:text-white" href="#features">
+            <span data-lang="en">Features</span>
+            <span data-lang="zh" hidden>功能</span>
+          </a>
+          <a class="hover:text-white" href="#how">
+            <span data-lang="en">How it works</span>
+            <span data-lang="zh" hidden>如何使用</span>
+          </a>
+          <a class="hover:text-white" href="#gallery">
+            <span data-lang="en">Screenshots</span>
+            <span data-lang="zh" hidden>截图</span>
+          </a>
+          <a class="hover:text-white" href="#install">
+            <span data-lang="en">Install</span>
+            <span data-lang="zh" hidden>安装</span>
+          </a>
+          <a class="hover:text-white" href="#faq">
+            <span data-lang="en">FAQ</span>
+            <span data-lang="zh" hidden>常见问题</span>
+          </a>
+        </nav>
+
+        <div class="flex items-center gap-2">
+          <a
+            class="inline-flex items-center gap-2 rounded-full border border-white/10 bg-white/5 px-3 py-1.5 text-xs font-medium text-slate-200 hover:border-white/20 hover:bg-white/10"
+            href="https://github.com/nova-infra/cx-switch"
+            target="_blank"
+            rel="noreferrer"
+          >
+            <svg class="h-4 w-4" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
+              <path
+                d="M12 .5C5.65.5.5 5.65.5 12a11.5 11.5 0 007.86 10.9c.57.1.78-.25.78-.55 0-.27-.01-1.16-.01-2.1-3.2.7-3.87-1.54-4.12-2.95-.14-.84-.74-1.58-1.27-1.8-.44-.2-1.08-.7-.01.69 1 .44 1.8 1.35 2.03 2.4.04.15.2.8.82.56.5-.2 1.03-.45 1.48-.74 1.5-1 2.9-1.43 4.14-1.59 1.24.16 2.64.59 4.14 1.59.45.29.98.54 1.48.74.62.24.78-.41.82-.56.23-1.05.99-1.96 2.03-2.4 1.07-.69.52-1.09.44-1.2-.27-.22-.91-.96-1.27-1.8-.25-1.41-.92-2.65-4.12-2.95 0-.84-.3-1.47-.01-2.1 2.16-.93 3.75-3.09 3.75-5.85 0-1.31-.47-2.38-1.24-3.22.12-.31.54-1.52-.12-3.18 0 0-1-.32-3.3 1.23a11.5 11.5 0 00-6 0C7.7 2.84 6.7 3.16 6.7 3.16c-.66 1.66-.24 2.87-.12 3.18-.77.84-1.24 1.91-1.24 3.22 0 2.76 1.59 4.92 3.75 5.85-.3.52-.57 1.42-.57 2.86 0 2.1.02 3.79.02 4.3 0 .42.21.91.79.75A11.5 11.5 0 0023.5 12C23.5 5.65 18.35.5 12 .5z"
+              />
+            </svg>
+            GitHub
+          </a>
+          <button
+            id="langToggle"
+            type="button"
+            class="rounded-full border border-white/10 bg-white/5 px-3 py-1.5 text-xs font-semibold text-slate-100 hover:border-accent/40 hover:bg-white/10"
+            aria-pressed="false"
+            aria-label="Toggle language"
+          >
+            <span data-lang="en">中文</span>
+            <span data-lang="zh" hidden>EN</span>
+          </button>
+        </div>
+      </div>
+    </header>
+
+    <main id="top">
+      <!-- Hero -->
+      <section class="mx-auto grid max-w-6xl gap-12 px-4 pb-16 pt-10 md:grid-cols-2 md:items-center md:pt-16">
+        <div>
+          <p class="text-xs font-semibold uppercase tracking-[0.22em] text-accent">
+            <span data-lang="en">Menu bar utility</span>
+            <span data-lang="zh" hidden>菜单栏工具</span>
+          </p>
+          <h1 class="mt-4 text-4xl font-semibold tracking-tight text-white md:text-5xl">
+            <span data-lang="en">Switch ChatGPT accounts in one click.</span>
+            <span data-lang="zh" hidden>一键切换 ChatGPT 账号。</span>
+          </h1>
+          <p class="mt-5 max-w-xl text-lg leading-relaxed text-slate-300">
+            <span data-lang="en">
+              CX Switch lives in your menu bar: instant switching for ChatGPT / Codex, live usage
+              bars, and per-account credentials in a local SQLite store.
+            </span>
+            <span data-lang="zh" hidden>
+              CX Switch 常驻菜单栏：为 ChatGPT / Codex 提供极速切换、实时用量条，以及按账户保存的本地
+              SQLite 凭证。
+            </span>
+          </p>
+          <div class="mt-8 flex flex-wrap gap-3">
+            <a
+              class="inline-flex items-center justify-center rounded-full bg-accent px-5 py-3 text-sm font-semibold text-white shadow-lg shadow-accent/25 transition hover:-translate-y-0.5 hover:bg-blue-500"
+              href="https://github.com/nova-infra/cx-switch/releases/latest"
+              target="_blank"
+              rel="noreferrer"
+            >
+              <span data-lang="en">Download for macOS</span>
+              <span data-lang="zh" hidden>下载 macOS 版本</span>
+            </a>
+            <a
+              class="inline-flex items-center justify-center rounded-full border border-white/15 bg-white/5 px-5 py-3 text-sm font-semibold text-white transition hover:-translate-y-0.5 hover:border-white/30 hover:bg-white/10"
+              href="https://github.com/nova-infra/cx-switch"
+              target="_blank"
+              rel="noreferrer"
+            >
+              <span data-lang="en">View on GitHub</span>
+              <span data-lang="zh" hidden>在 GitHub 上查看</span>
+            </a>
+          </div>
+          <p class="mt-4 text-xs text-slate-500">
+            <span data-lang="en">Requires macOS 14 or later.</span>
+            <span data-lang="zh" hidden>需要 macOS 14 或更新版本。</span>
+          </p>
+        </div>
+
+        <div class="relative">
+          <div
+            class="pointer-events-none absolute -inset-6 rounded-[32px] bg-gradient-to-tr from-accent/20 via-transparent to-indigo-500/10 blur-2xl"
+          ></div>
+          <figure class="float-slow relative mx-auto max-w-lg">
+            <img
+              src="./assets/hero.png"
+              alt="CX Switch menu bar panel preview"
+              width="960"
+              height="560"
+              class="w-full rounded-[22px] border border-white/10 bg-slate-900/40 shadow-glow"
+            />
+          </figure>
+        </div>
+      </section>
+
+      <!-- Features -->
+      <section id="features" class="border-t border-white/10 bg-slate-950/40 py-16">
+        <div class="mx-auto max-w-6xl px-4">
+          <div class="reveal max-w-2xl">
+            <p class="text-xs font-semibold uppercase tracking-[0.22em] text-accent">
+              <span data-lang="en">Features</span>
+              <span data-lang="zh" hidden>功能亮点</span>
+            </p>
+            <h2 class="mt-3 text-3xl font-semibold tracking-tight text-white md:text-4xl">
+              <span data-lang="en">Built for fast switching and clear usage.</span>
+              <span data-lang="zh" hidden>为快速切换与清晰用量而设计。</span>
+            </h2>
+            <p class="mt-3 text-slate-300">
+              <span data-lang="en">
+                Everything runs locally on your Mac — no web dashboard, no extra accounts.
+              </span>
+              <span data-lang="zh" hidden>所有逻辑都在你的 Mac 本地运行——无需网页控制台，也无需额外账号。</span>
+            </p>
+          </div>
+
+          <div
+            class="mt-10 grid gap-4 sm:grid-cols-2 lg:grid-cols-3"
+            style="--reveal-delay: 60ms"
+          >
+            <article
+              class="reveal rounded-2xl border border-white/10 bg-white/[0.03] p-5 shadow-sm"
+            >
+              <div class="text-2xl" aria-hidden="true">⚡</div>
+              <h3 class="mt-3 text-lg font-semibold text-white">
+                <span data-lang="en">Instant Switch</span>
+                <span data-lang="zh" hidden>极速切换</span>
+              </h3>
+              <p class="mt-2 text-sm leading-relaxed text-slate-300">
+                <span data-lang="en">Account switching completes in under 50ms.</span>
+                <span data-lang="zh" hidden>账户切换在 50 毫秒内完成。</span>
+              </p>
+            </article>
+
+            <article
+              class="reveal rounded-2xl border border-white/10 bg-white/[0.03] p-5 shadow-sm"
+              style="--reveal-delay: 90ms"
+            >
+              <div class="text-2xl" aria-hidden="true">🔒</div>
+              <h3 class="mt-3 text-lg font-semibold text-white">
+                <span data-lang="en">Per-Account Credentials</span>
+                <span data-lang="zh" hidden>分账户凭证</span>
+              </h3>
+              <p class="mt-2 text-sm leading-relaxed text-slate-300">
+                <span data-lang="en">Each account’s auth is stored separately in local SQLite.</span>
+                <span data-lang="zh" hidden>每个账户的鉴权信息单独保存在本地 SQLite 中。</span>
+              </p>
+            </article>
+
+            <article
+              class="reveal rounded-2xl border border-white/10 bg-white/[0.03] p-5 shadow-sm"
+              style="--reveal-delay: 120ms"
+            >
+              <div class="text-2xl" aria-hidden="true">📊</div>
+              <h3 class="mt-3 text-lg font-semibold text-white">
+                <span data-lang="en">Live Usage</span>
+                <span data-lang="zh" hidden>实时用量</span>
+              </h3>
+              <p class="mt-2 text-sm leading-relaxed text-slate-300">
+                <span data-lang="en">Real-time usage bars for 5-hour and weekly windows.</span>
+                <span data-lang="zh" hidden>5 小时与周窗口的实时用量条。</span>
+              </p>
+            </article>
+
+            <article
+              class="reveal rounded-2xl border border-white/10 bg-white/[0.03] p-5 shadow-sm"
+              style="--reveal-delay: 150ms"
+            >
+              <div class="text-2xl" aria-hidden="true">🔄</div>
+              <h3 class="mt-3 text-lg font-semibold text-white">
+                <span data-lang="en">Auto Refresh</span>
+                <span data-lang="zh" hidden>自动刷新</span>
+              </h3>
+              <p class="mt-2 text-sm leading-relaxed text-slate-300">
+                <span data-lang="en">Usage refreshes automatically when cooldowns expire.</span>
+                <span data-lang="zh" hidden>冷却结束后自动刷新用量数据。</span>
+              </p>
+            </article>
+
+            <article
+              class="reveal rounded-2xl border border-white/10 bg-white/[0.03] p-5 shadow-sm"
+              style="--reveal-delay: 180ms"
+            >
+              <div class="text-2xl" aria-hidden="true">🛡️</div>
+              <h3 class="mt-3 text-lg font-semibold text-white">
+                <span data-lang="en">SQLite Store</span>
+                <span data-lang="zh" hidden>SQLite 存储</span>
+              </h3>
+              <p class="mt-2 text-sm leading-relaxed text-slate-300">
+                <span data-lang="en">Encrypted local database — nothing leaves your machine.</span>
+                <span data-lang="zh" hidden>本地加密数据库——数据不离开你的设备。</span>
+              </p>
+            </article>
+
+            <article
+              class="reveal rounded-2xl border border-white/10 bg-white/[0.03] p-5 shadow-sm"
+              style="--reveal-delay: 210ms"
+            >
+              <div class="text-2xl" aria-hidden="true">🎨</div>
+              <h3 class="mt-3 text-lg font-semibold text-white">
+                <span data-lang="en">Liquid Glass</span>
+                <span data-lang="zh" hidden>液态玻璃</span>
+              </h3>
+              <p class="mt-2 text-sm leading-relaxed text-slate-300">
+                <span data-lang="en">Native SwiftUI UI aligned with macOS Tahoe Liquid Glass.</span>
+                <span data-lang="zh" hidden>原生 SwiftUI，适配 macOS Tahoe Liquid Glass 设计语言。</span>
+              </p>
+            </article>
+          </div>
+        </div>
+      </section>
+
+      <!-- How it works -->
+      <section id="how" class="py-16">
+        <div class="mx-auto max-w-6xl px-4">
+          <div class="reveal max-w-2xl">
+            <p class="text-xs font-semibold uppercase tracking-[0.22em] text-accent">
+              <span data-lang="en">How it works</span>
+              <span data-lang="zh" hidden>工作流程</span>
+            </p>
+            <h2 class="mt-3 text-3xl font-semibold tracking-tight text-white md:text-4xl">
+              <span data-lang="en">Three steps. No juggling browser tabs.</span>
+              <span data-lang="zh" hidden>三步完成，不再来回切换浏览器。</span>
+            </h2>
+          </div>
+
+          <ol class="mt-10 grid gap-4 md:grid-cols-3">
+            <li
+              class="reveal rounded-2xl border border-white/10 bg-gradient-to-b from-white/[0.06] to-white/[0.02] p-6"
+            >
+              <p class="text-sm font-semibold text-accent">1</p>
+              <h3 class="mt-2 text-lg font-semibold text-white">
+                <span data-lang="en">Add accounts</span>
+                <span data-lang="zh" hidden>添加账户</span>
+              </h3>
+              <p class="mt-2 text-sm text-slate-300">
+                <span data-lang="en">Sign in to each ChatGPT account with the built-in auth flow.</span>
+                <span data-lang="zh" hidden>通过内置登录流程，逐个添加 ChatGPT 账户。</span>
+              </p>
+            </li>
+            <li
+              class="reveal rounded-2xl border border-white/10 bg-gradient-to-b from-white/[0.06] to-white/[0.02] p-6"
+              style="--reveal-delay: 80ms"
+            >
+              <p class="text-sm font-semibold text-accent">2</p>
+              <h3 class="mt-2 text-lg font-semibold text-white">
+                <span data-lang="en">Click switch</span>
+                <span data-lang="zh" hidden>点击切换</span>
+              </h3>
+              <p class="mt-2 text-sm text-slate-300">
+                <span data-lang="en">Pick an account from the menu bar — switching is instant.</span>
+                <span data-lang="zh" hidden>在菜单栏选择目标账户——切换几乎是瞬时的。</span>
+              </p>
+            </li>
+            <li
+              class="reveal rounded-2xl border border-white/10 bg-gradient-to-b from-white/[0.06] to-white/[0.02] p-6"
+              style="--reveal-delay: 140ms"
+            >
+              <p class="text-sm font-semibold text-accent">3</p>
+              <h3 class="mt-2 text-lg font-semibold text-white">
+                <span data-lang="en">Codex uses the new account</span>
+                <span data-lang="zh" hidden>Codex 使用新账户</span>
+              </h3>
+              <p class="mt-2 text-sm text-slate-300">
+                <span data-lang="en">
+                  Active credentials are written to <code class="text-accent">~/.codex/auth.json</code>
+                  so Codex picks them up automatically.
+                </span>
+                <span data-lang="zh" hidden>
+                  当前凭证会写入 <code class="text-accent">~/.codex/auth.json</code>，Codex 会自动读取。
+                </span>
+              </p>
+            </li>
+          </ol>
+        </div>
+      </section>
+
+      <!-- Gallery -->
+      <section id="gallery" class="border-t border-white/10 bg-slate-950/40 py-16">
+        <div class="mx-auto max-w-6xl px-4">
+          <div class="reveal max-w-2xl">
+            <p class="text-xs font-semibold uppercase tracking-[0.22em] text-accent">
+              <span data-lang="en">Screenshots</span>
+              <span data-lang="zh" hidden>截图展示</span>
+            </p>
+            <h2 class="mt-3 text-3xl font-semibold tracking-tight text-white md:text-4xl">
+              <span data-lang="en">Dashboard, settings, and switching — at a glance.</span>
+              <span data-lang="zh" hidden>用量面板、设置与切换，一目了然。</span>
+            </h2>
+            <p class="mt-3 text-slate-300">
+              <span data-lang="en">Replace these placeholders with real product screenshots when ready.</span>
+              <span data-lang="zh" hidden>可在后续用真实产品截图替换下列占位图。</span>
+            </p>
+          </div>
+
+          <div class="mt-10 grid gap-6 md:grid-cols-3">
+            <figure class="reveal overflow-hidden rounded-2xl border border-white/10 bg-slate-900/30">
+              <img
+                src="./assets/gallery-usage.png"
+                alt=""
+                width="880"
+                height="520"
+                class="h-auto w-full"
+              />
+              <figcaption class="px-4 py-3 text-sm text-slate-300">
+                <span data-lang="en">Usage bars & timers</span>
+                <span data-lang="zh" hidden>用量条与倒计时</span>
+              </figcaption>
+            </figure>
+            <figure
+              class="reveal overflow-hidden rounded-2xl border border-white/10 bg-slate-900/30"
+              style="--reveal-delay: 70ms"
+            >
+              <img
+                src="./assets/gallery-settings.png"
+                alt=""
+                width="880"
+                height="520"
+                class="h-auto w-full"
+              />
+              <figcaption class="px-4 py-3 text-sm text-slate-300">
+                <span data-lang="en">Settings</span>
+                <span data-lang="zh" hidden>设置</span>
+              </figcaption>
+            </figure>
+            <figure
+              class="reveal overflow-hidden rounded-2xl border border-white/10 bg-slate-900/30"
+              style="--reveal-delay: 120ms"
+            >
+              <img
+                src="./assets/gallery-switch.png"
+                alt=""
+                width="880"
+                height="520"
+                class="h-auto w-full"
+              />
+              <figcaption class="px-4 py-3 text-sm text-slate-300">
+                <span data-lang="en">Switching animation</span>
+                <span data-lang="zh" hidden>切换过程</span>
+              </figcaption>
+            </figure>
+          </div>
+        </div>
+      </section>
+
+      <!-- Install -->
+      <section id="install" class="py-16">
+        <div class="mx-auto max-w-6xl px-4">
+          <div class="reveal max-w-2xl">
+            <p class="text-xs font-semibold uppercase tracking-[0.22em] text-accent">
+              <span data-lang="en">Install</span>
+              <span data-lang="zh" hidden>安装</span>
+            </p>
+            <h2 class="mt-3 text-3xl font-semibold tracking-tight text-white md:text-4xl">
+              <span data-lang="en">Homebrew or direct download.</span>
+              <span data-lang="zh" hidden>Homebrew 或直接下载。</span>
+            </h2>
+          </div>
+
+          <div class="mt-8 grid gap-6 lg:grid-cols-2">
+            <div class="reveal rounded-2xl border border-white/10 bg-white/[0.03] p-6">
+              <h3 class="text-lg font-semibold text-white">
+                <span data-lang="en">Homebrew (recommended)</span>
+                <span data-lang="zh" hidden>Homebrew（推荐）</span>
+              </h3>
+              <pre
+                class="mt-4 overflow-x-auto rounded-xl border border-white/10 bg-slate-950/60 p-4 text-sm text-slate-100"
+              ><code>brew install --cask cx-switch</code></pre>
+              <button
+                id="copyBrew"
+                type="button"
+                data-copy="brew install --cask cx-switch"
+                data-copied-en="Copied"
+                data-copied-zh="已复制"
+                class="mt-4 inline-flex rounded-full border border-white/15 bg-white/5 px-4 py-2 text-sm font-semibold text-white hover:border-accent/40 hover:bg-white/10"
+              >
+                <span data-lang="en">Copy command</span>
+                <span data-lang="zh" hidden>复制命令</span>
+              </button>
+            </div>
+
+            <div class="reveal rounded-2xl border border-white/10 bg-white/[0.03] p-6" style="--reveal-delay: 70ms">
+              <h3 class="text-lg font-semibold text-white">
+                <span data-lang="en">Download DMG</span>
+                <span data-lang="zh" hidden>下载 DMG</span>
+              </h3>
+              <p class="mt-3 text-sm text-slate-300">
+                <span data-lang="en">
+                  Grab the latest release from GitHub — signed & notarized builds are published there.
+                </span>
+                <span data-lang="zh" hidden>从 GitHub Releases 获取最新构建（签名与公证由发布流程提供）。</span>
+              </p>
+              <a
+                class="mt-5 inline-flex rounded-full bg-accent px-4 py-2 text-sm font-semibold text-white shadow-lg shadow-accent/20 hover:bg-blue-500"
+                href="https://github.com/nova-infra/cx-switch/releases/latest"
+                target="_blank"
+                rel="noreferrer"
+              >
+                <span data-lang="en">Open latest release</span>
+                <span data-lang="zh" hidden>打开最新发布</span>
+              </a>
+            </div>
+          </div>
+
+          <p class="reveal mt-6 text-sm text-slate-400" style="--reveal-delay: 40ms">
+            <span data-lang="en">
+              <strong class="text-slate-200">Requirements:</strong> macOS 14 (Sonoma) or later.
+            </span>
+            <span data-lang="zh" hidden>
+              <strong class="text-slate-200">系统要求：</strong>macOS 14（Sonoma）或更新版本。
+            </span>
+          </p>
+        </div>
+      </section>
+
+      <!-- FAQ -->
+      <section id="faq" class="border-t border-white/10 bg-slate-950/40 py-16">
+        <div class="mx-auto max-w-3xl px-4">
+          <div class="reveal">
+            <p class="text-xs font-semibold uppercase tracking-[0.22em] text-accent">
+              <span data-lang="en">FAQ</span>
+              <span data-lang="zh" hidden>常见问题</span>
+            </p>
+            <h2 class="mt-3 text-3xl font-semibold tracking-tight text-white md:text-4xl">
+              <span data-lang="en">Answers to common questions.</span>
+              <span data-lang="zh" hidden>常见问题解答。</span>
+            </h2>
+          </div>
+
+          <div class="mt-8 space-y-3">
+            <details class="faq reveal group rounded-2xl border border-white/10 bg-white/[0.03] p-4">
+              <summary class="flex items-center justify-between gap-3 text-left text-sm font-semibold text-white">
+                <span>
+                  <span data-lang="en">Is CX Switch free?</span>
+                  <span data-lang="zh" hidden>CX Switch 免费吗？</span>
+                </span>
+                <span class="text-slate-400 transition group-open:rotate-45">＋</span>
+              </summary>
+              <div class="mt-3 text-sm leading-relaxed text-slate-300">
+                <p data-lang="en">Yes. CX Switch is open source under Apache-2.0 and has no in-app purchases.</p>
+                <p data-lang="zh" hidden>是的。CX Switch 在 Apache-2.0 下开源，没有应用内购买。</p>
+              </div>
+            </details>
+
+            <details class="faq reveal group rounded-2xl border border-white/10 bg-white/[0.03] p-4">
+              <summary class="flex items-center justify-between gap-3 text-left text-sm font-semibold text-white">
+                <span>
+                  <span data-lang="en">Where are credentials stored?</span>
+                  <span data-lang="zh" hidden>凭证存在哪里？</span>
+                </span>
+                <span class="text-slate-400 transition group-open:rotate-45">＋</span>
+              </summary>
+              <div class="mt-3 text-sm leading-relaxed text-slate-300">
+                <p data-lang="en">
+                  Locally in an encrypted SQLite database under Application Support:
+                  <code class="text-accent">~/Library/Application Support/com.novainfra.cx-switch/cx-switch.db</code>.
+                </p>
+                <p data-lang="zh" hidden>
+                  凭证加密保存在本机 Application Support 下的 SQLite：
+                  <code class="text-accent">~/Library/Application Support/com.novainfra.cx-switch/cx-switch.db</code>。
+                </p>
+              </div>
+            </details>
+
+            <details class="faq reveal group rounded-2xl border border-white/10 bg-white/[0.03] p-4">
+              <summary class="flex items-center justify-between gap-3 text-left text-sm font-semibold text-white">
+                <span>
+                  <span data-lang="en">Does it work with ChatGPT Teams or Enterprise?</span>
+                  <span data-lang="zh" hidden>支持 ChatGPT Team / Enterprise 吗？</span>
+                </span>
+                <span class="text-slate-400 transition group-open:rotate-45">＋</span>
+              </summary>
+              <div class="mt-3 text-sm leading-relaxed text-slate-300">
+                <p data-lang="en">
+                  The app targets standard ChatGPT accounts. Team / Enterprise compatibility depends on your org’s
+                  auth setup — try it and file an issue if something breaks.
+                </p>
+                <p data-lang="zh" hidden>
+                  应用面向常规 ChatGPT 账户。Team / Enterprise 取决于组织的鉴权配置——如遇问题欢迎提 issue。
+                </p>
+              </div>
+            </details>
+
+            <details class="faq reveal group rounded-2xl border border-white/10 bg-white/[0.03] p-4">
+              <summary class="flex items-center justify-between gap-3 text-left text-sm font-semibold text-white">
+                <span>
+                  <span data-lang="en">Is any data sent to third-party servers?</span>
+                  <span data-lang="zh" hidden>会向第三方服务器发送数据吗？</span>
+                </span>
+                <span class="text-slate-400 transition group-open:rotate-45">＋</span>
+              </summary>
+              <div class="mt-3 text-sm leading-relaxed text-slate-300">
+                <p data-lang="en">
+                  CX Switch does not ship your credentials to a third-party analytics service. Tokens are exchanged
+                  directly with OpenAI’s auth endpoints when you sign in.
+                </p>
+                <p data-lang="zh" hidden>
+                  CX Switch 不会把凭证发送到第三方统计服务。登录时 token 直接与 OpenAI 鉴权端点交换。
+                </p>
+              </div>
+            </details>
+
+            <details class="faq reveal group rounded-2xl border border-white/10 bg-white/[0.03] p-4">
+              <summary class="flex items-center justify-between gap-3 text-left text-sm font-semibold text-white">
+                <span>
+                  <span data-lang="en">How does Codex pick up the active account?</span>
+                  <span data-lang="zh" hidden>Codex 如何识别当前账户？</span>
+                </span>
+                <span class="text-slate-400 transition group-open:rotate-45">＋</span>
+              </summary>
+              <div class="mt-3 text-sm leading-relaxed text-slate-300">
+                <p data-lang="en">
+                  When you switch accounts, CX Switch writes the active credentials to
+                  <code class="text-accent">~/.codex/auth.json</code> so the Codex CLI uses the new session.
+                </p>
+                <p data-lang="zh" hidden>
+                  切换账户后，CX Switch 会把当前凭证写入
+                  <code class="text-accent">~/.codex/auth.json</code>，Codex CLI 将使用新的会话。
+                </p>
+              </div>
+            </details>
+
+            <details class="faq reveal group rounded-2xl border border-white/10 bg-white/[0.03] p-4">
+              <summary class="flex items-center justify-between gap-3 text-left text-sm font-semibold text-white">
+                <span>
+                  <span data-lang="en">Is the source code available?</span>
+                  <span data-lang="zh" hidden>源码是否公开？</span>
+                </span>
+                <span class="text-slate-400 transition group-open:rotate-45">＋</span>
+              </summary>
+              <div class="mt-3 text-sm leading-relaxed text-slate-300">
+                <p data-lang="en">
+                  Yes — the repository is public on GitHub so you can audit behavior and build from source.
+                </p>
+                <p data-lang="zh" hidden>是的——仓库在 GitHub 公开，你可以审计行为或自行编译。</p>
+              </div>
+            </details>
+
+            <details class="faq reveal group rounded-2xl border border-white/10 bg-white/[0.03] p-4">
+              <summary class="flex items-center justify-between gap-3 text-left text-sm font-semibold text-white">
+                <span>
+                  <span data-lang="en">What macOS versions are supported?</span>
+                  <span data-lang="zh" hidden>支持哪些 macOS 版本？</span>
+                </span>
+                <span class="text-slate-400 transition group-open:rotate-45">＋</span>
+              </summary>
+              <div class="mt-3 text-sm leading-relaxed text-slate-300">
+                <p data-lang="en">macOS 14 (Sonoma) or later. Apple Silicon and Intel are supported.</p>
+                <p data-lang="zh" hidden>macOS 14（Sonoma）或更新；支持 Apple Silicon 与 Intel。</p>
+              </div>
+            </details>
+          </div>
+        </div>
+      </section>
+    </main>
+
+    <footer class="border-t border-white/10 py-10">
+      <div
+        class="mx-auto flex max-w-6xl flex-col gap-4 px-4 text-sm text-slate-400 md:flex-row md:items-center md:justify-between"
+      >
+        <p>
+          <span data-lang="en">© 2026 CX Switch. Apache License 2.0.</span>
+          <span data-lang="zh" hidden>© 2026 CX Switch。Apache License 2.0。</span>
+        </p>
+        <div class="flex flex-wrap gap-4">
+          <a class="hover:text-white" href="https://github.com/nova-infra/cx-switch" target="_blank" rel="noreferrer"
+            >GitHub</a
+          >
+          <a
+            class="hover:text-white"
+            href="https://github.com/nova-infra/cx-switch/blob/main/LICENSE"
+            target="_blank"
+            rel="noreferrer"
+          >
+            <span data-lang="en">License</span>
+            <span data-lang="zh" hidden>许可证</span>
+          </a>
+          <a
+            class="hover:text-white"
+            href="https://github.com/nova-infra/cx-switch/releases/latest"
+            target="_blank"
+            rel="noreferrer"
+          >
+            <span data-lang="en">Releases</span>
+            <span data-lang="zh" hidden>发布</span>
+          </a>
+        </div>
+      </div>
+    </footer>
+
+    <script src="./script.js"></script>
   </body>
 </html>
