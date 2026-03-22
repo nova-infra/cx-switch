@@ -32,6 +32,7 @@ struct LoginFlowSheet: View {
             }
         }
         .padding(16)
+        .adaptiveGlass(cornerRadius: 16)
         .frame(width: 300)
     }
 

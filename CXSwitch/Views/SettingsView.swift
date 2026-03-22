@@ -34,11 +34,7 @@ struct SettingsView: View {
                 )
             }
             .padding(14)
-            .background(.thinMaterial, in: RoundedRectangle(cornerRadius: 18, style: .continuous))
-            .overlay(
-                RoundedRectangle(cornerRadius: 18, style: .continuous)
-                    .strokeBorder(Color.primary.opacity(0.06))
-            )
+            .adaptiveGlass()
 
             Divider()
                 .opacity(0.35)

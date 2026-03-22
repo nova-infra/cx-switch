@@ -69,7 +69,7 @@ struct SavedAccountRow: View {
                         }
                     }
                     .frame(width: 24, height: 24)
-                    .background(Color.primary.opacity(0.06), in: Circle())
+                    .adaptiveGlassCircle()
                 }
                 .buttonStyle(.plain)
                 .disabled(refreshing)
@@ -79,14 +79,12 @@ struct SavedAccountRow: View {
         .frame(maxWidth: .infinity, alignment: .leading)
         .padding(.vertical, 6)
         .padding(.horizontal, 8)
-        .background(
-            RoundedRectangle(cornerRadius: 12, style: .continuous)
-                .fill(Color.primary.opacity(switching ? 0.05 : 0.001))
-        )
-        .overlay(
-            RoundedRectangle(cornerRadius: 12, style: .continuous)
-                .strokeBorder(Color.primary.opacity(switching ? 0.08 : 0.0))
-        )
+        .background {
+            if switching {
+                Color.clear
+                    .adaptiveGlassTint(Color.primary.opacity(0.18), in: RoundedRectangle(cornerRadius: 12, style: .continuous))
+            }
+        }
         .animation(.snappy(duration: 0.2), value: switching)
     }
 

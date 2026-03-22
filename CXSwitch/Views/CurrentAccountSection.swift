@@ -59,11 +59,7 @@ struct CurrentAccountSection: View {
             }
         }
         .padding(16)
-        .background(.thinMaterial, in: RoundedRectangle(cornerRadius: 18, style: .continuous))
-        .overlay(
-            RoundedRectangle(cornerRadius: 18, style: .continuous)
-                .strokeBorder(Color.primary.opacity(0.06))
-            )
+        .adaptiveGlass()
         .overlay(alignment: .topTrailing) {
             if refreshing, account != nil {
                 HStack(spacing: 6) {
@@ -75,7 +71,7 @@ struct CurrentAccountSection: View {
                 }
                 .padding(.horizontal, 10)
                 .padding(.vertical, 6)
-                .background(.regularMaterial, in: Capsule())
+                .adaptiveGlassTint(Color.primary.opacity(0.22), in: Capsule())
                 .padding(10)
                 .transition(.opacity.combined(with: .scale(scale: 0.96)))
             }
@@ -96,7 +92,7 @@ struct CurrentAccountSection: View {
                 }
             }
             .frame(width: 30, height: 30)
-            .background(.regularMaterial, in: Circle())
+            .adaptiveGlassCircle()
         }
         .buttonStyle(.plain)
         .disabled(refreshing || account == nil)

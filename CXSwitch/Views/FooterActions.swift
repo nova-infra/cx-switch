@@ -7,40 +7,42 @@ struct FooterActions: View {
     let onQuit: () -> Void
 
     var body: some View {
-        LazyVGrid(
-            columns: [
-                GridItem(.flexible(), spacing: 10),
-                GridItem(.flexible(), spacing: 10)
-            ],
-            alignment: .leading,
-            spacing: 8
-        ) {
-            actionCell(
-                title: Strings.addAccount,
-                systemImage: "plus"
+        AdaptiveGlassContainer {
+            LazyVGrid(
+                columns: [
+                    GridItem(.flexible(), spacing: 10),
+                    GridItem(.flexible(), spacing: 10)
+                ],
+                alignment: .leading,
+                spacing: 8
             ) {
-                onAddAccount()
-            }
+                actionCell(
+                    title: Strings.addAccount,
+                    systemImage: "plus"
+                ) {
+                    onAddAccount()
+                }
 
-            actionCell(
-                title: Strings.importToken,
-                systemImage: "arrow.down.circle"
-            ) {
-                onImportToken()
-            }
+                actionCell(
+                    title: Strings.importToken,
+                    systemImage: "arrow.down.circle"
+                ) {
+                    onImportToken()
+                }
 
-            actionCell(
-                title: Strings.settings,
-                systemImage: "gearshape"
-            ) {
-                onOpenSettings()
-            }
+                actionCell(
+                    title: Strings.settings,
+                    systemImage: "gearshape"
+                ) {
+                    onOpenSettings()
+                }
 
-            actionCell(
-                title: Strings.quit,
-                systemImage: "power"
-            ) {
-                onQuit()
+                actionCell(
+                    title: Strings.quit,
+                    systemImage: "power"
+                ) {
+                    onQuit()
+                }
             }
         }
     }
