@@ -1,5 +1,7 @@
 # CX Switch
 
+**中文** | [English](./README.md)
+
 **在 Mac 菜单栏里，一键切换多个 ChatGPT / Codex 账号。**
 
 CX Switch 是一款轻量 macOS 菜单栏工具，可集中管理并在多个 OpenAI 账号之间一键切换，无需反复登入登出；凭证加密保存在本地 SQLite 数据库中。
