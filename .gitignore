@@ -10,3 +10,6 @@ xcuserdata/
 icon.iconset
 CXSwitch.icns
 *.xcresult
+.wrangler/
+.env
+.env.*
