@@ -12,6 +12,9 @@ final class AccountStore {
     private let codexAuthURL: URL
     private let encoder: JSONEncoder
     private let decoder: JSONDecoder
+    private var pendingRegistrySnapshot: [Account] = []
+    private var pendingRegistryWorkItem: DispatchWorkItem?
+    private var registryWriteGeneration: UInt64 = 0
 
     init(
         fileManager: FileManager = .default,
@@ -67,6 +70,32 @@ final class AccountStore {
         let wrapped = RegistryFile(version: 1, accounts: accounts)
         let data = try encoder.encode(wrapped)
         try writeAtomically(data: data, to: registryURL)
+    }
+
+    func saveRegistryDebounced(
+        _ accounts: [Account],
+        delayNanoseconds: UInt64 = 500_000_000,
+        completion: @Sendable @escaping (Error?) -> Void = { _ in }
+    ) {
+        pendingRegistrySnapshot = accounts
+        registryWriteGeneration &+= 1
+        let generation = registryWriteGeneration
+
+        pendingRegistryWorkItem?.cancel()
+        let workItem = DispatchWorkItem { [weak self] in
+            guard let self, generation == self.registryWriteGeneration else { return }
+
+            do {
+                try self.saveRegistry(self.pendingRegistrySnapshot)
+                completion(nil)
+            } catch {
+                completion(error)
+            }
+        }
+        pendingRegistryWorkItem = workItem
+
+        let deadline = DispatchTime.now() + .nanoseconds(Int(delayNanoseconds))
+        DispatchQueue.global(qos: .utility).asyncAfter(deadline: deadline, execute: workItem)
     }
 
     private struct RegistryFile: Codable {

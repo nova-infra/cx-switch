@@ -1,12 +1,9 @@
 import SwiftUI
 
 struct FooterActions: View {
-    let maskEmails: Bool
     let onAddAccount: () -> Void
     let onImportToken: () -> Void
-    let onToggleMaskEmails: () -> Void
     let onOpenSettings: () -> Void
-    let onOpenStatus: () -> Void
     let onQuit: () -> Void
 
     var body: some View {
@@ -30,20 +27,6 @@ struct FooterActions: View {
                 systemImage: "arrow.down.circle"
             ) {
                 onImportToken()
-            }
-
-            actionCell(
-                title: Strings.status,
-                systemImage: "waveform.path.ecg"
-            ) {
-                onOpenStatus()
-            }
-
-            actionCell(
-                title: maskEmails ? Strings.L("显示邮箱", en: "Show Emails") : Strings.maskEmails,
-                systemImage: maskEmails ? "eye" : "eye.slash"
-            ) {
-                onToggleMaskEmails()
             }
 
             actionCell(

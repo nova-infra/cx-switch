@@ -2,14 +2,15 @@ import SwiftUI
 
 struct MenuBarView: View {
     @Environment(AppState.self) private var state
+    @State private var showSettings = false
     @State private var showImportToken = false
     @State private var importToken = ""
 
     var body: some View {
-        mainPanel
+        activePanel
             .padding(16)
             .fixedSize(horizontal: false, vertical: true)
-        .frame(width: 360)
+            .frame(width: 360)
         .task(id: "init") {
             await state.loadDashboard()
         }
@@ -18,6 +19,15 @@ struct MenuBarView: View {
                 loginFlow: state.loginFlow,
                 onCancel: { Task { await state.cancelAddAccount() } }
             )
+        }
+    }
+
+    @ViewBuilder
+    private var activePanel: some View {
+        if showSettings {
+            SettingsView(onBack: { showSettings = false })
+        } else {
+            mainPanel
         }
     }
 
@@ -46,9 +56,11 @@ struct MenuBarView: View {
                         SavedAccountRow(
                             account: account,
                             preferences: state.preferences,
-                            onSelect: { Task { await state.switchAccount(to: account) } },
+                            isCurrent: account.id == currentId,
+                            onSelect: { selectAccount(account) },
                             onRefresh: { Task { await state.refreshAccount(account) } },
-                            refreshing: state.isRefreshing(accountID: account.id)
+                            refreshing: state.isRefreshing(accountID: account.id),
+                            switching: state.switchingAccountID == account.id
                         )
                     }
                 }
@@ -57,12 +69,9 @@ struct MenuBarView: View {
             sectionDivider
 
             FooterActions(
-                maskEmails: state.preferences.maskEmails ?? false,
                 onAddAccount: { Task { await state.startAddAccount() } },
                 onImportToken: { toggleImportToken() },
-                onToggleMaskEmails: { state.setMaskEmails(!(state.preferences.maskEmails ?? false)) },
-                onOpenSettings: { state.openSettings() },
-                onOpenStatus: { state.openStatusPage() },
+                onOpenSettings: { showSettings = true },
                 onQuit: { state.quit() }
             )
 
@@ -80,27 +89,12 @@ struct MenuBarView: View {
                 }
             }
 
-            if state.refreshing || messageText != nil {
-                VStack(alignment: .leading, spacing: 8) {
-                    if state.refreshing {
-                        HStack(spacing: 8) {
-                            ProgressView()
-                                .controlSize(.small)
-                            Text(refreshingMessage)
-                                .font(.caption)
-                                .foregroundStyle(.secondary)
-                        }
-                    }
-
-                    if let messageText {
-                        Text(messageText)
-                            .font(.caption)
-                            .foregroundStyle(messageColor)
-                    }
-                }
-                .padding(.top, 4)
+            if let activity = activityMessage {
+                activityStrip(text: activity, color: activityColor, showSpinner: showActivitySpinner)
+                    .padding(.top, 4)
             }
         }
+        .animation(.snappy(duration: 0.2), value: state.switchingAccountID)
     }
 
     private var loginFlowBinding: Binding<Bool> {
@@ -144,6 +138,30 @@ struct MenuBarView: View {
         return Strings.L("正在刷新…", en: "Refreshing...")
     }
 
+    private var activityMessage: String? {
+        if let messageText {
+            return messageText
+        }
+        if state.refreshing {
+            return refreshingMessage
+        }
+        return nil
+    }
+
+    private var activityColor: Color {
+        if let errorMessage = state.errorMessage, !errorMessage.isEmpty {
+            return .red
+        }
+        if state.refreshing {
+            return .secondary
+        }
+        return .green
+    }
+
+    private var showActivitySpinner: Bool {
+        state.refreshing && (state.errorMessage?.isEmpty ?? true)
+    }
+
     private func doImport() {
         let token = importToken.trimmingCharacters(in: .whitespacesAndNewlines)
         guard !token.isEmpty else { return }
@@ -154,5 +172,34 @@ struct MenuBarView: View {
 
     private func toggleImportToken() {
         showImportToken.toggle()
+    }
+
+    private func selectAccount(_ account: Account) {
+        Task {
+            await state.switchAccount(to: account)
+        }
+    }
+
+    private func activityStrip(text: String, color: Color, showSpinner: Bool) -> some View {
+        HStack(spacing: 8) {
+            if showSpinner {
+                ProgressView()
+                    .controlSize(.small)
+            } else {
+                Circle()
+                    .fill(color)
+                    .frame(width: 6, height: 6)
+            }
+
+            Text(text)
+                .font(.caption)
+                .foregroundStyle(color)
+                .lineLimit(2)
+
+            Spacer(minLength: 0)
+        }
+        .padding(.horizontal, 10)
+        .padding(.vertical, 8)
+        .background(Color.primary.opacity(0.04), in: RoundedRectangle(cornerRadius: 12, style: .continuous))
     }
 }

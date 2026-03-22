@@ -31,6 +31,7 @@ source_files = [
   "CXSwitch/Views/LoginFlowSheet.swift",
   "CXSwitch/Views/MenuBarView.swift",
   "CXSwitch/Views/SavedAccountRow.swift",
+  "CXSwitch/Views/SettingsView.swift",
   "CXSwitch/Views/UsageBar.swift"
 ]
 

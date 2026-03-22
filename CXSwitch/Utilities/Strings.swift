@@ -19,7 +19,15 @@ enum Strings {
     static var status: String { L("状态", en: "Status") }
     static var quit: String { L("退出 CX Switch", en: "Quit CX Switch") }
     static var maskEmails: String { L("邮箱脱敏", en: "Mask Emails") }
-    static var openDataFolder: String { L("打开数据文件夹", en: "Open Data Folder") }
+    static var language: String { L("语言", en: "Language") }
+    static var theme: String { L("主题", en: "Theme") }
+    static var themeSystem: String { L("跟随系统", en: "System") }
+    static var themeLight: String { L("亮色", en: "Light") }
+    static var themeDark: String { L("暗色", en: "Dark") }
+    static var languageChinese: String { "中文" }
+    static var languageEnglish: String { "English" }
+    static var openaiStatus: String { L("OpenAI 状态", en: "OpenAI Status") }
+    static var openDataFolder: String { L("打开配置文件夹", en: "Open Config Folder") }
     static var noActiveAccount: String { L("未检测到活跃账户，请切换或添加", en: "No active account, switch or add one") }
     static var saveCurrentAccount: String { L("保存当前账户", en: "Save Current Account") }
     static var missingAuthForSelectedAccount: String { L("所选账户缺少认证信息", en: "Missing auth for selected account") }

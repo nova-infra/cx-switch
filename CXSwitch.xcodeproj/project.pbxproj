@@ -7,186 +7,189 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		009782C8952D524FA72A4BC1 /* CurrentAccountSection.swift in Sources */ = {isa = PBXBuildFile; fileRef = 574A67E2D81CADF81B579707 /* CurrentAccountSection.swift */; };
-		06FF2C1C1F0D920E2FB31C24 /* AppState.swift in Sources */ = {isa = PBXBuildFile; fileRef = FED6555F84903C821F939EA0 /* AppState.swift */; };
-		0F448EFE6041D96BA80A9AF8 /* Strings.swift in Sources */ = {isa = PBXBuildFile; fileRef = 557194D6F1CF6B56BAD8C62E /* Strings.swift */; };
-		2D0194252AE74509F9D40924 /* UsageProbe.swift in Sources */ = {isa = PBXBuildFile; fileRef = E0516A2694E05A0A2D2D1F75 /* UsageProbe.swift */; };
-		3431B4D381EE36871D8B2D68 /* AppIcon.icns in Resources */ = {isa = PBXBuildFile; fileRef = 589C3D8EDF870EECDA8E072C /* AppIcon.icns */; };
-		54CF3B4E96E72B3BA7EA519D /* Cocoa.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 630A08F3C6ED50278B58EEA1 /* Cocoa.framework */; };
-		5A37CAE7291E18C121368474 /* KeychainService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7817459F7E57BCA2ECBE3753 /* KeychainService.swift */; };
-		5FB4899665AE9F1E9127BCD9 /* AuthBlob.swift in Sources */ = {isa = PBXBuildFile; fileRef = 42AC57FFC74ABD172ACC023A /* AuthBlob.swift */; };
-		6687DA7C1F297C3E5CFE5557 /* LoginFlowState.swift in Sources */ = {isa = PBXBuildFile; fileRef = D7A76EE31CBA578E1C742FAC /* LoginFlowState.swift */; };
-		6F55EF7820C8734608A4A3B7 /* CodexAppServer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5FFBB81D91F724E7AF9CF7A9 /* CodexAppServer.swift */; };
-		6F8993A5DF8EB0544577D342 /* AccountStore.swift in Sources */ = {isa = PBXBuildFile; fileRef = F997474E68CCA72538ED7C7F /* AccountStore.swift */; };
-		71D4617013C2F27B979BE0B6 /* Preferences.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8AC83C341F1D2BE18D44D42D /* Preferences.swift */; };
-		77241EC76F85CF621F83E9E8 /* AuthService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1AB7DB2D55E1591016E5C553 /* AuthService.swift */; };
-		785ECD23076F800A7F6327C5 /* UsageBar.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7532F1EBBAE9B7D688B5F991 /* UsageBar.swift */; };
-		87E59D5DA1425D779AFAFD73 /* FooterActions.swift in Sources */ = {isa = PBXBuildFile; fileRef = A883DE383C794BED9C5D37EF /* FooterActions.swift */; };
-		8F7A4D9CA424C176C2B673AF /* Account.swift in Sources */ = {isa = PBXBuildFile; fileRef = 183D21AF7111AB31F70ABBB4 /* Account.swift */; };
-		9FD02B47143593E594D8FACD /* CXSwitchApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = B88C1521E8BF963499E3D124 /* CXSwitchApp.swift */; };
-		A7A9E99FAE94D4D095F8EBBA /* SavedAccountRow.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9DA10076E1F5344C2667D766 /* SavedAccountRow.swift */; };
-		ABC8618AAD1CCCC48B7D3D4A /* UsageSnapshot.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4AA5F96D8292ABBFAC35DEDD /* UsageSnapshot.swift */; };
-		D1028647DD349EE670328844 /* AppIntents.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = C17C5F00ADB620828D601711 /* AppIntents.framework */; };
-		DC110BF27EE6D37B9787BD35 /* MenuBarView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4E142911C675A1AD680BC431 /* MenuBarView.swift */; };
-		F0658028CFD45C9AA06C1A41 /* EmailMasker.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2ED9452ABA44ADF95E80FD54 /* EmailMasker.swift */; };
-		F11B8D8B024A1184F23927F4 /* LoginFlowSheet.swift in Sources */ = {isa = PBXBuildFile; fileRef = 44593370219034DA9AD66BAB /* LoginFlowSheet.swift */; };
-		FE0806F087F0D2E31CC3B696 /* JWTDecoder.swift in Sources */ = {isa = PBXBuildFile; fileRef = 28CC191926F8E001A982519F /* JWTDecoder.swift */; };
+		03A5584D37D17CE6DDBB44B0 /* SavedAccountRow.swift in Sources */ = {isa = PBXBuildFile; fileRef = DEB58767A67FBB041AFBB6BE /* SavedAccountRow.swift */; };
+		0C31F69C758A45081BC01F5B /* AccountStore.swift in Sources */ = {isa = PBXBuildFile; fileRef = D1CE1BFC639981D82556414E /* AccountStore.swift */; };
+		20FB201183B5FD920B63B89A /* SettingsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0CD392DA631F2FE8EA1CC711 /* SettingsView.swift */; };
+		294F92DF731D4DB45750FD6B /* CurrentAccountSection.swift in Sources */ = {isa = PBXBuildFile; fileRef = F757AD52C163C4C64C211B6F /* CurrentAccountSection.swift */; };
+		336FC07C956D9171B93CEB68 /* Strings.swift in Sources */ = {isa = PBXBuildFile; fileRef = DAAE74E21A4A0DD9267D17FA /* Strings.swift */; };
+		37A898436F875E2F60003EF2 /* KeychainService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 32B0C9DD6F38CB39F466EF68 /* KeychainService.swift */; };
+		4A964CBF68DCE140DD87F648 /* AppIntents.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 29F6508F5B407BB903334B7D /* AppIntents.framework */; };
+		4B8FD553C51784C890A54CDA /* CodexAppServer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 876FF63AFCC3866C32525895 /* CodexAppServer.swift */; };
+		5618409B79EAA3CE5CE109DB /* LoginFlowSheet.swift in Sources */ = {isa = PBXBuildFile; fileRef = 766FA1AC74D79C66D2880786 /* LoginFlowSheet.swift */; };
+		5D15748024810D0080E90919 /* AppIcon.icns in Resources */ = {isa = PBXBuildFile; fileRef = 9EBA3E8DAB9F40A18891C83E /* AppIcon.icns */; };
+		62D99A775ECAC2130945D42B /* Preferences.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4ADCD7C4566F769814CDE0E5 /* Preferences.swift */; };
+		7ACA221CB55B89B6AB4ABE60 /* JWTDecoder.swift in Sources */ = {isa = PBXBuildFile; fileRef = CE15DAF379175732B67F94D5 /* JWTDecoder.swift */; };
+		8276B652883431167D44779F /* MenuBarView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 10390C86025CBBB0E6102EC4 /* MenuBarView.swift */; };
+		9BD5975142EDE19343CEC0FC /* UsageProbe.swift in Sources */ = {isa = PBXBuildFile; fileRef = 411AC567ED37A32F906734D8 /* UsageProbe.swift */; };
+		A01850E82E6B3A56357C00AC /* CXSwitchApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5591D0C798A3CB22BE319F55 /* CXSwitchApp.swift */; };
+		A15E6D09CE123A1536EB5764 /* FooterActions.swift in Sources */ = {isa = PBXBuildFile; fileRef = DBB4ED18F8CA7C98792A019C /* FooterActions.swift */; };
+		A850EDA33BED941E6671D85F /* UsageBar.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3DAA8078DD8D990A411676A5 /* UsageBar.swift */; };
+		AFBB66005A8D7E10D637289F /* EmailMasker.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3F5FB4ED037AB2EC06B0CF71 /* EmailMasker.swift */; };
+		B24803D651418ECABFB063CE /* AppState.swift in Sources */ = {isa = PBXBuildFile; fileRef = F59C81A6508AEAFA7E9C4551 /* AppState.swift */; };
+		CE47E11104179B39ED465D36 /* AuthBlob.swift in Sources */ = {isa = PBXBuildFile; fileRef = D5D9AA741A0C3FCC729759D9 /* AuthBlob.swift */; };
+		E502F4968D2EDFD7B41636E9 /* Account.swift in Sources */ = {isa = PBXBuildFile; fileRef = 63267516E4E9B86D756E9B51 /* Account.swift */; };
+		EDCB07CC2755C34DBF23DF23 /* AuthService.swift in Sources */ = {isa = PBXBuildFile; fileRef = BAC296DBD94E574A73143E23 /* AuthService.swift */; };
+		F27BAD18D8D0C6FFBB2AE55D /* UsageSnapshot.swift in Sources */ = {isa = PBXBuildFile; fileRef = 124FF18B0AD07A485C5DE81A /* UsageSnapshot.swift */; };
+		F8AA46C28AA60C1A538B6E2C /* Cocoa.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 04FC631446BF6B0EADBE1A76 /* Cocoa.framework */; };
+		FDB18E64755C16395BB98CA6 /* LoginFlowState.swift in Sources */ = {isa = PBXBuildFile; fileRef = E55C66E640E7522B4F3E5317 /* LoginFlowState.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
-		183D21AF7111AB31F70ABBB4 /* Account.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = Account.swift; path = CXSwitch/Models/Account.swift; sourceTree = "<group>"; };
-		1AB7DB2D55E1591016E5C553 /* AuthService.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = AuthService.swift; path = CXSwitch/Services/AuthService.swift; sourceTree = "<group>"; };
-		28CC191926F8E001A982519F /* JWTDecoder.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = JWTDecoder.swift; path = CXSwitch/Utilities/JWTDecoder.swift; sourceTree = "<group>"; };
-		2ED9452ABA44ADF95E80FD54 /* EmailMasker.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = EmailMasker.swift; path = CXSwitch/Utilities/EmailMasker.swift; sourceTree = "<group>"; };
-		42AC57FFC74ABD172ACC023A /* AuthBlob.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = AuthBlob.swift; path = CXSwitch/Models/AuthBlob.swift; sourceTree = "<group>"; };
-		44593370219034DA9AD66BAB /* LoginFlowSheet.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = LoginFlowSheet.swift; path = CXSwitch/Views/LoginFlowSheet.swift; sourceTree = "<group>"; };
-		4AA5F96D8292ABBFAC35DEDD /* UsageSnapshot.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = UsageSnapshot.swift; path = CXSwitch/Models/UsageSnapshot.swift; sourceTree = "<group>"; };
-		4E142911C675A1AD680BC431 /* MenuBarView.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = MenuBarView.swift; path = CXSwitch/Views/MenuBarView.swift; sourceTree = "<group>"; };
-		557194D6F1CF6B56BAD8C62E /* Strings.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = Strings.swift; path = CXSwitch/Utilities/Strings.swift; sourceTree = "<group>"; };
-		574A67E2D81CADF81B579707 /* CurrentAccountSection.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = CurrentAccountSection.swift; path = CXSwitch/Views/CurrentAccountSection.swift; sourceTree = "<group>"; };
-		589C3D8EDF870EECDA8E072C /* AppIcon.icns */ = {isa = PBXFileReference; includeInIndex = 1; name = AppIcon.icns; path = CXSwitch/Resources/AppIcon.icns; sourceTree = "<group>"; };
-		5FFBB81D91F724E7AF9CF7A9 /* CodexAppServer.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = CodexAppServer.swift; path = CXSwitch/Services/CodexAppServer.swift; sourceTree = "<group>"; };
-		630A08F3C6ED50278B58EEA1 /* Cocoa.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Cocoa.framework; path = Platforms/MacOSX.platform/Developer/SDKs/MacOSX15.0.sdk/System/Library/Frameworks/Cocoa.framework; sourceTree = DEVELOPER_DIR; };
-		7532F1EBBAE9B7D688B5F991 /* UsageBar.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = UsageBar.swift; path = CXSwitch/Views/UsageBar.swift; sourceTree = "<group>"; };
-		7817459F7E57BCA2ECBE3753 /* KeychainService.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = KeychainService.swift; path = CXSwitch/Services/KeychainService.swift; sourceTree = "<group>"; };
-		8AC83C341F1D2BE18D44D42D /* Preferences.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = Preferences.swift; path = CXSwitch/Models/Preferences.swift; sourceTree = "<group>"; };
-		9DA10076E1F5344C2667D766 /* SavedAccountRow.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = SavedAccountRow.swift; path = CXSwitch/Views/SavedAccountRow.swift; sourceTree = "<group>"; };
-		A883DE383C794BED9C5D37EF /* FooterActions.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = FooterActions.swift; path = CXSwitch/Views/FooterActions.swift; sourceTree = "<group>"; };
-		B88C1521E8BF963499E3D124 /* CXSwitchApp.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = CXSwitchApp.swift; path = CXSwitch/CXSwitchApp.swift; sourceTree = "<group>"; };
-		C17C5F00ADB620828D601711 /* AppIntents.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AppIntents.framework; path = System/Library/Frameworks/AppIntents.framework; sourceTree = "<group>"; };
-		C8F2C3B9F382BB265EB0C9BD /* CXSwitch.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = CXSwitch.app; sourceTree = BUILT_PRODUCTS_DIR; };
-		D7A76EE31CBA578E1C742FAC /* LoginFlowState.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = LoginFlowState.swift; path = CXSwitch/Models/LoginFlowState.swift; sourceTree = "<group>"; };
-		E0516A2694E05A0A2D2D1F75 /* UsageProbe.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = UsageProbe.swift; path = CXSwitch/Services/UsageProbe.swift; sourceTree = "<group>"; };
-		F997474E68CCA72538ED7C7F /* AccountStore.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = AccountStore.swift; path = CXSwitch/Services/AccountStore.swift; sourceTree = "<group>"; };
-		FED6555F84903C821F939EA0 /* AppState.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = AppState.swift; path = CXSwitch/Models/AppState.swift; sourceTree = "<group>"; };
+		04FC631446BF6B0EADBE1A76 /* Cocoa.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Cocoa.framework; path = Platforms/MacOSX.platform/Developer/SDKs/MacOSX15.0.sdk/System/Library/Frameworks/Cocoa.framework; sourceTree = DEVELOPER_DIR; };
+		0CD392DA631F2FE8EA1CC711 /* SettingsView.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = SettingsView.swift; path = CXSwitch/Views/SettingsView.swift; sourceTree = "<group>"; };
+		10390C86025CBBB0E6102EC4 /* MenuBarView.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = MenuBarView.swift; path = CXSwitch/Views/MenuBarView.swift; sourceTree = "<group>"; };
+		124FF18B0AD07A485C5DE81A /* UsageSnapshot.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = UsageSnapshot.swift; path = CXSwitch/Models/UsageSnapshot.swift; sourceTree = "<group>"; };
+		29F6508F5B407BB903334B7D /* AppIntents.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AppIntents.framework; path = System/Library/Frameworks/AppIntents.framework; sourceTree = "<group>"; };
+		32B0C9DD6F38CB39F466EF68 /* KeychainService.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = KeychainService.swift; path = CXSwitch/Services/KeychainService.swift; sourceTree = "<group>"; };
+		3DAA8078DD8D990A411676A5 /* UsageBar.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = UsageBar.swift; path = CXSwitch/Views/UsageBar.swift; sourceTree = "<group>"; };
+		3DC93D675CFC77A0F71E1FEA /* CXSwitch.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = CXSwitch.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		3F5FB4ED037AB2EC06B0CF71 /* EmailMasker.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = EmailMasker.swift; path = CXSwitch/Utilities/EmailMasker.swift; sourceTree = "<group>"; };
+		411AC567ED37A32F906734D8 /* UsageProbe.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = UsageProbe.swift; path = CXSwitch/Services/UsageProbe.swift; sourceTree = "<group>"; };
+		4ADCD7C4566F769814CDE0E5 /* Preferences.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = Preferences.swift; path = CXSwitch/Models/Preferences.swift; sourceTree = "<group>"; };
+		5591D0C798A3CB22BE319F55 /* CXSwitchApp.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = CXSwitchApp.swift; path = CXSwitch/CXSwitchApp.swift; sourceTree = "<group>"; };
+		63267516E4E9B86D756E9B51 /* Account.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = Account.swift; path = CXSwitch/Models/Account.swift; sourceTree = "<group>"; };
+		766FA1AC74D79C66D2880786 /* LoginFlowSheet.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = LoginFlowSheet.swift; path = CXSwitch/Views/LoginFlowSheet.swift; sourceTree = "<group>"; };
+		876FF63AFCC3866C32525895 /* CodexAppServer.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = CodexAppServer.swift; path = CXSwitch/Services/CodexAppServer.swift; sourceTree = "<group>"; };
+		9EBA3E8DAB9F40A18891C83E /* AppIcon.icns */ = {isa = PBXFileReference; includeInIndex = 1; name = AppIcon.icns; path = CXSwitch/Resources/AppIcon.icns; sourceTree = "<group>"; };
+		BAC296DBD94E574A73143E23 /* AuthService.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = AuthService.swift; path = CXSwitch/Services/AuthService.swift; sourceTree = "<group>"; };
+		CE15DAF379175732B67F94D5 /* JWTDecoder.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = JWTDecoder.swift; path = CXSwitch/Utilities/JWTDecoder.swift; sourceTree = "<group>"; };
+		D1CE1BFC639981D82556414E /* AccountStore.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = AccountStore.swift; path = CXSwitch/Services/AccountStore.swift; sourceTree = "<group>"; };
+		D5D9AA741A0C3FCC729759D9 /* AuthBlob.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = AuthBlob.swift; path = CXSwitch/Models/AuthBlob.swift; sourceTree = "<group>"; };
+		DAAE74E21A4A0DD9267D17FA /* Strings.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = Strings.swift; path = CXSwitch/Utilities/Strings.swift; sourceTree = "<group>"; };
+		DBB4ED18F8CA7C98792A019C /* FooterActions.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = FooterActions.swift; path = CXSwitch/Views/FooterActions.swift; sourceTree = "<group>"; };
+		DEB58767A67FBB041AFBB6BE /* SavedAccountRow.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = SavedAccountRow.swift; path = CXSwitch/Views/SavedAccountRow.swift; sourceTree = "<group>"; };
+		E55C66E640E7522B4F3E5317 /* LoginFlowState.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = LoginFlowState.swift; path = CXSwitch/Models/LoginFlowState.swift; sourceTree = "<group>"; };
+		F59C81A6508AEAFA7E9C4551 /* AppState.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = AppState.swift; path = CXSwitch/Models/AppState.swift; sourceTree = "<group>"; };
+		F757AD52C163C4C64C211B6F /* CurrentAccountSection.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = CurrentAccountSection.swift; path = CXSwitch/Views/CurrentAccountSection.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
-		0C9E3BD342E62A01A4107CBC /* Frameworks */ = {
+		1536510AF5B93AE6E18CF229 /* Frameworks */ = {
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				54CF3B4E96E72B3BA7EA519D /* Cocoa.framework in Frameworks */,
-				D1028647DD349EE670328844 /* AppIntents.framework in Frameworks */,
+				F8AA46C28AA60C1A538B6E2C /* Cocoa.framework in Frameworks */,
+				4A964CBF68DCE140DD87F648 /* AppIntents.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
-		03F29B87EAA7461991C87C51 /* Services */ = {
+		12C18862041EC5E7558D3097 /* Views */ = {
 			isa = PBXGroup;
 			children = (
-				F997474E68CCA72538ED7C7F /* AccountStore.swift */,
-				1AB7DB2D55E1591016E5C553 /* AuthService.swift */,
-				5FFBB81D91F724E7AF9CF7A9 /* CodexAppServer.swift */,
-				7817459F7E57BCA2ECBE3753 /* KeychainService.swift */,
-				E0516A2694E05A0A2D2D1F75 /* UsageProbe.swift */,
-			);
-			name = Services;
-			sourceTree = "<group>";
-		};
-		2688E569EC747A6A125729F1 /* Frameworks */ = {
-			isa = PBXGroup;
-			children = (
-				86E504BE372BD7D6B00AFEC3 /* OS X */,
-				C17C5F00ADB620828D601711 /* AppIntents.framework */,
-			);
-			name = Frameworks;
-			sourceTree = "<group>";
-		};
-		28FF33F6FD6D8C5B7398041D /* Products */ = {
-			isa = PBXGroup;
-			children = (
-				C8F2C3B9F382BB265EB0C9BD /* CXSwitch.app */,
-			);
-			name = Products;
-			sourceTree = "<group>";
-		};
-		3DE266AFBFB085E0E28B80CF /* Models */ = {
-			isa = PBXGroup;
-			children = (
-				183D21AF7111AB31F70ABBB4 /* Account.swift */,
-				42AC57FFC74ABD172ACC023A /* AuthBlob.swift */,
-				FED6555F84903C821F939EA0 /* AppState.swift */,
-				D7A76EE31CBA578E1C742FAC /* LoginFlowState.swift */,
-				8AC83C341F1D2BE18D44D42D /* Preferences.swift */,
-				4AA5F96D8292ABBFAC35DEDD /* UsageSnapshot.swift */,
-			);
-			name = Models;
-			sourceTree = "<group>";
-		};
-		5ECEB040AD6316EB607B68B5 /* Utilities */ = {
-			isa = PBXGroup;
-			children = (
-				2ED9452ABA44ADF95E80FD54 /* EmailMasker.swift */,
-				28CC191926F8E001A982519F /* JWTDecoder.swift */,
-				557194D6F1CF6B56BAD8C62E /* Strings.swift */,
-			);
-			name = Utilities;
-			sourceTree = "<group>";
-		};
-		869D7F606A7C745C27CEA256 = {
-			isa = PBXGroup;
-			children = (
-				28FF33F6FD6D8C5B7398041D /* Products */,
-				2688E569EC747A6A125729F1 /* Frameworks */,
-				EA642B372822729F31A6627A /* CXSwitch */,
-			);
-			sourceTree = "<group>";
-		};
-		86E504BE372BD7D6B00AFEC3 /* OS X */ = {
-			isa = PBXGroup;
-			children = (
-				630A08F3C6ED50278B58EEA1 /* Cocoa.framework */,
-			);
-			name = "OS X";
-			sourceTree = "<group>";
-		};
-		8F138A2040A6B692E7DC9955 /* Views */ = {
-			isa = PBXGroup;
-			children = (
-				574A67E2D81CADF81B579707 /* CurrentAccountSection.swift */,
-				A883DE383C794BED9C5D37EF /* FooterActions.swift */,
-				44593370219034DA9AD66BAB /* LoginFlowSheet.swift */,
-				4E142911C675A1AD680BC431 /* MenuBarView.swift */,
-				9DA10076E1F5344C2667D766 /* SavedAccountRow.swift */,
-				7532F1EBBAE9B7D688B5F991 /* UsageBar.swift */,
+				F757AD52C163C4C64C211B6F /* CurrentAccountSection.swift */,
+				DBB4ED18F8CA7C98792A019C /* FooterActions.swift */,
+				766FA1AC74D79C66D2880786 /* LoginFlowSheet.swift */,
+				10390C86025CBBB0E6102EC4 /* MenuBarView.swift */,
+				DEB58767A67FBB041AFBB6BE /* SavedAccountRow.swift */,
+				0CD392DA631F2FE8EA1CC711 /* SettingsView.swift */,
+				3DAA8078DD8D990A411676A5 /* UsageBar.swift */,
 			);
 			name = Views;
 			sourceTree = "<group>";
 		};
-		B99DC592A7FE65D5FC8C5A2D /* Resources */ = {
+		1A9CD35CAF9080CF6E1B66D8 /* Models */ = {
 			isa = PBXGroup;
 			children = (
-				589C3D8EDF870EECDA8E072C /* AppIcon.icns */,
+				63267516E4E9B86D756E9B51 /* Account.swift */,
+				D5D9AA741A0C3FCC729759D9 /* AuthBlob.swift */,
+				F59C81A6508AEAFA7E9C4551 /* AppState.swift */,
+				E55C66E640E7522B4F3E5317 /* LoginFlowState.swift */,
+				4ADCD7C4566F769814CDE0E5 /* Preferences.swift */,
+				124FF18B0AD07A485C5DE81A /* UsageSnapshot.swift */,
 			);
-			name = Resources;
+			name = Models;
 			sourceTree = "<group>";
 		};
-		EA642B372822729F31A6627A /* CXSwitch */ = {
+		265E3CE463A24B14767EFCCF /* OS X */ = {
 			isa = PBXGroup;
 			children = (
-				3DE266AFBFB085E0E28B80CF /* Models */,
-				03F29B87EAA7461991C87C51 /* Services */,
-				5ECEB040AD6316EB607B68B5 /* Utilities */,
-				8F138A2040A6B692E7DC9955 /* Views */,
-				B99DC592A7FE65D5FC8C5A2D /* Resources */,
-				B88C1521E8BF963499E3D124 /* CXSwitchApp.swift */,
+				04FC631446BF6B0EADBE1A76 /* Cocoa.framework */,
+			);
+			name = "OS X";
+			sourceTree = "<group>";
+		};
+		46F04390B82B7EFB83F745F6 /* Services */ = {
+			isa = PBXGroup;
+			children = (
+				D1CE1BFC639981D82556414E /* AccountStore.swift */,
+				BAC296DBD94E574A73143E23 /* AuthService.swift */,
+				876FF63AFCC3866C32525895 /* CodexAppServer.swift */,
+				32B0C9DD6F38CB39F466EF68 /* KeychainService.swift */,
+				411AC567ED37A32F906734D8 /* UsageProbe.swift */,
+			);
+			name = Services;
+			sourceTree = "<group>";
+		};
+		46F3DCBEB315A23E911BB351 /* Utilities */ = {
+			isa = PBXGroup;
+			children = (
+				3F5FB4ED037AB2EC06B0CF71 /* EmailMasker.swift */,
+				CE15DAF379175732B67F94D5 /* JWTDecoder.swift */,
+				DAAE74E21A4A0DD9267D17FA /* Strings.swift */,
+			);
+			name = Utilities;
+			sourceTree = "<group>";
+		};
+		5E068D014FC7D656F050DB1F /* CXSwitch */ = {
+			isa = PBXGroup;
+			children = (
+				1A9CD35CAF9080CF6E1B66D8 /* Models */,
+				46F04390B82B7EFB83F745F6 /* Services */,
+				46F3DCBEB315A23E911BB351 /* Utilities */,
+				12C18862041EC5E7558D3097 /* Views */,
+				F7E1EDE28F37397116789419 /* Resources */,
+				5591D0C798A3CB22BE319F55 /* CXSwitchApp.swift */,
 			);
 			name = CXSwitch;
+			sourceTree = "<group>";
+		};
+		82403D653AED544BB1B8EF6A /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				3DC93D675CFC77A0F71E1FEA /* CXSwitch.app */,
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
+		D1C02C21F3CB09395A1E43F8 /* Frameworks */ = {
+			isa = PBXGroup;
+			children = (
+				265E3CE463A24B14767EFCCF /* OS X */,
+				29F6508F5B407BB903334B7D /* AppIntents.framework */,
+			);
+			name = Frameworks;
+			sourceTree = "<group>";
+		};
+		EC197A252C8A117141151A31 = {
+			isa = PBXGroup;
+			children = (
+				82403D653AED544BB1B8EF6A /* Products */,
+				D1C02C21F3CB09395A1E43F8 /* Frameworks */,
+				5E068D014FC7D656F050DB1F /* CXSwitch */,
+			);
+			sourceTree = "<group>";
+		};
+		F7E1EDE28F37397116789419 /* Resources */ = {
+			isa = PBXGroup;
+			children = (
+				9EBA3E8DAB9F40A18891C83E /* AppIcon.icns */,
+			);
+			name = Resources;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
-		FFADF4295BBC4021AFDCDED2 /* CXSwitch */ = {
+		BDCD0DDE7BEBD1B04A883141 /* CXSwitch */ = {
 			isa = PBXNativeTarget;
-			buildConfigurationList = AC832B261D8669EDD5C70712 /* Build configuration list for PBXNativeTarget "CXSwitch" */;
+			buildConfigurationList = A438DF11D9468E12E8E0A923 /* Build configuration list for PBXNativeTarget "CXSwitch" */;
 			buildPhases = (
-				12C962D0ADAA22EF63C1D5D6 /* Sources */,
-				0C9E3BD342E62A01A4107CBC /* Frameworks */,
-				4AA53E4412EDB71529B5DCEF /* Resources */,
+				BA1826235BA95ACA23EFD493 /* Sources */,
+				1536510AF5B93AE6E18CF229 /* Frameworks */,
+				9BEEB43BCCAD1DA3647AFFB5 /* Resources */,
 			);
 			buildRules = (
 			);
@@ -194,19 +197,19 @@
 			);
 			name = CXSwitch;
 			productName = CXSwitch;
-			productReference = C8F2C3B9F382BB265EB0C9BD /* CXSwitch.app */;
+			productReference = 3DC93D675CFC77A0F71E1FEA /* CXSwitch.app */;
 			productType = "com.apple.product-type.application";
 		};
 /* End PBXNativeTarget section */
 
 /* Begin PBXProject section */
-		FA913B37907EA7CF75D0066C /* Project object */ = {
+		BF9E39B80D454B530F57D471 /* Project object */ = {
 			isa = PBXProject;
 			attributes = {
 				LastSwiftUpdateCheck = 1600;
 				LastUpgradeCheck = 1600;
 			};
-			buildConfigurationList = 98D10D420D246B5090BC2A4B /* Build configuration list for PBXProject "CXSwitch" */;
+			buildConfigurationList = 3DF3FB40EA32CD4ACA8EAE54 /* Build configuration list for PBXProject "CXSwitch" */;
 			compatibilityVersion = "Xcode 3.2";
 			developmentRegion = en;
 			hasScannedForEncodings = 0;
@@ -214,62 +217,87 @@
 				en,
 				Base,
 			);
-			mainGroup = 869D7F606A7C745C27CEA256;
+			mainGroup = EC197A252C8A117141151A31;
 			minimizedProjectReferenceProxies = 0;
 			preferredProjectObjectVersion = 77;
-			productRefGroup = 28FF33F6FD6D8C5B7398041D /* Products */;
+			productRefGroup = 82403D653AED544BB1B8EF6A /* Products */;
 			projectDirPath = "";
 			projectRoot = "";
 			targets = (
-				FFADF4295BBC4021AFDCDED2 /* CXSwitch */,
+				BDCD0DDE7BEBD1B04A883141 /* CXSwitch */,
 			);
 		};
 /* End PBXProject section */
 
 /* Begin PBXResourcesBuildPhase section */
-		4AA53E4412EDB71529B5DCEF /* Resources */ = {
+		9BEEB43BCCAD1DA3647AFFB5 /* Resources */ = {
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				3431B4D381EE36871D8B2D68 /* AppIcon.icns in Resources */,
+				5D15748024810D0080E90919 /* AppIcon.icns in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXResourcesBuildPhase section */
 
 /* Begin PBXSourcesBuildPhase section */
-		12C962D0ADAA22EF63C1D5D6 /* Sources */ = {
+		BA1826235BA95ACA23EFD493 /* Sources */ = {
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				9FD02B47143593E594D8FACD /* CXSwitchApp.swift in Sources */,
-				8F7A4D9CA424C176C2B673AF /* Account.swift in Sources */,
-				5FB4899665AE9F1E9127BCD9 /* AuthBlob.swift in Sources */,
-				06FF2C1C1F0D920E2FB31C24 /* AppState.swift in Sources */,
-				6687DA7C1F297C3E5CFE5557 /* LoginFlowState.swift in Sources */,
-				71D4617013C2F27B979BE0B6 /* Preferences.swift in Sources */,
-				ABC8618AAD1CCCC48B7D3D4A /* UsageSnapshot.swift in Sources */,
-				6F8993A5DF8EB0544577D342 /* AccountStore.swift in Sources */,
-				77241EC76F85CF621F83E9E8 /* AuthService.swift in Sources */,
-				6F55EF7820C8734608A4A3B7 /* CodexAppServer.swift in Sources */,
-				5A37CAE7291E18C121368474 /* KeychainService.swift in Sources */,
-				2D0194252AE74509F9D40924 /* UsageProbe.swift in Sources */,
-				F0658028CFD45C9AA06C1A41 /* EmailMasker.swift in Sources */,
-				FE0806F087F0D2E31CC3B696 /* JWTDecoder.swift in Sources */,
-				0F448EFE6041D96BA80A9AF8 /* Strings.swift in Sources */,
-				009782C8952D524FA72A4BC1 /* CurrentAccountSection.swift in Sources */,
-				87E59D5DA1425D779AFAFD73 /* FooterActions.swift in Sources */,
-				F11B8D8B024A1184F23927F4 /* LoginFlowSheet.swift in Sources */,
-				DC110BF27EE6D37B9787BD35 /* MenuBarView.swift in Sources */,
-				A7A9E99FAE94D4D095F8EBBA /* SavedAccountRow.swift in Sources */,
-				785ECD23076F800A7F6327C5 /* UsageBar.swift in Sources */,
+				A01850E82E6B3A56357C00AC /* CXSwitchApp.swift in Sources */,
+				E502F4968D2EDFD7B41636E9 /* Account.swift in Sources */,
+				CE47E11104179B39ED465D36 /* AuthBlob.swift in Sources */,
+				B24803D651418ECABFB063CE /* AppState.swift in Sources */,
+				FDB18E64755C16395BB98CA6 /* LoginFlowState.swift in Sources */,
+				62D99A775ECAC2130945D42B /* Preferences.swift in Sources */,
+				F27BAD18D8D0C6FFBB2AE55D /* UsageSnapshot.swift in Sources */,
+				0C31F69C758A45081BC01F5B /* AccountStore.swift in Sources */,
+				EDCB07CC2755C34DBF23DF23 /* AuthService.swift in Sources */,
+				4B8FD553C51784C890A54CDA /* CodexAppServer.swift in Sources */,
+				37A898436F875E2F60003EF2 /* KeychainService.swift in Sources */,
+				9BD5975142EDE19343CEC0FC /* UsageProbe.swift in Sources */,
+				AFBB66005A8D7E10D637289F /* EmailMasker.swift in Sources */,
+				7ACA221CB55B89B6AB4ABE60 /* JWTDecoder.swift in Sources */,
+				336FC07C956D9171B93CEB68 /* Strings.swift in Sources */,
+				294F92DF731D4DB45750FD6B /* CurrentAccountSection.swift in Sources */,
+				A15E6D09CE123A1536EB5764 /* FooterActions.swift in Sources */,
+				5618409B79EAA3CE5CE109DB /* LoginFlowSheet.swift in Sources */,
+				8276B652883431167D44779F /* MenuBarView.swift in Sources */,
+				03A5584D37D17CE6DDBB44B0 /* SavedAccountRow.swift in Sources */,
+				20FB201183B5FD920B63B89A /* SettingsView.swift in Sources */,
+				A850EDA33BED941E6671D85F /* UsageBar.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXSourcesBuildPhase section */
 
 /* Begin XCBuildConfiguration section */
-		8FE7CCDCC9424C1187D01471 /* Debug */ = {
+		810FD423D04A420CE1A72E22 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				CODE_SIGNING_ALLOWED = NO;
+				CODE_SIGNING_REQUIRED = NO;
+				CODE_SIGN_STYLE = Manual;
+				COMBINE_HIDPI_IMAGES = YES;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = "";
+				GENERATE_INFOPLIST_FILE = NO;
+				INFOPLIST_FILE = CXSwitch/Resources/Info.plist;
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/../Frameworks";
+				MACOSX_DEPLOYMENT_TARGET = 14.0;
+				MARKETING_VERSION = 0.1.0;
+				ONLY_ACTIVE_ARCH = NO;
+				PRODUCT_BUNDLE_IDENTIFIER = "com.novainfra.cx-switch";
+				PRODUCT_NAME = CXSwitch;
+				SDKROOT = macosx;
+				SWIFT_VERSION = 6.0;
+			};
+			name = Release;
+		};
+		9EF98D1EE1A05B07EE9AFD9B /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
@@ -330,7 +358,7 @@
 			};
 			name = Debug;
 		};
-		A2CB93B3855B04C343496223 /* Release */ = {
+		C21FA0B4DB5094F9718B4E9F /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
@@ -352,9 +380,9 @@
 				SDKROOT = macosx;
 				SWIFT_VERSION = 6.0;
 			};
-			name = Release;
+			name = Debug;
 		};
-		A7E64B04C72978ED5482B271 /* Release */ = {
+		F8174EC9A8DD2863A0569B62 /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
@@ -408,52 +436,28 @@
 			};
 			name = Release;
 		};
-		F0262C0EC6895D9DCAA97C3E /* Debug */ = {
-			isa = XCBuildConfiguration;
-			buildSettings = {
-				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
-				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
-				CODE_SIGNING_ALLOWED = NO;
-				CODE_SIGNING_REQUIRED = NO;
-				CODE_SIGN_STYLE = Manual;
-				COMBINE_HIDPI_IMAGES = YES;
-				CURRENT_PROJECT_VERSION = 1;
-				DEVELOPMENT_TEAM = "";
-				GENERATE_INFOPLIST_FILE = NO;
-				INFOPLIST_FILE = CXSwitch/Resources/Info.plist;
-				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/../Frameworks";
-				MACOSX_DEPLOYMENT_TARGET = 14.0;
-				MARKETING_VERSION = 0.1.0;
-				ONLY_ACTIVE_ARCH = NO;
-				PRODUCT_BUNDLE_IDENTIFIER = "com.novainfra.cx-switch";
-				PRODUCT_NAME = CXSwitch;
-				SDKROOT = macosx;
-				SWIFT_VERSION = 6.0;
-			};
-			name = Debug;
-		};
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
-		98D10D420D246B5090BC2A4B /* Build configuration list for PBXProject "CXSwitch" */ = {
+		3DF3FB40EA32CD4ACA8EAE54 /* Build configuration list for PBXProject "CXSwitch" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
-				8FE7CCDCC9424C1187D01471 /* Debug */,
-				A7E64B04C72978ED5482B271 /* Release */,
+				9EF98D1EE1A05B07EE9AFD9B /* Debug */,
+				F8174EC9A8DD2863A0569B62 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
 		};
-		AC832B261D8669EDD5C70712 /* Build configuration list for PBXNativeTarget "CXSwitch" */ = {
+		A438DF11D9468E12E8E0A923 /* Build configuration list for PBXNativeTarget "CXSwitch" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
-				A2CB93B3855B04C343496223 /* Release */,
-				F0262C0EC6895D9DCAA97C3E /* Debug */,
+				810FD423D04A420CE1A72E22 /* Release */,
+				C21FA0B4DB5094F9718B4E9F /* Debug */,
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
 	};
-	rootObject = FA913B37907EA7CF75D0066C /* Project object */;
+	rootObject = BF9E39B80D454B530F57D471 /* Project object */;
 }

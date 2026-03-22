@@ -12,6 +12,7 @@ final class AppState {
     var refreshing: Bool
     var statusMessage: String?
     var errorMessage: String?
+    var switchingAccountID: String?
 
     nonisolated(unsafe) private let accountStore: AccountStore
     nonisolated(unsafe) private let legacyKeychainService: any KeychainStoring
@@ -28,6 +29,8 @@ final class AppState {
     private var autoRefreshTargets: [String: Date] = [:]
     private var autoRefreshFiredTargets: [String: Date] = [:]
     private var legacyKeychainMigrationCompleted = false
+    private var activeTransitionGeneration: UInt64 = 0
+    private var activeTransitionTask: Task<Void, Never>?
 
     init(
         accountStore: AccountStore = try! AccountStore(),
@@ -51,6 +54,7 @@ final class AppState {
         self.refreshing = false
         self.statusMessage = nil
         self.errorMessage = nil
+        self.switchingAccountID = nil
 
         Strings.languageProvider = { [weak self] in
             self?.preferences.language ?? Preferences.defaultLanguage
@@ -123,23 +127,25 @@ final class AppState {
             let prefs = try accountStore.loadPreferences()
             preferences = prefs
             applyPreferencesSideEffects()
+            applyTheme()
 
             let currentAuthBlob = try? accountStore.readAuthFile()
             let registry = try migrateLegacyKeychainAccountsIfNeeded(try accountStore.loadRegistry())
             let normalizedRegistry = normalizeAccountsFromStoredAuth(registry)
             let repairedRegistry = repairAccountsWithCurrentAuthIfPossible(normalizedRegistry.accounts, currentAuthBlob: currentAuthBlob)
-            if normalizedRegistry.changed || repairedRegistry.changed {
-                try accountStore.saveRegistry(repairedRegistry.accounts)
+            let deduplicatedRegistry = deduplicateAccounts(repairedRegistry.accounts)
+            if normalizedRegistry.changed || repairedRegistry.changed || deduplicatedRegistry.changed {
+                try accountStore.saveRegistry(deduplicatedRegistry.accounts)
             }
 
-            accountCacheByID = repairedRegistry.accounts.reduce(into: [:]) { cache, account in
+            accountCacheByID = deduplicatedRegistry.accounts.reduce(into: [:]) { cache, account in
                 cache[account.id] = account
             }
-            savedAccounts = applyMasking(to: repairedRegistry.accounts)
-            NSLog("[CXSwitch] loadDashboard: cache loaded, %d accounts", repairedRegistry.accounts.count)
+            savedAccounts = applyMasking(to: deduplicatedRegistry.accounts)
+            NSLog("[CXSwitch] loadDashboard: cache loaded, %d accounts", deduplicatedRegistry.accounts.count)
 
             // Show cached current account instantly
-            if let cached = repairedRegistry.accounts.first(where: { $0.isCurrent }) {
+            if let cached = deduplicatedRegistry.accounts.first(where: { $0.isCurrent }) {
                 currentAccount = applyMasking(to: cached)
                 NSLog("[CXSwitch] loadDashboard: cached current = %@", cached.email)
             }
@@ -166,10 +172,12 @@ final class AppState {
     }
 
     func switchAccount(to account: Account) async {
+        guard switchingAccountID == nil else { return }
+        guard account.id != currentAccount?.id else { return }
+
         errorMessage = nil
         statusMessage = nil
-        refreshing = true
-        defer { refreshing = false }
+        switchingAccountID = account.id
 
         do {
             let resolvedAuth = try resolveAuthBlob(for: account)
@@ -179,23 +187,30 @@ final class AppState {
                 return
             }
 
+            guard beginRefreshingAccounts([account.id]) else {
+                switchingAccountID = nil
+                return
+            }
             try accountStore.writeAuthFile(resolvedAuth.blob)
-            try await appServer.restartAndInitialize()
 
-            repairAccountAuthMetadata(for: account, authBlob: resolvedAuth.blob)
+            let optimistic = preparedOptimisticAccount(from: account, authBlob: resolvedAuth.blob)
+            optimisticallyActivateAccount(optimistic)
+            showStatus(Strings.L("正在切换到 \(optimistic.email)…", en: "Switching to \(optimistic.email)..."))
 
-            if let current = await waitForAccountReady(authBlob: resolvedAuth.blob, fallbackEmail: account.email) {
-                await activateAccount(current)
-                showStatus(Strings.L("已切换到 \(current.email)", en: "Switched to \(current.email)"))
-            } else {
-                NSLog("[CXSwitch] switchAccount: account/read not ready, falling back to selected account %@", account.email)
-                await activateAccount(account)
-                showStatus(Strings.L("已切换到 \(account.email)", en: "Switched to \(account.email)"))
-                Task { [weak self] in
-                    await self?.refreshCurrentAccount(force: true)
-                }
+            let generation = beginTransition()
+            activeTransitionTask = Task { @MainActor [weak self] in
+                guard let self else { return }
+                await self.reconcileActiveAccountTransition(
+                    optimisticAccount: optimistic,
+                    authBlob: resolvedAuth.blob,
+                    generation: generation,
+                    successMessage: Strings.L("已切换到 \(optimistic.email)", en: "Switched to \(optimistic.email)"),
+                    pendingMessage: Strings.L("已切换到 \(optimistic.email)，正在后台同步", en: "Switched to \(optimistic.email), syncing in background")
+                )
             }
         } catch {
+            endRefreshingAccounts([account.id])
+            switchingAccountID = nil
             errorMessage = error.localizedDescription
         }
     }
@@ -314,6 +329,7 @@ final class AppState {
     func startAddAccount() async {
         errorMessage = nil
         pendingRepairAccountID = nil
+        switchingAccountID = nil
         await beginLoginFlow(repairTargetID: nil)
     }
 
@@ -329,6 +345,7 @@ final class AppState {
 
             pendingRepairAccountID = repairTargetID
             pendingLoginId = response.loginId
+            switchingAccountID = repairTargetID
             loginFlow = LoginFlowState(
                 active: true,
                 loginId: response.loginId,
@@ -345,6 +362,7 @@ final class AppState {
             }
         } catch {
             loginFlow = LoginFlowState.empty()
+            switchingAccountID = nil
             errorMessage = error.localizedDescription
         }
     }
@@ -357,6 +375,7 @@ final class AppState {
             _ = try await appServer.sendRequest(method: "account/login/cancel", params: params) as EmptyResponse
             pendingLoginId = nil
             pendingRepairAccountID = nil
+            switchingAccountID = nil
             loginFlow = LoginFlowState.empty()
         } catch {
             errorMessage = error.localizedDescription
@@ -372,8 +391,6 @@ final class AppState {
             return
         }
 
-        refreshing = true
-        defer { refreshing = false }
         NSLog("[CXSwitch] importRefreshToken: exchanging token...")
         do {
             var tokens = try await authService.exchangeRefreshToken(token)
@@ -396,30 +413,76 @@ final class AppState {
             )
 
             try accountStore.writeAuthFile(authBlob)
-            try await appServer.restartAndInitialize()
+            let optimistic = provisionalImportedAccount(from: authBlob)
+            if let optimistic {
+                guard beginRefreshingAccounts([optimistic.id]) else {
+                    switchingAccountID = nil
+                    return
+                }
+                switchingAccountID = optimistic.id
+                optimisticallyActivateAccount(optimistic)
+                showStatus(Strings.L("已导入 \(optimistic.email)，正在同步…", en: "Imported \(optimistic.email), syncing..."))
 
-            guard let account = await waitForAccountReady(authBlob: authBlob) else {
-                errorMessage = Strings.accountInfoUnavailableAfterImport
-                return
+                let generation = beginTransition()
+                activeTransitionTask = Task { @MainActor [weak self] in
+                    guard let self else { return }
+                    await self.reconcileActiveAccountTransition(
+                        optimisticAccount: optimistic,
+                        authBlob: authBlob,
+                        generation: generation,
+                        successMessage: Strings.L("已导入 \(optimistic.email)", en: "Imported \(optimistic.email)"),
+                        pendingMessage: Strings.L("已导入 \(optimistic.email)，正在后台同步", en: "Imported \(optimistic.email), syncing in background")
+                    )
+                }
+            } else {
+                guard let account = await waitForAccountReady(authBlob: authBlob) else {
+                    errorMessage = Strings.accountInfoUnavailableAfterImport
+                    return
+                }
+
+                NSLog("[CXSwitch] importRefreshToken: got account %@", account.email)
+                await activateAccount(account)
+                showStatus(Strings.L("已导入 \(account.email)", en: "Imported \(account.email)"))
+                NSLog("[CXSwitch] importRefreshToken: done, current=%@", currentAccount?.email ?? "nil")
             }
-
-            NSLog("[CXSwitch] importRefreshToken: got account %@", account.email)
-            await activateAccount(account)
-            showStatus(Strings.L("已导入 \(account.email)", en: "Imported \(account.email)"))
-            NSLog("[CXSwitch] importRefreshToken: done, current=%@", currentAccount?.email ?? "nil")
         } catch {
             NSLog("[CXSwitch] importRefreshToken error: %@", error.localizedDescription)
+            switchingAccountID = nil
             errorMessage = error.localizedDescription
         }
     }
 
     func setMaskEmails(_ enabled: Bool) {
+        guard (preferences.maskEmails ?? false) != enabled else { return }
         preferences.maskEmails = enabled
         applyPreferencesSideEffects()
         savedAccounts = applyMasking(to: savedAccounts)
         if let current = currentAccount {
             currentAccount = applyMasking(to: current)
         }
+        do {
+            try accountStore.savePreferences(preferences)
+        } catch {
+            errorMessage = error.localizedDescription
+        }
+    }
+
+    func setLanguage(_ language: String) {
+        guard preferences.language != language else { return }
+        preferences.language = language
+        applyPreferencesSideEffects()
+        do {
+            try accountStore.savePreferences(preferences)
+        } catch {
+            errorMessage = error.localizedDescription
+        }
+    }
+
+    func setTheme(_ theme: String) {
+        let normalizedTheme = normalizedThemeValue(theme)
+        guard normalizedTheme != normalizedThemeValue(preferences.theme) else { return }
+        preferences.theme = normalizedTheme
+        applyTheme()
         do {
             try accountStore.savePreferences(preferences)
         } catch {
@@ -469,10 +532,8 @@ final class AppState {
             } else {
                 savedAccounts.append(applyMasking(to: entry))
             }
-            try accountStore.saveRegistry(savedAccounts)
+            persistRegistrySnapshot()
             rescheduleAutoRefreshTasks()
-        } catch {
-            NSLog("[CXSwitch] persistAccount error: %@", error.localizedDescription)
         }
     }
 
@@ -648,13 +709,13 @@ final class AppState {
         for attempt in 0..<3 {
             if let account = try await fetchCurrentAccountOnce(fromAuth: authBlob, fallbackEmail: fallbackEmail) {
                 if let expectedAccountId, account.id != expectedAccountId, attempt < 2 {
-                    try await restartStabilizationDelay()
+                    try await restartStabilizationDelay(attempt: attempt)
                     continue
                 }
                 return account
             }
             if attempt < 2 {
-                try await restartStabilizationDelay()
+                try await restartStabilizationDelay(attempt: attempt)
             }
         }
         return nil
@@ -692,12 +753,15 @@ final class AppState {
         return account
     }
 
-    private func waitForAccountReady(authBlob: AuthBlob?, fallbackEmail: String? = nil) async -> Account? {
+    private func waitForAccountReady(authBlob: AuthBlob?, expectedAccountId: String? = nil, fallbackEmail: String? = nil) async -> Account? {
         for attempt in 1...5 {
             NSLog("[CXSwitch] waitForAccountReady: attempt %d", attempt)
-            try? await Task.sleep(nanoseconds: 1_000_000_000)
+            try? await Task.sleep(nanoseconds: stabilizationDelayNanoseconds(forAttempt: attempt - 1))
 
             if let account = try? await fetchCurrentAccountOnce(fromAuth: authBlob, fallbackEmail: fallbackEmail) {
+                if let expectedAccountId, account.id != expectedAccountId, attempt < 5 {
+                    continue
+                }
                 return account
             }
         }
@@ -960,12 +1024,246 @@ final class AppState {
         )
     }
 
-    private func persistRegistrySnapshot() {
-        do {
-            try accountStore.saveRegistry(savedAccounts)
-        } catch {
-            errorMessage = error.localizedDescription
+    private func normalizeSavedAccountsState() {
+        let deduplicated = deduplicateAccounts(savedAccounts, preferredCurrentID: currentAccount?.id)
+        let normalized = deduplicated.accounts
+
+        savedAccounts = applyMasking(to: normalized)
+        accountCacheByID = normalized.reduce(into: [:]) { cache, account in
+            cache[account.id] = account
         }
+
+        let currentMatch = normalized.first(where: { $0.id == currentAccount?.id })
+            ?? normalized.first(where: \.isCurrent)
+            ?? normalized.first
+        if let currentMatch {
+            currentAccount = applyMasking(to: currentMatch)
+            savedAccounts = applyMasking(to: normalized.map { account in
+                var updated = account
+                updated.isCurrent = (account.id == currentMatch.id)
+                return updated
+            })
+            accountCacheByID[currentMatch.id] = currentMatch
+        } else {
+            currentAccount = nil
+        }
+    }
+
+    private func deduplicateAccounts(_ accounts: [Account], preferredCurrentID: String? = nil) -> (accounts: [Account], changed: Bool) {
+        var orderedKeys: [String] = []
+        var groups: [String: [Account]] = [:]
+
+        for account in accounts {
+            let key = canonicalAccountKey(for: account)
+            if groups[key] == nil {
+                orderedKeys.append(key)
+                groups[key] = []
+            }
+            groups[key, default: []].append(account)
+        }
+
+        var changed = false
+        var result: [Account] = []
+
+        for key in orderedKeys {
+            guard let group = groups[key], !group.isEmpty else { continue }
+            if group.count == 1 {
+                result.append(group[0])
+                continue
+            }
+
+            changed = true
+            let winner = group.max { lhs, rhs in
+                accountDeduplicationScore(lhs, preferredCurrentID: preferredCurrentID) <
+                    accountDeduplicationScore(rhs, preferredCurrentID: preferredCurrentID)
+            } ?? group[0]
+
+            var merged = winner
+            for candidate in group where candidate.id != winner.id {
+                merged = mergeAccountRecord(merged, preserving: candidate)
+                if merged.chatgptAccountId == nil {
+                    merged.chatgptAccountId = candidate.chatgptAccountId
+                }
+            }
+            result.append(merged)
+        }
+
+        return (result, changed)
+    }
+
+    private func canonicalAccountKey(for account: Account) -> String {
+        let email = account.email.trimmingCharacters(in: .whitespacesAndNewlines).lowercased()
+        if !email.isEmpty {
+            return "email:\(email)"
+        }
+        if let accountID = account.chatgptAccountId?.trimmingCharacters(in: .whitespacesAndNewlines).lowercased(), !accountID.isEmpty {
+            return "chatgpt:\(accountID)"
+        }
+        return "id:\(account.id.lowercased())"
+    }
+
+    private func accountDeduplicationScore(_ account: Account, preferredCurrentID: String?) -> Int {
+        var score = 0
+        if account.id == preferredCurrentID {
+            score += 10_000
+        }
+        if account.isCurrent {
+            score += 5_000
+        }
+        if let storedAuth = account.storedAuth, !storedAuth.isEmpty {
+            score += 1_000
+        }
+        if account.usageSnapshot != nil {
+            score += 500
+        }
+        if account.chatgptAccountId != nil {
+            score += 250
+        }
+        if account.lastUsedAt != nil {
+            score += 125
+        }
+        return score
+    }
+
+    private func persistRegistrySnapshot() {
+        normalizeSavedAccountsState()
+        accountStore.saveRegistryDebounced(savedAccounts) { [weak self] error in
+            guard let self, let error else { return }
+            Task { @MainActor in
+                self.errorMessage = error.localizedDescription
+            }
+        }
+    }
+
+    private func beginTransition() -> UInt64 {
+        activeTransitionGeneration &+= 1
+        activeTransitionTask?.cancel()
+        return activeTransitionGeneration
+    }
+
+    private func preparedOptimisticAccount(from account: Account, authBlob: AuthBlob) -> Account {
+        var prepared = enrichAccountMetadata(account, authBlob: authBlob)
+        prepared.storedAuth = encodeStoredAuth(authBlob)
+        prepared.authKeychainKey = nil
+        prepared.lastUsedAt = Date()
+        prepared.isCurrent = true
+        return prepared
+    }
+
+    private func provisionalImportedAccount(from authBlob: AuthBlob) -> Account? {
+        let claims = JWTDecoder.decodePayload(authBlob.tokens?.idToken)
+        let nested = claims?["https://api.openai.com/auth"] as? [String: Any]
+        let email = (claims?["email"] as? String)?.trimmingCharacters(in: .whitespacesAndNewlines)
+            ?? (nested?["email"] as? String)?.trimmingCharacters(in: .whitespacesAndNewlines)
+            ?? authBlob.tokens?.accountId?.trimmingCharacters(in: .whitespacesAndNewlines)
+        let accountID = nested?["chatgpt_account_id"] as? String
+            ?? authBlob.tokens?.accountId
+            ?? email
+
+        guard let email, !email.isEmpty, let accountID, !accountID.isEmpty else {
+            return nil
+        }
+
+        var provisional = Account(
+            id: accountID,
+            email: email,
+            maskedEmail: email,
+            accountType: AccountTypeMapper.from(authBlob: authBlob),
+            planType: planType(from: authBlob),
+            chatgptAccountId: chatgptAccountID(from: authBlob),
+            addedAt: Date(),
+            lastUsedAt: Date(),
+            usageSnapshot: nil,
+            authKeychainKey: nil,
+            storedAuth: encodeStoredAuth(authBlob),
+            usageError: nil,
+            isCurrent: true
+        )
+        provisional = applyMasking(to: provisional)
+        return provisional
+    }
+
+    private func optimisticallyActivateAccount(_ account: Account) {
+        let merged = mergeAccountRecord(
+            account,
+            preserving: accountCacheByID[account.id] ?? savedAccounts.first(where: { $0.id == account.id })
+        )
+
+        accountCacheByID[merged.id] = merged
+        var listEntry = merged
+        listEntry.isCurrent = false
+        let masked = applyMasking(to: listEntry)
+        if let index = savedAccounts.firstIndex(where: { $0.id == merged.id }) {
+            savedAccounts[index] = masked
+        } else {
+            savedAccounts.append(masked)
+        }
+
+        var currentDisplay = merged
+        currentDisplay.isCurrent = true
+        currentAccount = applyMasking(to: currentDisplay)
+        dashboardLoaded = true
+        rescheduleAutoRefreshTasks()
+    }
+
+    private func reconcileActiveAccountTransition(
+        optimisticAccount: Account,
+        authBlob: AuthBlob,
+        generation: UInt64,
+        successMessage: String,
+        pendingMessage: String
+    ) async {
+        defer {
+            if activeTransitionGeneration == generation {
+                activeTransitionTask = nil
+            }
+        }
+
+        guard !Task.isCancelled else {
+            if switchingAccountID == optimisticAccount.id {
+                switchingAccountID = nil
+            }
+            endRefreshingAccounts([optimisticAccount.id])
+            return
+        }
+
+        let expectedAccountID = optimisticAccount.chatgptAccountId ?? authBlob.tokens?.accountId
+        let liveAccount = await waitForAccountReady(
+            authBlob: authBlob,
+            expectedAccountId: expectedAccountID,
+            fallbackEmail: optimisticAccount.email
+        )
+
+        guard !Task.isCancelled else {
+            if switchingAccountID == optimisticAccount.id {
+                switchingAccountID = nil
+            }
+            endRefreshingAccounts([optimisticAccount.id])
+            return
+        }
+
+        if activeTransitionGeneration != generation {
+            if switchingAccountID == optimisticAccount.id {
+                switchingAccountID = nil
+            }
+            endRefreshingAccounts([optimisticAccount.id])
+            return
+        }
+
+        if let liveAccount {
+            mergeAccountCache(liveAccount, updateCurrentAccount: true)
+            showStatus(successMessage)
+        } else {
+            showStatus(pendingMessage)
+            Task { [weak self] in
+                await self?.refreshCurrentAccount(force: true)
+            }
+        }
+
+        if switchingAccountID == optimisticAccount.id {
+            switchingAccountID = nil
+        }
+        endRefreshingAccounts([optimisticAccount.id])
     }
 
     private struct ResolvedAuthBlob {
@@ -987,12 +1285,7 @@ final class AppState {
     }
 
     private func repairAccountAuthMetadata(for account: Account, authBlob: AuthBlob) {
-        var repaired = enrichAccountMetadata(account, authBlob: authBlob)
-
-        repaired.authKeychainKey = nil
-        repaired.storedAuth = encodeStoredAuth(authBlob)
-
-        repaired.lastUsedAt = Date()
+        let repaired = preparedOptimisticAccount(from: account, authBlob: authBlob)
         accountCacheByID[repaired.id] = repaired
 
         if let index = savedAccounts.firstIndex(where: { $0.id == repaired.id }) {
@@ -1010,12 +1303,18 @@ final class AppState {
 
     private func finishRepairLogin(for targetAccountID: String) async {
         guard let target = accountCacheByID[targetAccountID] ?? savedAccounts.first(where: { $0.id == targetAccountID }) else {
+            if switchingAccountID == targetAccountID {
+                switchingAccountID = nil
+            }
             await forceReloadDashboard()
             return
         }
 
         guard let authBlob = await readAuthFileWithRetry() else {
             errorMessage = Strings.missingAuthJSON
+            if switchingAccountID == targetAccountID {
+                switchingAccountID = nil
+            }
             await forceReloadDashboard()
             return
         }
@@ -1027,6 +1326,9 @@ final class AppState {
                 "重新授权得到的是 \(actualLabel)，与待修复账号 \(target.email) 不匹配",
                 en: "Re-auth returned \(actualLabel), which does not match \(target.email)"
             )
+            if switchingAccountID == targetAccountID {
+                switchingAccountID = nil
+            }
             await forceReloadDashboard()
             return
         }
@@ -1038,6 +1340,9 @@ final class AppState {
         let repaired = makeRepairedAccountRecord(target: target, liveAccount: liveAccount, authBlob: authBlob)
         replaceAccountRecord(target: target, with: repaired)
         showStatus(Strings.L("已修复 \(repaired.email)", en: "Repaired \(repaired.email)"))
+        if switchingAccountID == targetAccountID {
+            switchingAccountID = nil
+        }
         await forceReloadDashboard()
     }
 
@@ -1165,10 +1470,11 @@ final class AppState {
     }
 
     private func activateAccount(_ account: Account) async {
-        await persistAccount(account)
-        currentAccount = applyMasking(to: account)
-        markCurrentAccount(account)
+        let active = mergeAccountRecord(account, preserving: accountCacheByID[account.id] ?? savedAccounts.first(where: { $0.id == account.id }))
+        currentAccount = applyMasking(to: active)
+        markCurrentAccount(active)
         dashboardLoaded = true
+        await persistAccount(active)
     }
 
     private func mergeAccountRecord(_ incoming: Account, preserving existing: Account?) -> Account {
@@ -1228,6 +1534,26 @@ final class AppState {
         }
     }
 
+    private func applyTheme() {
+        switch normalizedThemeValue(preferences.theme) {
+        case "light":
+            NSApp.appearance = NSAppearance(named: .aqua)
+        case "dark":
+            NSApp.appearance = NSAppearance(named: .darkAqua)
+        default:
+            NSApp.appearance = nil
+        }
+    }
+
+    private func normalizedThemeValue(_ theme: String?) -> String {
+        switch theme?.lowercased() {
+        case "light", "dark", "system":
+            return theme?.lowercased() ?? Preferences.defaultTheme
+        default:
+            return Preferences.defaultTheme
+        }
+    }
+
     private func sanitizeToken(_ token: String) -> String {
         var cleaned = token.trimmingCharacters(in: .whitespacesAndNewlines)
         if cleaned.hasPrefix("\""), cleaned.hasSuffix("\""), cleaned.count >= 2 {
@@ -1237,8 +1563,19 @@ final class AppState {
         return cleaned
     }
 
-    private func restartStabilizationDelay() async throws {
-        try await Task.sleep(nanoseconds: 1_000_000_000) // 1 second
+    private func restartStabilizationDelay(attempt: Int = 0) async throws {
+        try await Task.sleep(nanoseconds: stabilizationDelayNanoseconds(forAttempt: attempt))
+    }
+
+    private func stabilizationDelayNanoseconds(forAttempt attempt: Int) -> UInt64 {
+        let delays: [UInt64] = [
+            200_000_000,
+            400_000_000,
+            800_000_000,
+            1_200_000_000,
+            1_600_000_000
+        ]
+        return delays[min(max(attempt, 0), delays.count - 1)]
     }
 
     private func handle(notification: ServerNotification) {

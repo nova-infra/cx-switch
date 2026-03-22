@@ -3,9 +3,11 @@ import SwiftUI
 struct SavedAccountRow: View {
     let account: Account
     let preferences: Preferences
+    let isCurrent: Bool
     let onSelect: () -> Void
     let onRefresh: () -> Void
     let refreshing: Bool
+    let switching: Bool
 
     var body: some View {
         HStack(alignment: .center, spacing: 10) {
@@ -23,6 +25,10 @@ struct SavedAccountRow: View {
 
                         if let planType = account.planType {
                             infoText(Strings.planTypeDisplayName(for: planType))
+                        }
+
+                        if isCurrent {
+                            infoText(Strings.L("当前", en: "Current"))
                         }
 
                         Spacer(minLength: 8)
@@ -44,25 +50,44 @@ struct SavedAccountRow: View {
             .buttonStyle(.plain)
             .accessibilityLabel(displayEmail(for: account))
 
-            Button(action: onRefresh) {
-                Group {
-                    if refreshing {
-                        ProgressView()
-                            .controlSize(.small)
-                    } else {
-                        Image(systemName: "arrow.clockwise")
-                            .font(.caption.weight(.semibold))
-                    }
+            HStack(spacing: 6) {
+                if switching {
+                    ProgressView()
+                        .controlSize(.small)
+                        .frame(width: 16, height: 16)
+                        .transition(.opacity)
                 }
-                .frame(width: 24, height: 24)
-                .background(Color.primary.opacity(0.06), in: Circle())
+
+                Button(action: onRefresh) {
+                    Group {
+                        if refreshing {
+                            ProgressView()
+                                .controlSize(.small)
+                        } else {
+                            Image(systemName: "arrow.clockwise")
+                                .font(.caption.weight(.semibold))
+                        }
+                    }
+                    .frame(width: 24, height: 24)
+                    .background(Color.primary.opacity(0.06), in: Circle())
+                }
+                .buttonStyle(.plain)
+                .disabled(refreshing)
+                .accessibilityLabel(Strings.refresh)
             }
-            .buttonStyle(.plain)
-            .disabled(refreshing)
-            .accessibilityLabel(Strings.refresh)
         }
         .frame(maxWidth: .infinity, alignment: .leading)
         .padding(.vertical, 6)
+        .padding(.horizontal, 8)
+        .background(
+            RoundedRectangle(cornerRadius: 12, style: .continuous)
+                .fill(Color.primary.opacity(switching ? 0.05 : 0.001))
+        )
+        .overlay(
+            RoundedRectangle(cornerRadius: 12, style: .continuous)
+                .strokeBorder(Color.primary.opacity(switching ? 0.08 : 0.0))
+        )
+        .animation(.snappy(duration: 0.2), value: switching)
     }
 
     private func displayEmail(for account: Account) -> String {
