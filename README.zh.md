@@ -1,5 +1,7 @@
 # CX Switch
 
+![CX Switch — Mac 菜单栏 ChatGPT / Codex 多账号切换](banner.jpg)
+
 **中文** | [English](./README.md)
 
 **在 Mac 菜单栏里，一键切换多个 ChatGPT / Codex 账号。**

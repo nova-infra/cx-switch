@@ -1,5 +1,7 @@
 # CX Switch
 
+![CX Switch — ChatGPT / Codex account switcher for macOS](banner.jpg)
+
 **English** | [中文](./README.zh.md)
 
 **Switch between multiple ChatGPT / Codex accounts instantly from your Mac menu bar.**
