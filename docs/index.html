@@ -114,8 +114,8 @@
             <span data-lang="zh" hidden>如何使用</span>
           </a>
           <a class="hover:text-white" href="#gallery">
-            <span data-lang="en">Screenshots</span>
-            <span data-lang="zh" hidden>截图</span>
+            <span data-lang="en">Diagram</span>
+            <span data-lang="zh" hidden>示意图</span>
           </a>
           <a class="hover:text-white" href="#install">
             <span data-lang="en">Install</span>
@@ -210,10 +210,11 @@
           <figure class="float-slow relative mx-auto max-w-lg">
             <img
               src="./assets/app-panel.jpg"
-              alt="CX Switch menu bar panel preview"
+              alt="CX Switch menu bar panel"
               width="692"
               height="1024"
               class="w-full max-w-md rounded-[22px] border border-white/10 bg-slate-900/40 object-contain shadow-glow"
+              decoding="async"
             />
           </figure>
         </div>
@@ -405,63 +406,65 @@
         <div class="mx-auto max-w-6xl px-4">
           <div class="reveal max-w-2xl">
             <p class="text-xs font-semibold uppercase tracking-[0.22em] text-accent">
-              <span data-lang="en">Screenshots</span>
-              <span data-lang="zh" hidden>截图展示</span>
+              <span data-lang="en">Product diagram</span>
+              <span data-lang="zh" hidden>产品示意图</span>
             </p>
             <h2 class="mt-3 text-3xl font-semibold tracking-tight text-white md:text-4xl">
-              <span data-lang="en">Dashboard, settings, and switching — at a glance.</span>
-              <span data-lang="zh" hidden>用量面板、设置与切换，一目了然。</span>
+              <span data-lang="en">One panel — usage, switch list, and shortcuts.</span>
+              <span data-lang="zh" hidden>同一面板：用量、切换与快捷操作。</span>
             </h2>
             <p class="mt-3 text-slate-300">
-              <span data-lang="en">Real app UI — current account, switch list, and quick actions in one panel.</span>
-              <span data-lang="zh" hidden>真实界面：当前账户、切换列表与快捷操作同屏呈现。</span>
+              <span data-lang="en">
+                Three diagrams for one popover: usage (1), account list (2), shortcuts and status (3). Not pixel-perfect
+                screenshots.
+              </span>
+              <span data-lang="zh" hidden>
+                同一菜单栏浮层拆成<strong class="font-medium text-slate-200">三张示意图</strong>（非截图）：① 用量 ② 切换 ③ 快捷与状态。
+              </span>
             </p>
           </div>
 
           <div class="mt-10 grid gap-6 md:grid-cols-3">
             <figure class="reveal overflow-hidden rounded-2xl border border-white/10 bg-slate-900/30">
               <img
-                src="./assets/app-panel.jpg"
+                src="./assets/schematic-usage.svg"
                 alt=""
-                width="692"
-                height="1024"
-                class="h-auto w-full object-contain"
+                width="300"
+                height="220"
+                class="h-auto w-full"
+                decoding="async"
               />
-              <figcaption class="px-4 py-3 text-sm text-slate-300">
-                <span data-lang="en">Current account · usage bars</span>
-                <span data-lang="zh" hidden>当前账户 · 用量条</span>
+              <figcaption class="px-3 py-3 text-xs leading-relaxed text-slate-400 sm:text-sm">
+                <span data-lang="en"><span class="text-slate-300">1</span> · Current account &amp; 5h / week bars</span>
+                <span data-lang="zh" hidden><span class="text-slate-300">①</span> 当前账户与 5h、周用量条</span>
               </figcaption>
             </figure>
-            <figure
-              class="reveal overflow-hidden rounded-2xl border border-white/10 bg-slate-900/30"
-              style="--reveal-delay: 70ms"
-            >
+            <figure class="reveal overflow-hidden rounded-2xl border border-white/10 bg-slate-900/30" style="--reveal-delay: 60ms">
               <img
-                src="./assets/app-panel.jpg"
+                src="./assets/schematic-switch.svg"
                 alt=""
-                width="692"
-                height="1024"
-                class="h-auto w-full object-contain"
+                width="300"
+                height="220"
+                class="h-auto w-full"
+                decoding="async"
               />
-              <figcaption class="px-4 py-3 text-sm text-slate-300">
-                <span data-lang="en">Switch to · saved accounts</span>
-                <span data-lang="zh" hidden>切换到 · 已保存账户</span>
+              <figcaption class="px-3 py-3 text-xs leading-relaxed text-slate-400 sm:text-sm">
+                <span data-lang="en"><span class="text-slate-300">2</span> · “Switch to” saved accounts</span>
+                <span data-lang="zh" hidden><span class="text-slate-300">②</span>「切换到」已保存账户</span>
               </figcaption>
             </figure>
-            <figure
-              class="reveal overflow-hidden rounded-2xl border border-white/10 bg-slate-900/30"
-              style="--reveal-delay: 120ms"
-            >
+            <figure class="reveal overflow-hidden rounded-2xl border border-white/10 bg-slate-900/30" style="--reveal-delay: 120ms">
               <img
-                src="./assets/app-panel.jpg"
+                src="./assets/schematic-actions.svg"
                 alt=""
-                width="692"
-                height="1024"
-                class="h-auto w-full object-contain"
+                width="300"
+                height="220"
+                class="h-auto w-full"
+                decoding="async"
               />
-              <figcaption class="px-4 py-3 text-sm text-slate-300">
-                <span data-lang="en">Add · import · settings · quit</span>
-                <span data-lang="zh" hidden>添加 · 导入 · 设置 · 退出</span>
+              <figcaption class="px-3 py-3 text-xs leading-relaxed text-slate-400 sm:text-sm">
+                <span data-lang="en"><span class="text-slate-300">3</span> · Action grid + optional status line</span>
+                <span data-lang="zh" hidden><span class="text-slate-300">③</span> 快捷操作网格与底部状态行</span>
               </figcaption>
             </figure>
           </div>

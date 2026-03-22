@@ -26,5 +26,9 @@
 	<string>NSApplication</string>
 	<key>NSHighResolutionCapable</key>
 	<true/>
+	<key>SUFeedURL</key>
+	<string>https://nova-infra.github.io/cx-switch/appcast.xml</string>
+	<key>SUPublicEDKey</key>
+	<string>RMdcYtgV0BGFFMGtqdtIoeboxlqn1l+pzjCy0wDmX/Q=</string>
 </dict>
 </plist>

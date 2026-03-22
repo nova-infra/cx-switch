@@ -537,6 +537,10 @@ final class AppState {
         NSApplication.shared.terminate(nil)
     }
 
+    static let appVersion: String = {
+        Bundle.main.infoDictionary?["CFBundleShortVersionString"] as? String ?? "0.2.1"
+    }()
+
     private func persistAccount(_ account: Account, authBlob: AuthBlob?) {
         var entry = enrichAccountMetadata(account, authBlob: authBlob)
         entry = mergeAccountRecord(entry, preserving: savedAccounts.first(where: { $0.id == entry.id }) ?? (currentAccount?.id == entry.id ? currentAccount : nil))

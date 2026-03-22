@@ -2,6 +2,7 @@ import SwiftUI
 
 struct SettingsView: View {
     @Environment(AppState.self) private var state
+    @EnvironmentObject private var updaterService: UpdaterService
     let onBack: () -> Void
 
     var body: some View {
@@ -52,6 +53,44 @@ struct SettingsView: View {
                     action: state.openSettings
                 )
             }
+
+            Divider()
+                .opacity(0.35)
+
+            versionSection
+        }
+    }
+
+    private var versionSection: some View {
+            VStack(alignment: .leading, spacing: 8) {
+                HStack {
+                    Text("\(Strings.version) \(AppState.appVersion)")
+                        .font(.caption)
+                        .foregroundStyle(.secondary)
+
+                    Spacer()
+                }
+
+                Button(action: { updaterService.checkForUpdates() }) {
+                    HStack(spacing: 10) {
+                        Image(systemName: "arrow.triangle.2.circlepath")
+                            .font(.body)
+                            .foregroundStyle(.secondary)
+                            .frame(width: 18, alignment: .center)
+
+                    Text(Strings.checkForUpdates)
+                        .font(.body)
+
+                    Spacer()
+
+                    Image(systemName: "chevron.right")
+                        .font(.caption.weight(.semibold))
+                        .foregroundStyle(.tertiary)
+                }
+                .padding(.vertical, 7)
+            }
+            .buttonStyle(.plain)
+            .disabled(!updaterService.canCheckForUpdates)
         }
     }
 
