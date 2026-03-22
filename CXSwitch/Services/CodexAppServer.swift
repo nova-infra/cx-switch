@@ -100,6 +100,23 @@ final class CodexAppServer: CodexAppServering, @unchecked Sendable {
 
     init() {}
 
+    private static func resolveCodexPath() -> String {
+        let candidates = [
+            "\(NSHomeDirectory())/.bun/bin/codex",
+            "\(NSHomeDirectory())/.local/bin/codex",
+            "/usr/local/bin/codex",
+            "/opt/homebrew/bin/codex",
+            "\(NSHomeDirectory())/.nvm/versions/node/default/bin/codex",
+            "\(NSHomeDirectory())/.npm-global/bin/codex",
+        ]
+        for path in candidates {
+            if FileManager.default.isExecutableFile(atPath: path) {
+                return path
+            }
+        }
+        return "codex"
+    }
+
     func start() throws {
         try queue.sync {
             if process?.isRunning == true { return }
@@ -109,9 +126,17 @@ final class CodexAppServer: CodexAppServering, @unchecked Sendable {
             let pipeOut = Pipe()
             let pipeErr = Pipe()
 
+            let codexPath = Self.resolveCodexPath()
+            NSLog("[CodexAppServer] resolved codex path: %@", codexPath)
+
             let proc = Process()
-            proc.executableURL = URL(fileURLWithPath: "/usr/bin/env")
-            proc.arguments = ["codex", "app-server", "--listen", "stdio://"]
+            if codexPath.contains("/") {
+                proc.executableURL = URL(fileURLWithPath: codexPath)
+                proc.arguments = ["app-server", "--listen", "stdio://"]
+            } else {
+                proc.executableURL = URL(fileURLWithPath: "/usr/bin/env")
+                proc.arguments = ["codex", "app-server", "--listen", "stdio://"]
+            }
             proc.standardInput = pipeIn
             proc.standardOutput = pipeOut
             proc.standardError = pipeErr
