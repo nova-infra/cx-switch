@@ -100,21 +100,23 @@ final class CodexAppServer: CodexAppServering, @unchecked Sendable {
 
     init() {}
 
-    private static func resolveCodexPath() -> String {
-        let candidates = [
-            "\(NSHomeDirectory())/.bun/bin/codex",
-            "\(NSHomeDirectory())/.local/bin/codex",
-            "/usr/local/bin/codex",
-            "/opt/homebrew/bin/codex",
-            "\(NSHomeDirectory())/.nvm/versions/node/default/bin/codex",
-            "\(NSHomeDirectory())/.npm-global/bin/codex",
+    private static let extraPathDirs: [String] = {
+        let home = NSHomeDirectory()
+        return [
+            "\(home)/.bun/bin",
+            "\(home)/.local/bin",
+            "\(home)/.nvm/versions/node/default/bin",
+            "\(home)/.npm-global/bin",
+            "\(home)/.volta/bin",
+            "/usr/local/bin",
+            "/opt/homebrew/bin",
         ]
-        for path in candidates {
-            if FileManager.default.isExecutableFile(atPath: path) {
-                return path
-            }
-        }
-        return "codex"
+    }()
+
+    private static func buildFullPath() -> String {
+        let systemPath = ProcessInfo.processInfo.environment["PATH"] ?? "/usr/bin:/bin"
+        let extra = extraPathDirs.filter { FileManager.default.fileExists(atPath: $0) }
+        return (extra + [systemPath]).joined(separator: ":")
     }
 
     func start() throws {
@@ -126,17 +128,15 @@ final class CodexAppServer: CodexAppServering, @unchecked Sendable {
             let pipeOut = Pipe()
             let pipeErr = Pipe()
 
-            let codexPath = Self.resolveCodexPath()
-            NSLog("[CodexAppServer] resolved codex path: %@", codexPath)
+            let fullPath = Self.buildFullPath()
+            NSLog("[CodexAppServer] PATH: %@", fullPath)
 
             let proc = Process()
-            if codexPath.contains("/") {
-                proc.executableURL = URL(fileURLWithPath: codexPath)
-                proc.arguments = ["app-server", "--listen", "stdio://"]
-            } else {
-                proc.executableURL = URL(fileURLWithPath: "/usr/bin/env")
-                proc.arguments = ["codex", "app-server", "--listen", "stdio://"]
-            }
+            proc.executableURL = URL(fileURLWithPath: "/usr/bin/env")
+            proc.arguments = ["codex", "app-server", "--listen", "stdio://"]
+            var env = ProcessInfo.processInfo.environment
+            env["PATH"] = fullPath
+            proc.environment = env
             proc.standardInput = pipeIn
             proc.standardOutput = pipeOut
             proc.standardError = pipeErr

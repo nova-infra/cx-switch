@@ -28,6 +28,8 @@ enum Strings {
     static var languageEnglish: String { "English" }
     static var openaiStatus: String { L("OpenAI 状态", en: "OpenAI Status") }
     static var openDataFolder: String { L("打开配置文件夹", en: "Open Config Folder") }
+    static var version: String { L("版本", en: "Version") }
+    static var checkForUpdates: String { L("检查更新", en: "Check for Updates") }
     static var noActiveAccount: String { L("未检测到活跃账户，请切换或添加", en: "No active account, switch or add one") }
     static var saveCurrentAccount: String { L("保存当前账户", en: "Save Current Account") }
     static var missingAuthForSelectedAccount: String { L("所选账户缺少认证信息", en: "Missing auth for selected account") }
