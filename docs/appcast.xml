@@ -8,15 +8,15 @@
     <description>CX Switch Updates</description>
     <language>en</language>
     <item>
-      <title>Version 0.2.3</title>
-      <sparkle:version>5</sparkle:version>
-      <sparkle:shortVersionString>0.2.3</sparkle:shortVersionString>
+      <title>Version 0.2.4</title>
+      <sparkle:version>6</sparkle:version>
+      <sparkle:shortVersionString>0.2.4</sparkle:shortVersionString>
       <sparkle:minimumSystemVersion>14.0</sparkle:minimumSystemVersion>
-      <pubDate>Sat, 22 Mar 2026 12:41:00 +0000</pubDate>
+      <pubDate>Sat, 22 Mar 2026 13:12:00 +0000</pubDate>
       <enclosure
-        url="https://github.com/nova-infra/cx-switch/releases/download/v0.2.3/CXSwitch-v0.2.3.dmg"
-        sparkle:edSignature="xa+5zibu27UoVDMzRcwnBd3HbbyRA4IgEbeZDy95fznAJWCj22qyQkXf/b1XSMr9a5rcONPT4BAkRghx2NxWAQ=="
-        length="4378186"
+        url="https://github.com/nova-infra/cx-switch/releases/download/v0.2.4/CXSwitch-v0.2.4.dmg"
+        sparkle:edSignature="ZUlRhapdmtomkGKFd2qwF+HMRwhoDeAA+Vw+5PZUH0h5vi5XTVBW+4NNDKufQuvWcpxLEpg5VGR5t87HDEW8BQ=="
+        length="4123947"
         type="application/octet-stream" />
     </item>
   </channel>
