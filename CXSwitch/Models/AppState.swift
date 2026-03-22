@@ -185,11 +185,11 @@ final class AppState {
             try await startAppServerIfNeeded()
             try await appServer.initialize()
 
-            let current = await loadCurrentAccountForDashboard()
+            let current = await loadCurrentAccountForDashboard(authBlob: currentAuthBlob)
             if let current {
                 currentAccount = current
                 NSLog("[CXSwitch] loadDashboard: live current = %@", current.email)
-                await persistAccount(current)
+                persistAccount(current, authBlob: currentAuthBlob)
             } else if currentAccount == nil {
                 NSLog("[CXSwitch] loadDashboard: no current account")
             }
@@ -250,27 +250,22 @@ final class AppState {
         guard var current = currentAccount else {
             return
         }
-        do {
-            guard let authBlob = try accountStore.readAuthFile() else {
-                errorMessage = Strings.missingAuthJSON
-                return
-            }
-            current = enrichAccountMetadata(current, authBlob: authBlob)
-            current.lastUsedAt = Date()
+        let authBlob = loadCredential(for: current)
+        current = enrichAccountMetadata(current, authBlob: authBlob)
+        current.lastUsedAt = Date()
 
-            if !savedAccounts.contains(where: { $0.id == current.id }) {
-                savedAccounts.append(current)
-            } else {
-                savedAccounts = savedAccounts.map { $0.id == current.id ? current : $0 }
-            }
-            savedAccounts = applyMasking(to: savedAccounts)
-            try? accountDB.saveAccount(current)
-            try? accountDB.saveCredential(accountId: current.id, authBlob: authBlob)
-            try? accountDB.setCurrentAccount(id: current.id)
-            rescheduleAutoRefreshTasks()
-        } catch {
-            errorMessage = error.localizedDescription
+        if !savedAccounts.contains(where: { $0.id == current.id }) {
+            savedAccounts.append(current)
+        } else {
+            savedAccounts = savedAccounts.map { $0.id == current.id ? current : $0 }
         }
+        savedAccounts = applyMasking(to: savedAccounts)
+        try? accountDB.saveAccount(current)
+        if let authBlob {
+            try? accountDB.saveCredential(accountId: current.id, authBlob: authBlob)
+        }
+        try? accountDB.setCurrentAccount(id: current.id)
+        rescheduleAutoRefreshTasks()
     }
 
     func removeAccount(_ account: Account) async {
@@ -316,12 +311,13 @@ final class AppState {
         defer { endRefreshingAccounts([cachedCurrent.id]) }
 
         errorMessage = nil
+        let authBlob = loadCredential(for: cachedCurrent)
 
         do {
             try await startAppServerIfNeeded()
             try await appServer.initialize()
 
-            if let refreshed = try await fetchCurrentAccount() {
+            if let refreshed = try await fetchCurrentAccount(fromAuth: authBlob) {
                 persistAccountSnapshot(refreshed, updateCurrentAccount: true)
                 return
             }
@@ -472,7 +468,7 @@ final class AppState {
                 }
 
                 NSLog("[CXSwitch] importRefreshToken: got account %@", account.email)
-                await activateAccount(account)
+                activateAccount(account, authBlob: authBlob)
                 try? accountDB.saveAccount(account)
                 try? accountDB.saveCredential(accountId: account.id, authBlob: authBlob)
                 try? accountDB.setCurrentAccount(id: account.id)
@@ -541,8 +537,7 @@ final class AppState {
         NSApplication.shared.terminate(nil)
     }
 
-    private func persistAccount(_ account: Account) async {
-        let authBlob = await readAuthFileWithRetry()
+    private func persistAccount(_ account: Account, authBlob: AuthBlob?) {
         var entry = enrichAccountMetadata(account, authBlob: authBlob)
         entry = mergeAccountRecord(entry, preserving: savedAccounts.first(where: { $0.id == entry.id }) ?? (currentAccount?.id == entry.id ? currentAccount : nil))
         if entry.isCurrent {
@@ -553,21 +548,19 @@ final class AppState {
             }
         }
 
-        do {
-            if let index = savedAccounts.firstIndex(where: { $0.id == entry.id }) {
-                savedAccounts[index] = applyMasking(to: entry)
-            } else {
-                savedAccounts.append(applyMasking(to: entry))
-            }
-            try? accountDB.saveAccount(entry)
-            if let authBlob {
-                try? accountDB.saveCredential(accountId: entry.id, authBlob: authBlob)
-            }
-            if entry.isCurrent {
-                try? accountDB.setCurrentAccount(id: entry.id)
-            }
-            rescheduleAutoRefreshTasks()
+        if let index = savedAccounts.firstIndex(where: { $0.id == entry.id }) {
+            savedAccounts[index] = applyMasking(to: entry)
+        } else {
+            savedAccounts.append(applyMasking(to: entry))
         }
+        try? accountDB.saveAccount(entry)
+        if let authBlob, credentialBelongsToAccount(authBlob, accountId: entry.id) {
+            try? accountDB.saveCredential(accountId: entry.id, authBlob: authBlob)
+        }
+        if entry.isCurrent {
+            try? accountDB.setCurrentAccount(id: entry.id)
+        }
+        rescheduleAutoRefreshTasks()
     }
 
     private func persistRefreshedAccounts(_ accounts: [Account], currentAccountID: String?) {
@@ -764,13 +757,9 @@ final class AppState {
         throw CodexAppServerError.launchFailed
     }
 
-    private func fetchCurrentAccount() async throws -> Account? {
-        return try await fetchCurrentAccount(fromAuth: try accountStore.readAuthFile())
-    }
-
-    private func loadCurrentAccountForDashboard() async -> Account? {
+    private func loadCurrentAccountForDashboard(authBlob: AuthBlob?) async -> Account? {
         do {
-            if let current = try await fetchCurrentAccount() {
+            if let current = try await fetchCurrentAccount(fromAuth: authBlob) {
                 return current
             }
         } catch {
@@ -778,7 +767,7 @@ final class AppState {
         }
 
         try? await Task.sleep(nanoseconds: 1_000_000_000)
-        return try? await fetchCurrentAccount()
+        return try? await fetchCurrentAccount(fromAuth: authBlob)
     }
 
     private func fetchCurrentAccount(fromAuth authBlob: AuthBlob?, expectedAccountId: String? = nil, fallbackEmail: String? = nil) async throws -> Account? {
@@ -843,18 +832,23 @@ final class AppState {
     }
 
     private func waitForAccountReady(authBlob: AuthBlob?, expectedAccountId: String? = nil, fallbackEmail: String? = nil) async -> Account? {
+        var lastAccount: Account?
         for attempt in 1...5 {
             NSLog("[CXSwitch] waitForAccountReady: attempt %d", attempt)
             try? await Task.sleep(nanoseconds: stabilizationDelayNanoseconds(forAttempt: attempt - 1))
 
             if let account = try? await fetchCurrentAccountOnce(fromAuth: authBlob, expectedAccountId: expectedAccountId, fallbackEmail: fallbackEmail) {
-                if let expectedAccountId, account.id != expectedAccountId, attempt < 5 {
+                if let expectedAccountId, account.id != expectedAccountId {
+                    NSLog("[CXSwitch] waitForAccountReady: got %@ but expected %@, retrying", account.id, expectedAccountId)
+                    lastAccount = account
                     continue
                 }
                 return account
             }
         }
-        return nil
+        // Return the last fetched account even if ID didn't match — the caller
+        // (reconcileActiveAccountTransition) will verify the ID and rollback if needed.
+        return lastAccount
     }
 
     private func refreshAccountUsage(_ account: Account, force: Bool) async -> (UsageSnapshot?, String?) {
@@ -1267,9 +1261,36 @@ final class AppState {
             return
         }
 
-        if let liveAccount {
+        if var liveAccount {
+            // Guard: if the live account ID doesn't match the expected target,
+            // the app-server hasn't stabilized — treat as failure.
+            if let expectedAccountID, liveAccount.id != expectedAccountID {
+                NSLog("[CXSwitch] reconcile: live account ID %@ doesn't match expected %@, rolling back", liveAccount.id, expectedAccountID)
+                rollbackTransition(accountID: optimisticAccount.id, to: previousState, error: failureMessage)
+                return
+            }
+
+            // Strip usage from the live account — rateLimits/read may return
+            // stale data from the previous session during an account switch.
+            liveAccount.usageSnapshot = nil
+            liveAccount.usageError = nil
             persistAccountSnapshot(liveAccount, updateCurrentAccount: true)
             showStatus(successMessage)
+
+            // Fetch fresh usage with the new account's own credentials (from DB, not auth.json).
+            // Hold switchingAccountID lock through the entire operation to block concurrent switches.
+            let usageResult = await refreshAccountUsage(liveAccount, force: true)
+
+            guard !Task.isCancelled, activeTransitionGeneration == generation else {
+                if switchingAccountID == optimisticAccount.id {
+                    switchingAccountID = nil
+                }
+                endRefreshingAccounts([optimisticAccount.id])
+                return
+            }
+
+            let withUsage = applyUsageResult(to: liveAccount, result: usageResult)
+            persistAccountSnapshot(withUsage, updateCurrentAccount: true)
         } else {
             rollbackTransition(accountID: optimisticAccount.id, to: previousState, error: failureMessage)
             return
@@ -1396,14 +1417,14 @@ final class AppState {
         }
     }
 
-    private func activateAccount(_ account: Account) async {
+    private func activateAccount(_ account: Account, authBlob: AuthBlob?) {
         let existing = savedAccounts.first(where: { $0.id == account.id })
             ?? (currentAccount?.id == account.id ? currentAccount : nil)
         let active = mergeAccountRecord(account, preserving: existing)
         currentAccount = applyMasking(to: active)
         markCurrentAccount(active)
         dashboardLoaded = true
-        await persistAccount(active)
+        persistAccount(active, authBlob: authBlob)
     }
 
     private func displayAccountWithoutUsage(_ account: Account) -> Account {
@@ -1469,6 +1490,15 @@ final class AppState {
             return nil
         }
         return trimmed.lowercased()
+    }
+
+    private func credentialBelongsToAccount(_ authBlob: AuthBlob, accountId: String) -> Bool {
+        let identity = authIdentity(from: authBlob)
+        let credentialAccountId = normalizedAccountIdentifier(identity.chatgptAccountID)
+            ?? normalizedAccountIdentifier(authBlob.tokens?.accountId)
+        let targetAccountId = normalizedAccountIdentifier(accountId)
+        guard let credentialAccountId, let targetAccountId else { return true }
+        return credentialAccountId == targetAccountId
     }
 
     private func normalizedAccountIdentifier(_ value: String?) -> String? {

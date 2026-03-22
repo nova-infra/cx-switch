@@ -49,6 +49,7 @@ final class UsageProbe {
         }
 
         guard let primary = parseWindow(from: http, prefix: "primary") else {
+            NSLog("[CXSwitch] UsageProbe: missingHeaders — HTTP %d, headers: %@", http.statusCode, http.allHeaderFields)
             throw UsageProbeError.missingHeaders
         }
 
