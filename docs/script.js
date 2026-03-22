@@ -52,10 +52,9 @@
     });
   }
 
-  const copyBtn = document.getElementById("copyBrew");
-  if (copyBtn) {
+  for (const copyBtn of document.querySelectorAll("[data-copy]")) {
     copyBtn.addEventListener("click", async () => {
-      const cmd = copyBtn.getAttribute("data-copy") || "brew install --cask cx-switch";
+      const cmd = copyBtn.getAttribute("data-copy") || "";
       try {
         await navigator.clipboard.writeText(cmd);
         copyBtn.classList.add("ring-2", "ring-[#007AFF]/50");

@@ -23,6 +23,15 @@ CX Switch is a lightweight macOS menu bar utility that lets you manage and switc
 brew install --cask cx-switch
 ```
 
+### Direct download (DMG)
+
+1. Download [**CXSwitch-v0.2.3.dmg**](https://github.com/nova-infra/cx-switch/releases/download/v0.2.3/CXSwitch-v0.2.3.dmg), open it, and drag **CXSwitch** into **Applications**.
+2. If macOS shows a security warning or the app won’t open, clear quarantine flags:
+
+```bash
+xattr -cr /Applications/CXSwitch.app
+```
+
 ### Build from source
 
 Requires **Swift 6.0+** and **macOS 14+**.

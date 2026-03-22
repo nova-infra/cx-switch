@@ -23,6 +23,15 @@ CX Switch 是一款轻量 macOS 菜单栏工具，可集中管理并在多个 Op
 brew install --cask cx-switch
 ```
 
+### 直接下载（DMG）
+
+1. 下载 [**CXSwitch-v0.2.3.dmg**](https://github.com/nova-infra/cx-switch/releases/download/v0.2.3/CXSwitch-v0.2.3.dmg)，打开后将 **CXSwitch** 拖入 **应用程序**。
+2. 若出现安全提示或无法打开，在终端执行：
+
+```bash
+xattr -cr /Applications/CXSwitch.app
+```
+
 ### 从源码构建
 
 需要 **Swift 6.0+** 与 **macOS 14+**。
