@@ -30,6 +30,7 @@ final class AppState {
     private var autoRefreshFiredTargets: [String: Date] = [:]
     private var activeTransitionGeneration: UInt64 = 0
     private var activeTransitionTask: Task<Void, Never>?
+    private var fileWatchSources: [DispatchSourceFileSystemObject] = []
 
     private struct TransitionSnapshot {
         let currentAccount: Account?
@@ -93,6 +94,15 @@ final class AppState {
             }
         }
 
+        // Pre-load cached accounts so UI is never empty on first appear
+        if let cachedAccounts = try? db.loadAllAccounts(), !cachedAccounts.isEmpty {
+            savedAccounts = cachedAccounts
+            if let current = cachedAccounts.first(where: { $0.isCurrent }) {
+                currentAccount = current
+            }
+        }
+
+        startFileWatching()
     }
 
     func loadDashboard() async {
@@ -142,7 +152,6 @@ final class AppState {
         dashboardLoading = true
         defer {
             dashboardLoading = false
-            dashboardLoaded = true
         }
         errorMessage = nil
         do {
@@ -193,6 +202,8 @@ final class AppState {
             } else if currentAccount == nil {
                 NSLog("[CXSwitch] loadDashboard: no current account")
             }
+
+            dashboardLoaded = true
 
         } catch {
             NSLog("[CXSwitch] loadDashboard error: \(error)")
@@ -534,6 +545,8 @@ final class AppState {
     }
 
     func quit() {
+        cancelAllAutoRefreshTasks()
+        appServer.shutdown()
         NSApplication.shared.terminate(nil)
     }
 
@@ -697,6 +710,72 @@ final class AppState {
         autoRefreshTasks.removeValue(forKey: accountID)
         autoRefreshTargets.removeValue(forKey: accountID)
         autoRefreshFiredTargets.removeValue(forKey: accountID)
+    }
+
+    private func cancelAllAutoRefreshTasks() {
+        for (_, task) in autoRefreshTasks {
+            task.cancel()
+        }
+        autoRefreshTasks.removeAll()
+        autoRefreshTargets.removeAll()
+        autoRefreshFiredTargets.removeAll()
+    }
+
+    private func startFileWatching() {
+        let codexDir = FileManager.default.homeDirectoryForCurrentUser
+            .appendingPathComponent(".codex")
+        let authPath = codexDir.appendingPathComponent("auth.json").path
+        let prefsPath = accountStore.appSupportDirectoryURL
+            .appendingPathComponent("preferences.json").path
+
+        watchFile(at: authPath) { [weak self] in
+            Task { @MainActor in
+                guard let self, self.dashboardLoaded, self.switchingAccountID == nil else { return }
+                NSLog("[CXSwitch] auth.json changed externally, reloading dashboard")
+                await self.forceReloadDashboard()
+            }
+        }
+
+        watchFile(at: prefsPath) { [weak self] in
+            Task { @MainActor in
+                guard let self else { return }
+                NSLog("[CXSwitch] preferences.json changed externally, reloading preferences")
+                if let prefs = try? self.accountStore.loadPreferences() {
+                    self.preferences = prefs
+                    self.applyPreferencesSideEffects()
+                    self.applyTheme()
+                    self.savedAccounts = self.applyMasking(to: self.savedAccounts)
+                    if let current = self.currentAccount {
+                        self.currentAccount = self.applyMasking(to: current)
+                    }
+                }
+            }
+        }
+    }
+
+    private func watchFile(at path: String, onChange: @escaping () -> Void) {
+        let fd = open(path, O_EVTONLY)
+        guard fd >= 0 else {
+            NSLog("[CXSwitch] Cannot watch file: %@", path)
+            return
+        }
+
+        let source = DispatchSource.makeFileSystemObjectSource(
+            fileDescriptor: fd,
+            eventMask: [.write, .rename, .delete],
+            queue: .main
+        )
+
+        source.setEventHandler {
+            onChange()
+        }
+
+        source.setCancelHandler {
+            close(fd)
+        }
+
+        source.resume()
+        fileWatchSources.append(source)
     }
 
     private func performAutoRefreshIfNeeded(accountID: String, targetDate: Date) async {

@@ -7,10 +7,13 @@ struct MenuBarView: View {
     @State private var importToken = ""
 
     var body: some View {
-        activePanel
-            .padding(16)
-            .fixedSize(horizontal: false, vertical: true)
-            .frame(width: 360)
+        ScrollView(.vertical) {
+            activePanel
+                .padding(16)
+                .frame(width: 360, alignment: .leading)
+        }
+        .frame(width: 360)
+        .frame(maxHeight: 560)
         .task(id: "init") {
             await state.loadDashboard()
         }
@@ -42,8 +45,8 @@ struct MenuBarView: View {
             )
 
             let currentId = state.currentAccount?.id
-            let otherAccounts = state.savedAccounts.filter { $0.id != currentId }
-            if !otherAccounts.isEmpty {
+            let allAccounts = state.savedAccounts
+            if !allAccounts.isEmpty {
                 sectionDivider
 
                 VStack(alignment: .leading, spacing: 10) {
@@ -52,7 +55,7 @@ struct MenuBarView: View {
                         .foregroundStyle(.secondary)
                         .textCase(.uppercase)
 
-                    ForEach(otherAccounts) { account in
+                    ForEach(allAccounts) { account in
                         SavedAccountRow(
                             account: account,
                             preferences: state.preferences,
