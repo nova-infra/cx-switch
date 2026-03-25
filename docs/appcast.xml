@@ -8,6 +8,29 @@
     <description>CX Switch Updates</description>
     <language>en</language>
     <item>
+      <title>Version 0.3.0</title>
+      <sparkle:version>7</sparkle:version>
+      <sparkle:shortVersionString>0.3.0</sparkle:shortVersionString>
+      <sparkle:minimumSystemVersion>14.0</sparkle:minimumSystemVersion>
+      <pubDate>Tue, 25 Mar 2026 00:00:00 +0000</pubDate>
+      <description><![CDATA[
+        <ul>
+          <li>Menu height adapts to content, up to full screen height</li>
+          <li>Native-style scroll arrows when content overflows (no scrollbar)</li>
+          <li>Single "Refresh All" button replaces per-account refresh</li>
+          <li>Parallel account refresh via TaskGroup</li>
+          <li>Fix: current account no longer duplicated in switch list</li>
+          <li>Fix: cancelled status no longer shown in UI</li>
+          <li>Fix: Sparkle gracefully handles SwiftPM debug builds</li>
+        </ul>
+      ]]></description>
+      <enclosure
+        url="https://github.com/nova-infra/cx-switch/releases/download/v0.3.0/CXSwitch-0.3.0.dmg"
+        sparkle:edSignature="je5KkgX7YKP5oguO0Wf9yO9VvgbLY5DOJNfzJyzhuI+csS+1tolcj2qCoGeaTAFSsLj3G1Sq6qYdq/NwX3BbBg=="
+        length="4146639"
+        type="application/octet-stream" />
+    </item>
+    <item>
       <title>Version 0.2.4</title>
       <sparkle:version>6</sparkle:version>
       <sparkle:shortVersionString>0.2.4</sparkle:shortVersionString>
