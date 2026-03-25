@@ -3,8 +3,6 @@ import SwiftUI
 struct CurrentAccountSection: View {
     let account: Account?
     let preferences: Preferences
-    let refreshing: Bool
-    let onRefresh: () -> Void
 
     var body: some View {
         VStack(alignment: .leading, spacing: 12) {
@@ -40,8 +38,6 @@ struct CurrentAccountSection: View {
                         }
 
                         Spacer(minLength: 8)
-
-                        refreshButton
                     }
                 }
             }
@@ -60,27 +56,6 @@ struct CurrentAccountSection: View {
         }
         .padding(16)
         .adaptiveGlass()
-        .animation(.snappy(duration: 0.2), value: refreshing)
-    }
-
-    @ViewBuilder
-    private var refreshButton: some View {
-        Button(action: onRefresh) {
-            Group {
-                if refreshing {
-                    ProgressView()
-                        .controlSize(.small)
-                } else {
-                    Image(systemName: "arrow.clockwise")
-                        .font(.headline)
-                }
-            }
-            .frame(width: 30, height: 30)
-            .adaptiveGlassCircle()
-        }
-        .buttonStyle(.plain)
-        .disabled(refreshing || account == nil)
-        .accessibilityLabel(Strings.refresh)
     }
 
     private func displayEmail(for account: Account) -> String {

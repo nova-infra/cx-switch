@@ -1,19 +1,56 @@
+import AppKit
 import SwiftUI
 
 struct MenuBarView: View {
+    private let scrollCoordinateSpace = "MenuBarScroll"
+
     @Environment(AppState.self) private var state
     @State private var showSettings = false
     @State private var showImportToken = false
     @State private var importToken = ""
+    @State private var contentHeight: CGFloat = 300
+    @State private var topAnchorY: CGFloat = 0
+    @State private var bottomAnchorY: CGFloat = 0
 
     var body: some View {
-        ScrollView(.vertical) {
-            activePanel
-                .padding(16)
-                .frame(width: 360, alignment: .leading)
+        ScrollView(showsIndicators: false) {
+            VStack(alignment: .leading, spacing: 14) {
+                topAnchor
+                activePanel
+                bottomAnchor
+            }
+            .padding(16)
+            .background {
+                GeometryReader { proxy in
+                    Color.clear.preference(key: ContentHeightKey.self, value: proxy.size.height)
+                }
+            }
         }
-        .frame(width: 360)
-        .frame(maxHeight: 560)
+        .coordinateSpace(name: scrollCoordinateSpace)
+        .frame(width: 360, height: min(contentHeight, screenHeight))
+        .onPreferenceChange(ContentHeightKey.self) { height in
+            if height > 0 {
+                contentHeight = height
+            }
+        }
+        .onPreferenceChange(ScrollPositionKey.self) { position in
+            if let topAnchorY = position.topAnchorY {
+                self.topAnchorY = topAnchorY
+            }
+            if let bottomAnchorY = position.bottomAnchorY {
+                self.bottomAnchorY = bottomAnchorY
+            }
+        }
+        .overlay(alignment: .top) {
+            if showsUpArrow {
+                scrollArrow(direction: .up)
+            }
+        }
+        .overlay(alignment: .bottom) {
+            if showsDownArrow {
+                scrollArrow(direction: .down)
+            }
+        }
         .task(id: "init") {
             await state.loadDashboard()
         }
@@ -23,6 +60,54 @@ struct MenuBarView: View {
                 onCancel: { Task { await state.cancelAddAccount() } }
             )
         }
+    }
+
+    private var showsScrollableArrows: Bool {
+        contentHeight > screenHeight
+    }
+
+    private var showsUpArrow: Bool {
+        showsScrollableArrows && topAnchorY < 0
+    }
+
+    private var showsDownArrow: Bool {
+        showsScrollableArrows && bottomAnchorY > min(contentHeight, screenHeight)
+    }
+
+    private var screenHeight: CGFloat {
+        NSScreen.main?.visibleFrame.height ?? 600
+    }
+
+    @ViewBuilder
+    private var topAnchor: some View {
+        Color.clear
+            .frame(height: 0)
+            .background {
+                GeometryReader { proxy in
+                    Color.clear.preference(
+                        key: ScrollPositionKey.self,
+                        value: ScrollPosition(
+                            topAnchorY: proxy.frame(in: .named(scrollCoordinateSpace)).minY
+                        )
+                    )
+                }
+            }
+    }
+
+    @ViewBuilder
+    private var bottomAnchor: some View {
+        Color.clear
+            .frame(height: 0)
+            .background {
+                GeometryReader { proxy in
+                    Color.clear.preference(
+                        key: ScrollPositionKey.self,
+                        value: ScrollPosition(
+                            bottomAnchorY: proxy.frame(in: .named(scrollCoordinateSpace)).maxY
+                        )
+                    )
+                }
+            }
     }
 
     @ViewBuilder
@@ -39,14 +124,12 @@ struct MenuBarView: View {
         VStack(alignment: .leading, spacing: 14) {
             CurrentAccountSection(
                 account: state.currentAccount,
-                preferences: state.preferences,
-                refreshing: state.isRefreshing(accountID: state.currentAccount?.id),
-                onRefresh: { Task { await state.refreshCurrentAccount() } }
+                preferences: state.preferences
             )
 
             let currentId = state.currentAccount?.id
-            let allAccounts = state.savedAccounts
-            if !allAccounts.isEmpty {
+            let otherAccounts = state.savedAccounts.filter { $0.id != currentId }
+            if !otherAccounts.isEmpty {
                 sectionDivider
 
                 VStack(alignment: .leading, spacing: 10) {
@@ -55,14 +138,12 @@ struct MenuBarView: View {
                         .foregroundStyle(.secondary)
                         .textCase(.uppercase)
 
-                    ForEach(allAccounts) { account in
+                    ForEach(otherAccounts) { account in
                         SavedAccountRow(
                             account: account,
                             preferences: state.preferences,
-                            isCurrent: account.id == currentId,
+                            isCurrent: false,
                             onSelect: { selectAccount(account) },
-                            onRefresh: { Task { await state.refreshAccount(account) } },
-                            refreshing: state.isRefreshing(accountID: account.id),
                             switching: state.switchingAccountID == account.id
                         )
                     }
@@ -73,9 +154,11 @@ struct MenuBarView: View {
 
             FooterActions(
                 onAddAccount: { Task { await state.startAddAccount() } },
+                onRefreshAll: { Task { await state.refreshAllAccounts() } },
                 onImportToken: { toggleImportToken() },
                 onOpenSettings: { showSettings = true },
-                onQuit: { state.quit() }
+                onQuit: { state.quit() },
+                isRefreshing: state.refreshing
             )
 
             if showImportToken {
@@ -204,5 +287,64 @@ struct MenuBarView: View {
         .padding(.horizontal, 10)
         .padding(.vertical, 8)
         .background(Color.primary.opacity(0.04), in: RoundedRectangle(cornerRadius: 12, style: .continuous))
+    }
+
+    private func scrollArrow(direction: ArrowDirection) -> some View {
+        HStack {
+            Spacer()
+            Image(systemName: direction == .up ? "chevron.compact.up" : "chevron.compact.down")
+                .font(.system(size: 12, weight: .semibold))
+                .foregroundStyle(.secondary)
+            Spacer()
+        }
+        .frame(height: 20)
+        .background(
+            LinearGradient(
+                colors: [
+                    Color(nsColor: .windowBackgroundColor),
+                    Color(nsColor: .windowBackgroundColor).opacity(0)
+                ],
+                startPoint: direction == .up ? .top : .bottom,
+                endPoint: direction == .up ? .bottom : .top
+            )
+        )
+        .allowsHitTesting(false)
+    }
+}
+
+private enum ArrowDirection {
+    case up
+    case down
+}
+
+private struct ContentHeightKey: PreferenceKey {
+    static let defaultValue: CGFloat = 0
+
+    static func reduce(value: inout CGFloat, nextValue: () -> CGFloat) {
+        value = max(value, nextValue())
+    }
+}
+
+private struct ScrollPosition: Equatable {
+    var topAnchorY: CGFloat?
+    var bottomAnchorY: CGFloat?
+
+    init(topAnchorY: CGFloat? = nil, bottomAnchorY: CGFloat? = nil) {
+        self.topAnchorY = topAnchorY
+        self.bottomAnchorY = bottomAnchorY
+    }
+}
+
+private struct ScrollPositionKey: PreferenceKey {
+    static let defaultValue = ScrollPosition()
+
+    static func reduce(value: inout ScrollPosition, nextValue: () -> ScrollPosition) {
+        let nextValue = nextValue()
+        if let topAnchorY = nextValue.topAnchorY {
+            value.topAnchorY = topAnchorY
+        }
+        if let bottomAnchorY = nextValue.bottomAnchorY {
+            value.bottomAnchorY = bottomAnchorY
+        }
     }
 }

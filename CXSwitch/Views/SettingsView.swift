@@ -62,15 +62,16 @@ struct SettingsView: View {
     }
 
     private var versionSection: some View {
-            VStack(alignment: .leading, spacing: 8) {
-                HStack {
-                    Text("\(Strings.version) \(AppState.appVersion)")
-                        .font(.caption)
-                        .foregroundStyle(.secondary)
+        VStack(alignment: .leading, spacing: 8) {
+            HStack {
+                Text("\(Strings.version) \(AppState.appVersion)")
+                    .font(.caption)
+                    .foregroundStyle(.secondary)
 
-                    Spacer()
-                }
+                Spacer()
+            }
 
+            if updaterService.isAvailable {
                 Button(action: { updaterService.checkForUpdates() }) {
                     HStack(spacing: 10) {
                         Image(systemName: "arrow.triangle.2.circlepath")
@@ -78,19 +79,20 @@ struct SettingsView: View {
                             .foregroundStyle(.secondary)
                             .frame(width: 18, alignment: .center)
 
-                    Text(Strings.checkForUpdates)
-                        .font(.body)
+                        Text(Strings.checkForUpdates)
+                            .font(.body)
 
-                    Spacer()
+                        Spacer()
 
-                    Image(systemName: "chevron.right")
-                        .font(.caption.weight(.semibold))
-                        .foregroundStyle(.tertiary)
+                        Image(systemName: "chevron.right")
+                            .font(.caption.weight(.semibold))
+                            .foregroundStyle(.tertiary)
+                    }
+                    .padding(.vertical, 7)
                 }
-                .padding(.vertical, 7)
+                .buttonStyle(.plain)
+                .disabled(!updaterService.canCheckForUpdates)
             }
-            .buttonStyle(.plain)
-            .disabled(!updaterService.canCheckForUpdates)
         }
     }
 

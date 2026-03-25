@@ -145,6 +145,28 @@ final class AppState {
         }
     }
 
+    private func clearTransientStatus() {
+        statusMessage = nil
+        errorMessage = nil
+    }
+
+    private func isCancellationError(_ error: Error) -> Bool {
+        if error is CancellationError {
+            return true
+        }
+
+        let nsError = error as NSError
+        if nsError.domain == NSURLErrorDomain, nsError.code == NSURLErrorCancelled {
+            return true
+        }
+
+        if nsError.domain == NSCocoaErrorDomain, nsError.code == NSUserCancelledError {
+            return true
+        }
+
+        return nsError.localizedDescription.localizedCaseInsensitiveContains("cancelled")
+    }
+
     func loadDashboard(force: Bool) async {
         guard !dashboardLoading else { return }
         if !force, dashboardLoaded { return }
@@ -206,6 +228,10 @@ final class AppState {
             dashboardLoaded = true
 
         } catch {
+            if isCancellationError(error) {
+                clearTransientStatus()
+                return
+            }
             NSLog("[CXSwitch] loadDashboard error: \(error)")
             errorMessage = error.localizedDescription
         }
@@ -230,10 +256,15 @@ final class AppState {
                 switchingAccountID = nil
                 return
             }
+
+            NSLog("[CXSwitch] switchAccount: writing auth.json for %@", account.email)
             try accountStore.writeAuthFile(authBlob)
-            try? accountDB.setCurrentAccount(id: account.id)
+            NSLog("[CXSwitch] switchAccount: restarting app server")
+            try await appServer.restartAndInitialize()
+            NSLog("[CXSwitch] switchAccount: app server restarted")
 
             let optimistic = preparedOptimisticAccount(from: account, authBlob: authBlob)
+            try? accountDB.setCurrentAccount(id: account.id)
             optimisticallyActivateAccount(optimistic)
             showStatus(Strings.L("正在切换到 \(optimistic.email)…", en: "Switching to \(optimistic.email)..."))
 
@@ -250,6 +281,13 @@ final class AppState {
                 )
             }
         } catch {
+            if isCancellationError(error) {
+                clearTransientStatus()
+                switchingAccountID = nil
+                endRefreshingAccounts([account.id])
+                return
+            }
+            NSLog("[CXSwitch] switchAccount failed: %@", error.localizedDescription)
             endRefreshingAccounts([account.id])
             switchingAccountID = nil
             errorMessage = error.localizedDescription
@@ -355,6 +393,35 @@ final class AppState {
         persistAccountSnapshot(refreshed, updateCurrentAccount: false)
     }
 
+    func refreshAllAccounts(force: Bool = true) async {
+        var accountsToRefresh: [Account] = []
+        let currentAccountID = currentAccount?.id
+
+        if let current = currentAccount ?? savedAccounts.first(where: { $0.isCurrent }) {
+            accountsToRefresh.append(current)
+        }
+
+        accountsToRefresh.append(contentsOf: savedAccounts.filter { account in
+            !accountsToRefresh.contains(where: { $0.id == account.id })
+        })
+
+        await withTaskGroup(of: Void.self) { group in
+            for account in accountsToRefresh {
+                group.addTask { [weak self] in
+                    guard let self else { return }
+                    if account.id == currentAccountID {
+                        await self.refreshCurrentAccount(force: force)
+                    } else {
+                        await self.refreshAccount(account, force: force)
+                    }
+                }
+            }
+
+            for await _ in group {
+            }
+        }
+    }
+
     func startAddAccount() async {
         errorMessage = nil
         pendingRepairAccountID = nil
@@ -390,6 +457,14 @@ final class AppState {
                 NSWorkspace.shared.open(url)
             }
         } catch {
+            if isCancellationError(error) {
+                clearTransientStatus()
+                switchingAccountID = nil
+                loginFlow = LoginFlowState.empty()
+                pendingLoginId = nil
+                pendingRepairAccountID = nil
+                return
+            }
             loginFlow = LoginFlowState.empty()
             switchingAccountID = nil
             errorMessage = error.localizedDescription
@@ -407,6 +482,14 @@ final class AppState {
             switchingAccountID = nil
             loginFlow = LoginFlowState.empty()
         } catch {
+            if isCancellationError(error) {
+                clearTransientStatus()
+                pendingLoginId = nil
+                pendingRepairAccountID = nil
+                switchingAccountID = nil
+                loginFlow = LoginFlowState.empty()
+                return
+            }
             errorMessage = error.localizedDescription
         }
     }
@@ -487,6 +570,11 @@ final class AppState {
                 NSLog("[CXSwitch] importRefreshToken: done, current=%@", currentAccount?.email ?? "nil")
             }
         } catch {
+            if isCancellationError(error) {
+                clearTransientStatus()
+                switchingAccountID = nil
+                return
+            }
             NSLog("[CXSwitch] importRefreshToken error: %@", error.localizedDescription)
             switchingAccountID = nil
             errorMessage = error.localizedDescription

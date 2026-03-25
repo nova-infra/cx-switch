@@ -2,9 +2,11 @@ import SwiftUI
 
 struct FooterActions: View {
     let onAddAccount: () -> Void
+    let onRefreshAll: () -> Void
     let onImportToken: () -> Void
     let onOpenSettings: () -> Void
     let onQuit: () -> Void
+    let isRefreshing: Bool
 
     var body: some View {
         AdaptiveGlassContainer {
@@ -16,6 +18,14 @@ struct FooterActions: View {
                 alignment: .leading,
                 spacing: 8
             ) {
+                actionCell(
+                    title: Strings.L("Refresh All", en: "Refresh All"),
+                    systemImage: "arrow.clockwise",
+                    isLoading: isRefreshing
+                ) {
+                    onRefreshAll()
+                }
+
                 actionCell(
                     title: Strings.addAccount,
                     systemImage: "plus"
@@ -48,7 +58,7 @@ struct FooterActions: View {
     }
 
     @ViewBuilder
-    private func actionCell(title: String, systemImage: String, action: @escaping () -> Void) -> some View {
+    private func actionCell(title: String, systemImage: String, isLoading: Bool = false, action: @escaping () -> Void) -> some View {
         Button(action: action) {
             HStack(spacing: 12) {
                 Image(systemName: systemImage)
@@ -61,10 +71,16 @@ struct FooterActions: View {
                     .lineLimit(1)
 
                 Spacer()
+
+                if isLoading {
+                    ProgressView()
+                        .controlSize(.small)
+                }
             }
             .padding(.vertical, 7)
             .padding(.horizontal, 2)
         }
         .buttonStyle(.plain)
+        .disabled(isLoading)
     }
 }

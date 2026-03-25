@@ -5,8 +5,6 @@ struct SavedAccountRow: View {
     let preferences: Preferences
     let isCurrent: Bool
     let onSelect: () -> Void
-    let onRefresh: () -> Void
-    let refreshing: Bool
     let switching: Bool
 
     var body: some View {
@@ -50,30 +48,11 @@ struct SavedAccountRow: View {
             .buttonStyle(.plain)
             .accessibilityLabel(displayEmail(for: account))
 
-            HStack(spacing: 6) {
-                if switching {
-                    ProgressView()
-                        .controlSize(.small)
-                        .frame(width: 16, height: 16)
-                        .transition(.opacity)
-                }
-
-                Button(action: onRefresh) {
-                    Group {
-                        if refreshing {
-                            ProgressView()
-                                .controlSize(.small)
-                        } else {
-                            Image(systemName: "arrow.clockwise")
-                                .font(.caption.weight(.semibold))
-                        }
-                    }
-                    .frame(width: 24, height: 24)
-                    .adaptiveGlassCircle()
-                }
-                .buttonStyle(.plain)
-                .disabled(refreshing)
-                .accessibilityLabel(Strings.refresh)
+            if switching {
+                ProgressView()
+                    .controlSize(.small)
+                    .frame(width: 16, height: 16)
+                    .transition(.opacity)
             }
         }
         .frame(maxWidth: .infinity, alignment: .leading)
